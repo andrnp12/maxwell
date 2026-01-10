@@ -1,0 +1,2150 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   Profile | StarCode Kh - Minimal Admin &amp; Dashboard Template
+  </title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <meta content="Premium Multipurpose Admin &amp; Dashboard Template" name="description">
+   <meta content="admintem.com" name="author"/>
+   <!-- App favicon -->
+   <link href="assets/images/favicon.ico" rel="shortcut icon"/>
+   <!-- preloader css -->
+   <link href="assets/css/preloader.min.css" rel="stylesheet" type="text/css">
+    <!-- Bootstrap Css -->
+    <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css"/>
+    <!-- Icons Css -->
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
+    <!-- App Css-->
+    <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css"/>
+   </link>
+  </meta>
+ </head>
+ <body>
+  <!-- <body data-layout="horizontal"> -->
+  <!-- Begin page -->
+  <div id="layout-wrapper">
+   <header id="page-topbar">
+    <div class="navbar-header">
+     <div class="d-flex">
+      <!-- LOGO -->
+      <div class="navbar-brand-box">
+       <a class="logo logo-dark" href="index.html">
+        <span class="logo-sm">
+         <img alt="" height="24" src="assets/images/logo-sm.svg"/>
+        </span>
+        <span class="logo-lg">
+         <img alt="" height="24" src="assets/images/logo-sm.svg"/>
+         <span class="logo-txt">
+          StarCode Kh
+         </span>
+        </span>
+       </a>
+       <a class="logo logo-light" href="index.html">
+        <span class="logo-sm">
+         <img alt="" height="24" src="assets/images/logo-sm.svg"/>
+        </span>
+        <span class="logo-lg">
+         <img alt="" height="24" src="assets/images/logo-sm.svg"/>
+         <span class="logo-txt">
+          StarCode Kh
+         </span>
+        </span>
+       </a>
+      </div>
+      <button class="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn" type="button">
+       <i class="fa fa-fw fa-bars">
+       </i>
+      </button>
+      <!-- App Search-->
+      <form class="app-search d-none d-lg-block">
+       <div class="position-relative">
+        <input class="form-control" placeholder="Search..." type="text"/>
+        <button class="btn btn-primary" type="button">
+         <i class="bx bx-search-alt align-middle">
+         </i>
+        </button>
+       </div>
+      </form>
+     </div>
+     <div class="d-flex">
+      <div class="dropdown d-inline-block d-lg-none ms-2">
+       <button aria-expanded="false" aria-haspopup="true" class="btn header-item" data-bs-toggle="dropdown" id="page-header-search-dropdown" type="button">
+        <i class="icon-lg" data-feather="search">
+        </i>
+       </button>
+       <div aria-labelledby="page-header-search-dropdown" class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+        <form class="p-3">
+         <div class="form-group m-0">
+          <div class="input-group">
+           <input aria-label="Search Result" class="form-control" placeholder="Search ..." type="text"/>
+           <button class="btn btn-primary" type="submit">
+            <i class="mdi mdi-magnify">
+            </i>
+           </button>
+          </div>
+         </div>
+        </form>
+       </div>
+      </div>
+      <div class="dropdown d-none d-sm-inline-block">
+       <button aria-expanded="false" aria-haspopup="true" class="btn header-item" data-bs-toggle="dropdown" type="button">
+        <img alt="Header Language" height="16" id="header-lang-img" src="assets/images/flags/us.jpg"/>
+       </button>
+       <div class="dropdown-menu dropdown-menu-end">
+        <!-- item-->
+        <a class="dropdown-item notify-item language" data-lang="en" href="javascript:void(0);">
+         <img alt="user-image" class="me-1" height="12" src="assets/images/flags/us.jpg"/>
+         <span class="align-middle">
+          English
+         </span>
+        </a>
+        <!-- item-->
+        <a class="dropdown-item notify-item language" data-lang="sp" href="javascript:void(0);">
+         <img alt="user-image" class="me-1" height="12" src="assets/images/flags/spain.jpg"/>
+         <span class="align-middle">
+          Spanish
+         </span>
+        </a>
+        <!-- item-->
+        <a class="dropdown-item notify-item language" data-lang="gr" href="javascript:void(0);">
+         <img alt="user-image" class="me-1" height="12" src="assets/images/flags/germany.jpg"/>
+         <span class="align-middle">
+          German
+         </span>
+        </a>
+        <!-- item-->
+        <a class="dropdown-item notify-item language" data-lang="it" href="javascript:void(0);">
+         <img alt="user-image" class="me-1" height="12" src="assets/images/flags/italy.jpg"/>
+         <span class="align-middle">
+          Italian
+         </span>
+        </a>
+        <!-- item-->
+        <a class="dropdown-item notify-item language" data-lang="ru" href="javascript:void(0);">
+         <img alt="user-image" class="me-1" height="12" src="assets/images/flags/russia.jpg"/>
+         <span class="align-middle">
+          Russian
+         </span>
+        </a>
+       </div>
+      </div>
+      <div class="dropdown d-none d-sm-inline-block">
+       <button class="btn header-item" id="mode-setting-btn" type="button">
+        <i class="icon-lg layout-mode-dark" data-feather="moon">
+        </i>
+        <i class="icon-lg layout-mode-light" data-feather="sun">
+        </i>
+       </button>
+      </div>
+      <div class="dropdown d-none d-lg-inline-block ms-1">
+       <button aria-expanded="false" aria-haspopup="true" class="btn header-item" data-bs-toggle="dropdown" type="button">
+        <i class="icon-lg" data-feather="grid">
+        </i>
+       </button>
+       <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+        <div class="p-2">
+         <div class="row g-0">
+          <div class="col">
+           <a class="dropdown-icon-item" href="#">
+            <img alt="Github" src="assets/images/brands/github.png"/>
+            <span>
+             GitHub
+            </span>
+           </a>
+          </div>
+          <div class="col">
+           <a class="dropdown-icon-item" href="#">
+            <img alt="bitbucket" src="assets/images/brands/bitbucket.png"/>
+            <span>
+             Bitbucket
+            </span>
+           </a>
+          </div>
+          <div class="col">
+           <a class="dropdown-icon-item" href="#">
+            <img alt="dribbble" src="assets/images/brands/dribbble.png"/>
+            <span>
+             Dribbble
+            </span>
+           </a>
+          </div>
+         </div>
+         <div class="row g-0">
+          <div class="col">
+           <a class="dropdown-icon-item" href="#">
+            <img alt="dropbox" src="assets/images/brands/dropbox.png"/>
+            <span>
+             Dropbox
+            </span>
+           </a>
+          </div>
+          <div class="col">
+           <a class="dropdown-icon-item" href="#">
+            <img alt="mail_chimp" src="assets/images/brands/mail_chimp.png"/>
+            <span>
+             Mail Chimp
+            </span>
+           </a>
+          </div>
+          <div class="col">
+           <a class="dropdown-icon-item" href="#">
+            <img alt="slack" src="assets/images/brands/slack.png"/>
+            <span>
+             Slack
+            </span>
+           </a>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="dropdown d-inline-block">
+       <button aria-expanded="false" aria-haspopup="true" class="btn header-item noti-icon position-relative" data-bs-toggle="dropdown" id="page-header-notifications-dropdown" type="button">
+        <i class="icon-lg" data-feather="bell">
+        </i>
+        <span class="badge bg-danger rounded-pill">
+         5
+        </span>
+       </button>
+       <div aria-labelledby="page-header-notifications-dropdown" class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+        <div class="p-3">
+         <div class="row align-items-center">
+          <div class="col">
+           <h6 class="m-0">
+            Notifications
+           </h6>
+          </div>
+          <div class="col-auto">
+           <a class="small text-reset text-decoration-underline" href="#!">
+            Unread (3)
+           </a>
+          </div>
+         </div>
+        </div>
+        <div data-simplebar="" style="max-height: 230px;">
+         <a class="text-reset notification-item" href="#!">
+          <div class="d-flex">
+           <div class="flex-shrink-0 me-3">
+            <img alt="user-pic" class="rounded-circle avatar-sm" src="assets/images/users/avatar-3.jpg"/>
+           </div>
+           <div class="flex-grow-1">
+            <h6 class="mb-1">
+             James Lemire
+            </h6>
+            <div class="font-size-13 text-muted">
+             <p class="mb-1">
+              It will seem like simplified English.
+             </p>
+             <p class="mb-0">
+              <i class="mdi mdi-clock-outline">
+              </i>
+              <span>
+               1 hour ago
+              </span>
+             </p>
+            </div>
+           </div>
+          </div>
+         </a>
+         <a class="text-reset notification-item" href="#!">
+          <div class="d-flex">
+           <div class="flex-shrink-0 avatar-sm me-3">
+            <span class="avatar-title bg-primary rounded-circle font-size-16">
+             <i class="bx bx-cart">
+             </i>
+            </span>
+           </div>
+           <div class="flex-grow-1">
+            <h6 class="mb-1">
+             Your order is placed
+            </h6>
+            <div class="font-size-13 text-muted">
+             <p class="mb-1">
+              If several languages coalesce the grammar
+             </p>
+             <p class="mb-0">
+              <i class="mdi mdi-clock-outline">
+              </i>
+              <span>
+               3 min ago
+              </span>
+             </p>
+            </div>
+           </div>
+          </div>
+         </a>
+         <a class="text-reset notification-item" href="#!">
+          <div class="d-flex">
+           <div class="flex-shrink-0 avatar-sm me-3">
+            <span class="avatar-title bg-success rounded-circle font-size-16">
+             <i class="bx bx-badge-check">
+             </i>
+            </span>
+           </div>
+           <div class="flex-grow-1">
+            <h6 class="mb-1">
+             Your item is shipped
+            </h6>
+            <div class="font-size-13 text-muted">
+             <p class="mb-1">
+              If several languages coalesce the grammar
+             </p>
+             <p class="mb-0">
+              <i class="mdi mdi-clock-outline">
+              </i>
+              <span>
+               3 min ago
+              </span>
+             </p>
+            </div>
+           </div>
+          </div>
+         </a>
+         <a class="text-reset notification-item" href="#!">
+          <div class="d-flex">
+           <div class="flex-shrink-0 me-3">
+            <img alt="user-pic" class="rounded-circle avatar-sm" src="assets/images/users/avatar-6.jpg"/>
+           </div>
+           <div class="flex-grow-1">
+            <h6 class="mb-1">
+             Salena Layfield
+            </h6>
+            <div class="font-size-13 text-muted">
+             <p class="mb-1">
+              As a skeptical Cambridge friend of mine occidental.
+             </p>
+             <p class="mb-0">
+              <i class="mdi mdi-clock-outline">
+              </i>
+              <span>
+               1 hour ago
+              </span>
+             </p>
+            </div>
+           </div>
+          </div>
+         </a>
+        </div>
+        <div class="p-2 border-top d-grid">
+         <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
+          <i class="mdi mdi-arrow-right-circle me-1">
+          </i>
+          <span>
+           View More..
+          </span>
+         </a>
+        </div>
+       </div>
+      </div>
+      <div class="dropdown d-inline-block">
+       <button class="btn header-item right-bar-toggle me-2" type="button">
+        <i class="icon-lg" data-feather="settings">
+        </i>
+       </button>
+      </div>
+      <div class="dropdown d-inline-block">
+       <button aria-expanded="false" aria-haspopup="true" class="btn header-item bg-light-subtle border-start border-end" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
+        <img alt="Header Avatar" class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg"/>
+        <span class="d-none d-xl-inline-block ms-1 fw-medium">
+         StarCode Kh
+        </span>
+        <i class="mdi mdi-chevron-down d-none d-xl-inline-block">
+        </i>
+       </button>
+       <div class="dropdown-menu dropdown-menu-end">
+        <!-- item-->
+        <a class="dropdown-item" href="apps-contacts-profile.html">
+         <i class="mdi mdi mdi-face-man font-size-16 align-middle me-1">
+         </i>
+         Profile
+        </a>
+        <a class="dropdown-item" href="auth-lock-screen.html">
+         <i class="mdi mdi-lock font-size-16 align-middle me-1">
+         </i>
+         Lock Screen
+        </a>
+        <div class="dropdown-divider">
+        </div>
+        <a class="dropdown-item" href="auth-logout.html">
+         <i class="mdi mdi-logout font-size-16 align-middle me-1">
+         </i>
+         Logout
+        </a>
+       </div>
+      </div>
+     </div>
+    </div>
+   </header>
+   <!-- ========== Left Sidebar Start ========== -->
+   <div class="vertical-menu">
+    <div class="h-100" data-simplebar="">
+     <!--- Sidemenu -->
+     <div id="sidebar-menu">
+      <!-- Left Menu Start -->
+      <ul class="metismenu list-unstyled" id="side-menu">
+       <li class="menu-title" data-key="t-menu">
+        Menu
+       </li>
+       <li>
+        <a href="index.html">
+         <i data-feather="home">
+         </i>
+         <span data-key="t-dashboard">
+          Dashboard
+         </span>
+        </a>
+       </li>
+       <li>
+        <a class="has-arrow" href="javascript: void(0);">
+         <i data-feather="grid">
+         </i>
+         <span data-key="t-apps">
+          Apps
+         </span>
+        </a>
+        <ul aria-expanded="false" class="sub-menu">
+         <li>
+          <a href="apps-calendar.html">
+           <span data-key="t-calendar">
+            Calendar
+           </span>
+          </a>
+         </li>
+         <li>
+          <a href="apps-chat.html">
+           <span data-key="t-chat">
+            Chat
+           </span>
+          </a>
+         </li>
+         <li>
+          <a class="has-arrow" href="javascript: void(0);">
+           <span data-key="t-email">
+            Email
+           </span>
+          </a>
+          <ul aria-expanded="false" class="sub-menu">
+           <li>
+            <a data-key="t-inbox" href="apps-email-inbox.html">
+             Inbox
+            </a>
+           </li>
+           <li>
+            <a data-key="t-read-email" href="apps-email-read.html">
+             Read Email
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li>
+          <a class="has-arrow" href="javascript: void(0);">
+           <span data-key="t-invoices">
+            Invoices
+           </span>
+          </a>
+          <ul aria-expanded="false" class="sub-menu">
+           <li>
+            <a data-key="t-invoice-list" href="apps-invoices-list.html">
+             Invoice List
+            </a>
+           </li>
+           <li>
+            <a data-key="t-invoice-detail" href="apps-invoices-detail.html">
+             Invoice Detail
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li>
+          <a class="has-arrow" href="javascript: void(0);">
+           <span data-key="t-contacts">
+            Contacts
+           </span>
+          </a>
+          <ul aria-expanded="false" class="sub-menu">
+           <li>
+            <a data-key="t-user-grid" href="apps-contacts-grid.html">
+             User Grid
+            </a>
+           </li>
+           <li>
+            <a data-key="t-user-list" href="apps-contacts-list.html">
+             User List
+            </a>
+           </li>
+           <li>
+            <a data-key="t-profile" href="apps-contacts-profile.html">
+             Profile
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li>
+          <a class="" href="javascript: void(0);">
+           <span data-key="t-blog">
+            Blog
+           </span>
+           <span class="badge rounded-pill badge-soft-danger float-end" key="t-new">
+            New
+           </span>
+          </a>
+          <ul aria-expanded="false" class="sub-menu">
+           <li>
+            <a data-key="t-blog-grid" href="apps-blog-grid.html">
+             Blog Grid
+            </a>
+           </li>
+           <li>
+            <a data-key="t-blog-list" href="apps-blog-list.html">
+             Blog List
+            </a>
+           </li>
+           <li>
+            <a data-key="t-blog-details" href="apps-blog-detail.html">
+             Blog Details
+            </a>
+           </li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+       <li>
+        <a class="has-arrow" href="javascript: void(0);">
+         <i data-feather="users">
+         </i>
+         <span data-key="t-authentication">
+          Authentication
+         </span>
+        </a>
+        <ul aria-expanded="false" class="sub-menu">
+         <li>
+          <a data-key="t-login" href="auth-login.html">
+           Login
+          </a>
+         </li>
+         <li>
+          <a data-key="t-register" href="auth-register.html">
+           Register
+          </a>
+         </li>
+         <li>
+          <a data-key="t-recover-password" href="auth-recoverpw.html">
+           Recover Password
+          </a>
+         </li>
+         <li>
+          <a data-key="t-lock-screen" href="auth-lock-screen.html">
+           Lock Screen
+          </a>
+         </li>
+         <li>
+          <a data-key="t-logout" href="auth-logout.html">
+           Log Out
+          </a>
+         </li>
+         <li>
+          <a data-key="t-confirm-mail" href="auth-confirm-mail.html">
+           Confirm Mail
+          </a>
+         </li>
+         <li>
+          <a data-key="t-email-verification" href="auth-email-verification.html">
+           Email Verification
+          </a>
+         </li>
+         <li>
+          <a data-key="t-two-step-verification" href="auth-two-step-verification.html">
+           Two Step Verification
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        <a class="has-arrow" href="javascript: void(0);">
+         <i data-feather="file-text">
+         </i>
+         <span data-key="t-pages">
+          Pages
+         </span>
+        </a>
+        <ul aria-expanded="false" class="sub-menu">
+         <li>
+          <a data-key="t-starter-page" href="pages-starter.html">
+           Starter Page
+          </a>
+         </li>
+         <li>
+          <a data-key="t-maintenance" href="pages-maintenance.html">
+           Maintenance
+          </a>
+         </li>
+         <li>
+          <a data-key="t-coming-soon" href="pages-comingsoon.html">
+           Coming Soon
+          </a>
+         </li>
+         <li>
+          <a data-key="t-timeline" href="pages-timeline.html">
+           Timeline
+          </a>
+         </li>
+         <li>
+          <a data-key="t-faqs" href="pages-faqs.html">
+           FAQs
+          </a>
+         </li>
+         <li>
+          <a data-key="t-pricing" href="pages-pricing.html">
+           Pricing
+          </a>
+         </li>
+         <li>
+          <a data-key="t-error-404" href="pages-404.html">
+           Error 404
+          </a>
+         </li>
+         <li>
+          <a data-key="t-error-500" href="pages-500.html">
+           Error 500
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        <a href="layouts-horizontal.html">
+         <i data-feather="layout">
+         </i>
+         <span data-key="t-horizontal">
+          Horizontal
+         </span>
+        </a>
+       </li>
+       <li class="menu-title mt-2" data-key="t-components">
+        Elements
+       </li>
+       <li>
+        <a class="has-arrow" href="javascript: void(0);">
+         <i data-feather="briefcase">
+         </i>
+         <span data-key="t-components">
+          Components
+         </span>
+        </a>
+        <ul aria-expanded="false" class="sub-menu">
+         <li>
+          <a data-key="t-alerts" href="ui-alerts.html">
+           Alerts
+          </a>
+         </li>
+         <li>
+          <a data-key="t-buttons" href="ui-buttons.html">
+           Buttons
+          </a>
+         </li>
+         <li>
+          <a data-key="t-cards" href="ui-cards.html">
+           Cards
+          </a>
+         </li>
+         <li>
+          <a data-key="t-carousel" href="ui-carousel.html">
+           Carousel
+          </a>
+         </li>
+         <li>
+          <a data-key="t-dropdowns" href="ui-dropdowns.html">
+           Dropdowns
+          </a>
+         </li>
+         <li>
+          <a data-key="t-grid" href="ui-grid.html">
+           Grid
+          </a>
+         </li>
+         <li>
+          <a data-key="t-images" href="ui-images.html">
+           Images
+          </a>
+         </li>
+         <li>
+          <a data-key="t-modals" href="ui-modals.html">
+           Modals
+          </a>
+         </li>
+         <li>
+          <a data-key="t-offcanvas" href="ui-offcanvas.html">
+           Offcanvas
+          </a>
+         </li>
+         <li>
+          <a data-key="t-progress-bars" href="ui-progressbars.html">
+           Progress Bars
+          </a>
+         </li>
+         <li>
+          <a data-key="t-progress-bars" href="ui-placeholders.html">
+           Placeholders
+          </a>
+         </li>
+         <li>
+          <a data-key="t-tabs-accordions" href="ui-tabs-accordions.html">
+           Tabs &amp; Accordions
+          </a>
+         </li>
+         <li>
+          <a data-key="t-typography" href="ui-typography.html">
+           Typography
+          </a>
+         </li>
+         <li>
+          <a data-key="t-typography" href="ui-toasts.html">
+           Toasts
+          </a>
+         </li>
+         <li>
+          <a data-key="t-video" href="ui-video.html">
+           Video
+          </a>
+         </li>
+         <li>
+          <a data-key="t-general" href="ui-general.html">
+           General
+          </a>
+         </li>
+         <li>
+          <a data-key="t-colors" href="ui-colors.html">
+           Colors
+          </a>
+         </li>
+         <li>
+          <a data-key="t-colors" href="ui-utilities.html">
+           Utilities
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        <a class="has-arrow" href="javascript: void(0);">
+         <i data-feather="gift">
+         </i>
+         <span data-key="t-ui-elements">
+          Extended
+         </span>
+        </a>
+        <ul aria-expanded="false" class="sub-menu">
+         <li>
+          <a data-key="t-lightbox" href="extended-lightbox.html">
+           Lightbox
+          </a>
+         </li>
+         <li>
+          <a data-key="t-range-slider" href="extended-rangeslider.html">
+           Range Slider
+          </a>
+         </li>
+         <li>
+          <a data-key="t-sweet-alert" href="extended-sweet-alert.html">
+           SweetAlert 2
+          </a>
+         </li>
+         <li>
+          <a data-key="t-session-timeout" href="extended-session-timeout.html">
+           Session Timeout
+          </a>
+         </li>
+         <li>
+          <a data-key="t-rating" href="extended-rating.html">
+           Rating
+          </a>
+         </li>
+         <li>
+          <a data-key="t-notifications" href="extended-notifications.html">
+           Notifications
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        <a href="javascript: void(0);">
+         <i data-feather="box">
+         </i>
+         <span class="badge rounded-pill badge-soft-danger text-danger float-end">
+          7
+         </span>
+         <span data-key="t-forms">
+          Forms
+         </span>
+        </a>
+        <ul aria-expanded="false" class="sub-menu">
+         <li>
+          <a data-key="t-form-elements" href="form-elements.html">
+           Basic Elements
+          </a>
+         </li>
+         <li>
+          <a data-key="t-form-validation" href="form-validation.html">
+           Validation
+          </a>
+         </li>
+         <li>
+          <a data-key="t-form-advanced" href="form-advanced.html">
+           Advanced Plugins
+          </a>
+         </li>
+         <li>
+          <a data-key="t-form-editors" href="form-editors.html">
+           Editors
+          </a>
+         </li>
+         <li>
+          <a data-key="t-form-upload" href="form-uploads.html">
+           File Upload
+          </a>
+         </li>
+         <li>
+          <a data-key="t-form-wizard" href="form-wizard.html">
+           Wizard
+          </a>
+         </li>
+         <li>
+          <a data-key="t-form-mask" href="form-mask.html">
+           Mask
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        <a class="has-arrow" href="javascript: void(0);">
+         <i data-feather="sliders">
+         </i>
+         <span data-key="t-tables">
+          Tables
+         </span>
+        </a>
+        <ul aria-expanded="false" class="sub-menu">
+         <li>
+          <a data-key="t-basic-tables" href="tables-basic.html">
+           Bootstrap Basic
+          </a>
+         </li>
+         <li>
+          <a data-key="t-data-tables" href="tables-datatable.html">
+           DataTables
+          </a>
+         </li>
+         <li>
+          <a data-key="t-responsive-table" href="tables-responsive.html">
+           Responsive
+          </a>
+         </li>
+         <li>
+          <a data-key="t-editable-table" href="tables-editable.html">
+           Editable
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        <a class="has-arrow" href="javascript: void(0);">
+         <i data-feather="pie-chart">
+         </i>
+         <span data-key="t-charts">
+          Charts
+         </span>
+        </a>
+        <ul aria-expanded="false" class="sub-menu">
+         <li>
+          <a data-key="t-apex-charts" href="charts-apex.html">
+           Apexcharts
+          </a>
+         </li>
+         <li>
+          <a data-key="t-e-charts" href="charts-echart.html">
+           Echarts
+          </a>
+         </li>
+         <li>
+          <a data-key="t-chartjs-charts" href="charts-chartjs.html">
+           Chartjs
+          </a>
+         </li>
+         <li>
+          <a data-key="t-knob-charts" href="charts-knob.html">
+           Jquery Knob
+          </a>
+         </li>
+         <li>
+          <a data-key="t-sparkline-charts" href="charts-sparkline.html">
+           Sparkline
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        <a class="has-arrow" href="javascript: void(0);">
+         <i data-feather="cpu">
+         </i>
+         <span data-key="t-icons">
+          Icons
+         </span>
+        </a>
+        <ul aria-expanded="false" class="sub-menu">
+         <li>
+          <a data-key="t-boxicons" href="icons-boxicons.html">
+           Boxicons
+          </a>
+         </li>
+         <li>
+          <a data-key="t-material-design" href="icons-materialdesign.html">
+           Material Design
+          </a>
+         </li>
+         <li>
+          <a data-key="t-dripicons" href="icons-dripicons.html">
+           Dripicons
+          </a>
+         </li>
+         <li>
+          <a data-key="t-font-awesome" href="icons-fontawesome.html">
+           Font Awesome 5
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        <a class="has-arrow" href="javascript: void(0);">
+         <i data-feather="map">
+         </i>
+         <span data-key="t-maps">
+          Maps
+         </span>
+        </a>
+        <ul aria-expanded="false" class="sub-menu">
+         <li>
+          <a data-key="t-g-maps" href="maps-google.html">
+           Google
+          </a>
+         </li>
+         <li>
+          <a data-key="t-v-maps" href="maps-vector.html">
+           Vector
+          </a>
+         </li>
+         <li>
+          <a data-key="t-l-maps" href="maps-leaflet.html">
+           Leaflet
+          </a>
+         </li>
+        </ul>
+       </li>
+       <li>
+        <a class="has-arrow" href="javascript: void(0);">
+         <i data-feather="share-2">
+         </i>
+         <span data-key="t-multi-level">
+          Multi Level
+         </span>
+        </a>
+        <ul aria-expanded="true" class="sub-menu">
+         <li>
+          <a data-key="t-level-1-1" href="javascript: void(0);">
+           Level 1.1
+          </a>
+         </li>
+         <li>
+          <a class="has-arrow" data-key="t-level-1-2" href="javascript: void(0);">
+           Level 1.2
+          </a>
+          <ul aria-expanded="true" class="sub-menu">
+           <li>
+            <a data-key="t-level-2-1" href="javascript: void(0);">
+             Level 2.1
+            </a>
+           </li>
+           <li>
+            <a data-key="t-level-2-2" href="javascript: void(0);">
+             Level 2.2
+            </a>
+           </li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+      </ul>
+      <div class="card sidebar-alert border-0 text-center mx-4 mb-0 mt-5">
+       <div class="card-body">
+        <img alt="" src="assets/images/giftbox.png"/>
+        <div class="mt-4">
+         <h5 class="alertcard-title font-size-16">
+          Unlimited Access
+         </h5>
+         <p class="font-size-13">
+          Upgrade your plan from a Free trial, to select âBusiness Planâ.
+         </p>
+         <a class="btn btn-primary mt-2" href="#!">
+          Upgrade Now
+         </a>
+        </div>
+       </div>
+      </div>
+     </div>
+     <!-- Sidebar -->
+    </div>
+   </div>
+   <!-- Left Sidebar End -->
+   <!-- ============================================================== -->
+   <!-- Start right Content here -->
+   <!-- ============================================================== -->
+   <div class="main-content">
+    <div class="page-content">
+     <div class="container-fluid">
+      <!-- start page title -->
+      <div class="row">
+       <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+         <h4 class="mb-sm-0 font-size-18">
+          Profile
+         </h4>
+         <div class="page-title-right">
+          <ol class="breadcrumb m-0">
+           <li class="breadcrumb-item">
+            <a href="javascript: void(0);">
+             Contacts
+            </a>
+           </li>
+           <li class="breadcrumb-item active">
+            Profile
+           </li>
+          </ol>
+         </div>
+        </div>
+       </div>
+      </div>
+      <!-- end page title -->
+      <div class="row">
+       <div class="col-xl-9 col-lg-8">
+        <div class="card">
+         <div class="card-body">
+          <div class="row">
+           <div class="col-sm order-2 order-sm-1">
+            <div class="d-flex align-items-start mt-3 mt-sm-0">
+             <div class="flex-shrink-0">
+              <div class="avatar-xl me-3">
+               <img alt="" class="img-fluid rounded-circle d-block" src="assets/images/users/avatar-2.jpg"/>
+              </div>
+             </div>
+             <div class="flex-grow-1">
+              <div>
+               <h5 class="font-size-16 mb-1">
+                Phyllis Gatlin
+               </h5>
+               <p class="text-muted font-size-13">
+                Full Stack Developer
+               </p>
+               <div class="d-flex flex-wrap align-items-start gap-2 gap-lg-3 text-muted font-size-13">
+                <div>
+                 <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                 </i>
+                 Development
+                </div>
+                <div>
+                 <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                 </i>
+                 phyllisgatlin@StarCode Kh.com
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+           <div class="col-sm-auto order-1 order-sm-2">
+            <div class="d-flex align-items-start justify-content-end gap-2">
+             <div>
+              <button class="btn btn-soft-light" type="button">
+               <i class="me-1">
+               </i>
+               Message
+              </button>
+             </div>
+             <div>
+              <div class="dropdown">
+               <button aria-expanded="false" class="btn btn-link font-size-16 shadow-none text-muted dropdown-toggle" data-bs-toggle="dropdown" type="button">
+                <i class="bx bx-dots-horizontal-rounded">
+                </i>
+               </button>
+               <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                 <a class="dropdown-item" href="#">
+                  Action
+                 </a>
+                </li>
+                <li>
+                 <a class="dropdown-item" href="#">
+                  Another action
+                 </a>
+                </li>
+                <li>
+                 <a class="dropdown-item" href="#">
+                  Something else here
+                 </a>
+                </li>
+               </ul>
+              </div>
+             </div>
+            </div>
+           </div>
+          </div>
+          <ul class="nav nav-tabs-custom card-header-tabs border-top mt-4" id="pills-tab" role="tablist">
+           <li class="nav-item">
+            <a class="nav-link px-3 active" data-bs-toggle="tab" href="#overview" role="tab">
+             Overview
+            </a>
+           </li>
+           <li class="nav-item">
+            <a class="nav-link px-3" data-bs-toggle="tab" href="#about" role="tab">
+             About
+            </a>
+           </li>
+           <li class="nav-item">
+            <a class="nav-link px-3" data-bs-toggle="tab" href="#post" role="tab">
+             Post
+            </a>
+           </li>
+          </ul>
+         </div>
+         <!-- end card body -->
+        </div>
+        <!-- end card -->
+        <div class="tab-content">
+         <div class="tab-pane active" id="overview" role="tabpanel">
+          <div class="card">
+           <div class="card-header">
+            <h5 class="card-title mb-0">
+             About
+            </h5>
+           </div>
+           <div class="card-body">
+            <div>
+             <div class="pb-3">
+              <div class="row">
+               <div class="col-xl-2">
+                <div>
+                 <h5 class="font-size-15">
+                  Bio :
+                 </h5>
+                </div>
+               </div>
+               <div class="col-xl">
+                <div class="text-muted">
+                 <p class="mb-2">
+                  Hi I'm Phyllis Gatlin, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages
+                 </p>
+                 <p class="mb-0">
+                  It is a long established fact that a reader will be distracted by the readable content of a page when looking at it has a more-or-less normal distribution of letters
+                 </p>
+                </div>
+               </div>
+              </div>
+             </div>
+             <div class="py-3">
+              <div class="row">
+               <div class="col-xl-2">
+                <div>
+                 <h5 class="font-size-15">
+                  Experience :
+                 </h5>
+                </div>
+               </div>
+               <div class="col-xl">
+                <div class="text-muted">
+                 <p>
+                  If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages. The new common language will be more simple and regular than the existing European languages. It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is. The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc
+                 </p>
+                 <ul class="list-unstyled mb-0">
+                  <li class="py-1">
+                   <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                   </i>
+                   Donec vitae sapien ut libero venenatis faucibus
+                  </li>
+                  <li class="py-1">
+                   <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                   </i>
+                   Quisque rutrum aenean imperdiet
+                  </li>
+                  <li class="py-1">
+                   <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                   </i>
+                   Integer ante a consectetuer eget
+                  </li>
+                  <li class="py-1">
+                   <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                   </i>
+                   Phasellus nec sem in justo pellentesque
+                  </li>
+                 </ul>
+                </div>
+               </div>
+              </div>
+             </div>
+            </div>
+           </div>
+           <!-- end card body -->
+          </div>
+          <!-- end card -->
+          <div class="card">
+           <div class="card-header">
+            <div class="d-flex">
+             <div class="flex-grow-1">
+              <h5 class="card-title mb-0">
+               Post
+              </h5>
+             </div>
+             <div class="flex-shrink-0">
+              <a href="#post">
+               View All
+              </a>
+             </div>
+            </div>
+           </div>
+           <div class="card-body">
+            <div>
+             <div class="row">
+              <div class="col-xl-4">
+               <div class="card p-1 mb-xl-0">
+                <div class="p-3">
+                 <div class="d-flex align-items-start">
+                  <div class="flex-grow-1 overflow-hidden">
+                   <h5 class="font-size-15 text-truncate">
+                    <a class="text-body" href="#">
+                     Beautiful Day with Friends
+                    </a>
+                   </h5>
+                   <p class="font-size-13 text-muted mb-0">
+                    10 Apr, 2020
+                   </p>
+                  </div>
+                  <div class="flex-shrink-0 ms-2">
+                   <div class="dropdown">
+                    <a aria-expanded="false" class="btn btn-link text-muted font-size-16 p-1 py-0 dropdown-toggle shadow-none" data-bs-toggle="dropdown" href="#" role="button">
+                     <i class="bx bx-dots-horizontal-rounded">
+                     </i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                     <li>
+                      <a class="dropdown-item" href="#">
+                       Action
+                      </a>
+                     </li>
+                     <li>
+                      <a class="dropdown-item" href="#">
+                       Another action
+                      </a>
+                     </li>
+                     <li>
+                      <a class="dropdown-item" href="#">
+                       Something else here
+                      </a>
+                     </li>
+                    </ul>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <div class="position-relative">
+                 <img alt="" class="img-thumbnail" src="assets/images/small/img-3.jpg"/>
+                </div>
+                <div class="p-3">
+                 <ul class="list-inline">
+                  <li class="list-inline-item me-3">
+                   <a class="text-muted" href="javascript: void(0);">
+                    <i class="bx bx-purchase-tag-alt align-middle text-muted me-1">
+                    </i>
+                    Project
+                   </a>
+                  </li>
+                  <li class="list-inline-item me-3">
+                   <a class="text-muted" href="javascript: void(0);">
+                    <i class="bx bx-comment-dots align-middle text-muted me-1">
+                    </i>
+                    12 Comments
+                   </a>
+                  </li>
+                 </ul>
+                 <p class="text-muted">
+                  Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet
+                 </p>
+                 <div>
+                  <a class="text-primary" href="javascript: void(0);">
+                   Read more
+                   <i class="mdi mdi-arrow-right">
+                   </i>
+                  </a>
+                 </div>
+                </div>
+               </div>
+              </div>
+              <!-- end col -->
+              <div class="col-xl-4">
+               <div class="card p-1 mb-xl-0">
+                <div class="p-3">
+                 <div class="d-flex align-items-start">
+                  <div class="flex-grow-1 overflow-hidden">
+                   <h5 class="font-size-15 text-truncate">
+                    <a class="text-body" href="#">
+                     Drawing a sketch
+                    </a>
+                   </h5>
+                   <p class="font-size-13 text-muted mb-0">
+                    24 Mar, 2020
+                   </p>
+                  </div>
+                  <div class="flex-shrink-0 ms-2">
+                   <div class="dropdown">
+                    <a aria-expanded="false" class="btn btn-link text-muted font-size-16 p-1 py-0 dropdown-toggle shadow-none" data-bs-toggle="dropdown" href="#" role="button">
+                     <i class="bx bx-dots-horizontal-rounded">
+                     </i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                     <li>
+                      <a class="dropdown-item" href="#">
+                       Action
+                      </a>
+                     </li>
+                     <li>
+                      <a class="dropdown-item" href="#">
+                       Another action
+                      </a>
+                     </li>
+                     <li>
+                      <a class="dropdown-item" href="#">
+                       Something else here
+                      </a>
+                     </li>
+                    </ul>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <div class="position-relative">
+                 <img alt="" class="img-thumbnail" src="assets/images/small/img-1.jpg"/>
+                </div>
+                <div class="p-3">
+                 <ul class="list-inline">
+                  <li class="list-inline-item me-3">
+                   <a class="text-muted" href="javascript: void(0);">
+                    <i class="bx bx-purchase-tag-alt align-middle text-muted me-1">
+                    </i>
+                    Development
+                   </a>
+                  </li>
+                  <li class="list-inline-item me-3">
+                   <a class="text-muted" href="javascript: void(0);">
+                    <i class="bx bx-comment-dots align-middle text-muted me-1">
+                    </i>
+                    08 Comments
+                   </a>
+                  </li>
+                 </ul>
+                 <p class="text-muted">
+                  At vero eos et accusamus et iusto odio dignissimos ducimus quos
+                 </p>
+                 <div>
+                  <a class="text-primary" href="javascript: void(0);">
+                   Read more
+                   <i class="mdi mdi-arrow-right">
+                   </i>
+                  </a>
+                 </div>
+                </div>
+               </div>
+               <!-- end card -->
+              </div>
+              <!-- end col -->
+              <div class="col-xl-4">
+               <div class="card p-1 mb-sm-0">
+                <div class="p-3">
+                 <div class="d-flex align-items-start">
+                  <div class="flex-grow-1 overflow-hidden">
+                   <h5 class="font-size-15 text-truncate">
+                    <a class="text-body" href="#">
+                     Project discussion with team
+                    </a>
+                   </h5>
+                   <p class="font-size-13 text-muted mb-0">
+                    20 Mar, 2020
+                   </p>
+                  </div>
+                  <div class="flex-shrink-0 ms-2">
+                   <div class="dropdown">
+                    <a aria-expanded="false" class="btn btn-link text-muted font-size-16 p-1 py-0 dropdown-toggle shadow-none" data-bs-toggle="dropdown" href="#" role="button">
+                     <i class="bx bx-dots-horizontal-rounded">
+                     </i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                     <li>
+                      <a class="dropdown-item" href="#">
+                       Action
+                      </a>
+                     </li>
+                     <li>
+                      <a class="dropdown-item" href="#">
+                       Another action
+                      </a>
+                     </li>
+                     <li>
+                      <a class="dropdown-item" href="#">
+                       Something else here
+                      </a>
+                     </li>
+                    </ul>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <div class="position-relative">
+                 <img alt="" class="img-thumbnail" src="assets/images/small/img-5.jpg"/>
+                </div>
+                <div class="p-3">
+                 <ul class="list-inline">
+                  <li class="list-inline-item me-3">
+                   <a class="text-muted" href="javascript: void(0);">
+                    <i class="bx bx-purchase-tag-alt align-middle text-muted me-1">
+                    </i>
+                    Project
+                   </a>
+                  </li>
+                  <li class="list-inline-item me-3">
+                   <a class="text-muted" href="javascript: void(0);">
+                    <i class="bx bx-comment-dots align-middle text-muted me-1">
+                    </i>
+                    08 Comments
+                   </a>
+                  </li>
+                 </ul>
+                 <p class="text-muted">
+                  Itaque earum rerum hic tenetur a sapiente delectus ut aut
+                 </p>
+                 <div>
+                  <a class="text-primary" href="javascript: void(0);">
+                   Read more
+                   <i class="mdi mdi-arrow-right">
+                   </i>
+                  </a>
+                 </div>
+                </div>
+               </div>
+               <!-- end card -->
+              </div>
+              <!-- end col -->
+             </div>
+             <!-- end row -->
+            </div>
+           </div>
+           <!-- end card body -->
+          </div>
+          <!-- end card -->
+         </div>
+         <!-- end tab pane -->
+         <div class="tab-pane" id="about" role="tabpanel">
+          <div class="card">
+           <div class="card-header">
+            <h5 class="card-title mb-0">
+             About
+            </h5>
+           </div>
+           <div class="card-body">
+            <div>
+             <div class="pb-3">
+              <h5 class="font-size-15">
+               Bio :
+              </h5>
+              <div class="text-muted">
+               <p class="mb-2">
+                Hi I'm Phyllis Gatlin, Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages
+               </p>
+               <p class="mb-2">
+                It is a long established fact that a reader will be distracted by the readable content of a page when looking at it has a more-or-less normal distribution of letters
+               </p>
+               <p>
+                It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is. The European languages are members of the same family. Their separate existence is a myth.
+               </p>
+               <ul class="list-unstyled mb-0">
+                <li class="py-1">
+                 <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                 </i>
+                 Donec vitae sapien ut libero venenatis faucibus
+                </li>
+                <li class="py-1">
+                 <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                 </i>
+                 Quisque rutrum aenean imperdiet
+                </li>
+                <li class="py-1">
+                 <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                 </i>
+                 Integer ante a consectetuer eget
+                </li>
+               </ul>
+              </div>
+             </div>
+             <div class="pt-3">
+              <h5 class="font-size-15">
+               Experience :
+              </h5>
+              <div class="text-muted">
+               <p>
+                If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual languages. The new common language will be more simple and regular than the existing European languages. It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is. The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc
+               </p>
+               <ul class="list-unstyled mb-0">
+                <li class="py-1">
+                 <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                 </i>
+                 Donec vitae sapien ut libero venenatis faucibus
+                </li>
+                <li class="py-1">
+                 <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                 </i>
+                 Quisque rutrum aenean imperdiet
+                </li>
+                <li class="py-1">
+                 <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                 </i>
+                 Integer ante a consectetuer eget
+                </li>
+                <li class="py-1">
+                 <i class="mdi mdi-circle-medium me-1 text-success align-middle">
+                 </i>
+                 Phasellus nec sem in justo pellentesque
+                </li>
+               </ul>
+              </div>
+             </div>
+            </div>
+           </div>
+           <!-- end card body -->
+          </div>
+          <!-- end card -->
+         </div>
+         <!-- end tab pane -->
+         <div class="tab-pane" id="post" role="tabpanel">
+          <div class="card">
+           <div class="card-header">
+            <h5 class="card-title mb-0">
+             Post
+            </h5>
+           </div>
+           <div class="card-body">
+            <div>
+             <div class="row justify-content-center">
+              <div class="col-xl-8">
+               <div class="mt-5">
+                <div class="d-flex align-items-start">
+                 <div class="flex-grow-1 overflow-hidden">
+                  <h5 class="font-size-15 text-truncate">
+                   <a class="text-body" href="#">
+                    Project discussion with team
+                   </a>
+                  </h5>
+                  <p class="font-size-13 text-muted mb-0">
+                   24 Mar, 2020
+                  </p>
+                 </div>
+                 <div class="flex-shrink-0 ms-2">
+                  <div class="dropdown">
+                   <a aria-expanded="false" class="btn btn-link text-muted font-size-16 p-1 py-0 dropdown-toggle shadow-none" data-bs-toggle="dropdown" href="#" role="button">
+                    <i class="bx bx-dots-horizontal-rounded">
+                    </i>
+                   </a>
+                   <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                     <a class="dropdown-item" href="#">
+                      Action
+                     </a>
+                    </li>
+                    <li>
+                     <a class="dropdown-item" href="#">
+                      Another action
+                     </a>
+                    </li>
+                    <li>
+                     <a class="dropdown-item" href="#">
+                      Something else here
+                     </a>
+                    </li>
+                   </ul>
+                  </div>
+                 </div>
+                </div>
+                <div class="pt-3">
+                 <ul class="list-inline">
+                  <li class="list-inline-item me-3">
+                   <a class="text-muted" href="javascript: void(0);">
+                    <i class="bx bx-purchase-tag-alt align-middle text-muted me-1">
+                    </i>
+                    Development
+                   </a>
+                  </li>
+                  <li class="list-inline-item me-3">
+                   <a class="text-muted" href="javascript: void(0);">
+                    <i class="bx bx-comment-dots align-middle text-muted me-1">
+                    </i>
+                    08 Comments
+                   </a>
+                  </li>
+                 </ul>
+                 <p class="text-muted">
+                  At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores
+                 </p>
+                 <div>
+                  <a class="text-primary" href="javascript: void(0);">
+                   Read more
+                   <i class="mdi mdi-arrow-right">
+                   </i>
+                  </a>
+                 </div>
+                </div>
+               </div>
+               <!-- end post -->
+               <hr class="my-5"/>
+               <div>
+                <div class="d-flex align-items-start">
+                 <div class="flex-grow-1 overflow-hidden">
+                  <h5 class="font-size-15 text-truncate">
+                   <a class="text-body" href="#">
+                    Beautiful Day with Friends
+                   </a>
+                  </h5>
+                  <p class="font-size-13 text-muted mb-0">
+                   10 Apr, 2020
+                  </p>
+                 </div>
+                 <div class="flex-shrink-0 ms-2">
+                  <div class="dropdown">
+                   <a aria-expanded="false" class="btn btn-link text-muted font-size-16 p-1 py-0 dropdown-toggle shadow-none" data-bs-toggle="dropdown" href="#" role="button">
+                    <i class="bx bx-dots-horizontal-rounded">
+                    </i>
+                   </a>
+                   <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                     <a class="dropdown-item" href="#">
+                      Action
+                     </a>
+                    </li>
+                    <li>
+                     <a class="dropdown-item" href="#">
+                      Another action
+                     </a>
+                    </li>
+                    <li>
+                     <a class="dropdown-item" href="#">
+                      Something else here
+                     </a>
+                    </li>
+                   </ul>
+                  </div>
+                 </div>
+                </div>
+                <div class="position-relative mt-3">
+                 <img alt="" class="img-thumbnail" src="assets/images/small/img-3.jpg"/>
+                </div>
+                <div class="pt-3">
+                 <ul class="list-inline">
+                  <li class="list-inline-item me-3">
+                   <a class="text-muted" href="javascript: void(0);">
+                    <i class="bx bx-purchase-tag-alt align-middle text-muted me-1">
+                    </i>
+                    Project
+                   </a>
+                  </li>
+                  <li class="list-inline-item me-3">
+                   <a class="text-muted" href="javascript: void(0);">
+                    <i class="bx bx-comment-dots align-middle text-muted me-1">
+                    </i>
+                    12 Comments
+                   </a>
+                  </li>
+                 </ul>
+                 <p class="text-muted">
+                  Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, aliquam quaerat voluptatem. Ut enim ad minima veniam, quis
+                 </p>
+                 <div>
+                  <a class="text-primary" href="javascript: void(0);">
+                   Read more
+                   <i class="mdi mdi-arrow-right">
+                   </i>
+                  </a>
+                 </div>
+                </div>
+               </div>
+               <!-- end post -->
+               <hr class="my-5"/>
+               <div>
+                <div class="d-flex align-items-start">
+                 <div class="flex-grow-1 overflow-hidden">
+                  <h5 class="font-size-15 text-truncate">
+                   <a class="text-body" href="#">
+                    Drawing a sketch
+                   </a>
+                  </h5>
+                  <p class="font-size-13 text-muted mb-0">
+                   20 Mar, 2020
+                  </p>
+                 </div>
+                 <div class="flex-shrink-0 ms-2">
+                  <div class="dropdown">
+                   <a aria-expanded="false" class="btn btn-link text-muted font-size-16 p-1 py-0 dropdown-toggle shadow-none" data-bs-toggle="dropdown" href="#" role="button">
+                    <i class="bx bx-dots-horizontal-rounded">
+                    </i>
+                   </a>
+                   <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                     <a class="dropdown-item" href="#">
+                      Action
+                     </a>
+                    </li>
+                    <li>
+                     <a class="dropdown-item" href="#">
+                      Another action
+                     </a>
+                    </li>
+                    <li>
+                     <a class="dropdown-item" href="#">
+                      Something else here
+                     </a>
+                    </li>
+                   </ul>
+                  </div>
+                 </div>
+                </div>
+                <div class="pt-3">
+                 <ul class="list-inline">
+                  <li class="list-inline-item me-3">
+                   <a class="text-muted" href="javascript: void(0);">
+                    <i class="bx bx-purchase-tag-alt align-middle text-muted me-1">
+                    </i>
+                    Project
+                   </a>
+                  </li>
+                  <li class="list-inline-item me-3">
+                   <a class="text-muted" href="javascript: void(0);">
+                    <i class="bx bx-comment-dots align-middle text-muted me-1">
+                    </i>
+                    12 Comments
+                   </a>
+                  </li>
+                 </ul>
+                 <p class="text-muted">
+                  Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, aliquam quaerat voluptatem. Ut enim ad minima veniam, quis
+                 </p>
+                 <div>
+                  <a class="text-primary" href="javascript: void(0);">
+                   Read more
+                   <i class="mdi mdi-arrow-right">
+                   </i>
+                  </a>
+                 </div>
+                </div>
+               </div>
+               <!-- end post -->
+              </div>
+              <!-- end col -->
+             </div>
+             <!-- end row -->
+             <div class="row g-0 mt-4">
+              <div class="col-sm-6">
+               <div>
+                <p class="mb-sm-0">
+                 Showing 1 to 10 of 57 entries
+                </p>
+               </div>
+              </div>
+              <div class="col-sm-6">
+               <div class="float-sm-end">
+                <ul class="pagination mb-sm-0">
+                 <li class="page-item disabled">
+                  <a class="page-link" href="#">
+                   <i class="mdi mdi-chevron-left">
+                   </i>
+                  </a>
+                 </li>
+                 <li class="page-item">
+                  <a class="page-link" href="#">
+                   1
+                  </a>
+                 </li>
+                 <li class="page-item active">
+                  <a class="page-link" href="#">
+                   2
+                  </a>
+                 </li>
+                 <li class="page-item">
+                  <a class="page-link" href="#">
+                   3
+                  </a>
+                 </li>
+                 <li class="page-item">
+                  <a class="page-link" href="#">
+                   4
+                  </a>
+                 </li>
+                 <li class="page-item">
+                  <a class="page-link" href="#">
+                   5
+                  </a>
+                 </li>
+                 <li class="page-item">
+                  <a class="page-link" href="#">
+                   <i class="mdi mdi-chevron-right">
+                   </i>
+                  </a>
+                 </li>
+                </ul>
+               </div>
+              </div>
+             </div>
+             <!-- end row -->
+            </div>
+           </div>
+           <!-- end card body -->
+          </div>
+          <!-- end card -->
+         </div>
+         <!-- end tab pane -->
+        </div>
+        <!-- end tab content -->
+       </div>
+       <!-- end col -->
+       <div class="col-xl-3 col-lg-4">
+        <div class="card">
+         <div class="card-body">
+          <h5 class="card-title mb-3">
+           Skills
+          </h5>
+          <div class="d-flex flex-wrap gap-2 font-size-16">
+           <a class="badge bg-primary-subtle text-primary" href="#">
+            Photoshop
+           </a>
+           <a class="badge bg-primary-subtle text-primary" href="#">
+            illustrator
+           </a>
+           <a class="badge bg-primary-subtle text-primary" href="#">
+            HTML
+           </a>
+           <a class="badge bg-primary-subtle text-primary" href="#">
+            CSS
+           </a>
+           <a class="badge bg-primary-subtle text-primary" href="#">
+            Javascript
+           </a>
+           <a class="badge bg-primary-subtle text-primary" href="#">
+            Php
+           </a>
+           <a class="badge bg-primary-subtle text-primary" href="#">
+            Python
+           </a>
+          </div>
+         </div>
+         <!-- end card body -->
+        </div>
+        <!-- end card -->
+        <div class="card">
+         <div class="card-body">
+          <h5 class="card-title mb-3">
+           Portfolio
+          </h5>
+          <div>
+           <ul class="list-unstyled mb-0">
+            <li>
+             <a class="py-2 d-block text-muted" href="#">
+              <i class="mdi mdi-web text-primary me-1">
+              </i>
+              Website
+             </a>
+            </li>
+            <li>
+             <a class="py-2 d-block text-muted" href="#">
+              <i class="mdi mdi-note-text-outline text-primary me-1">
+              </i>
+              Blog
+             </a>
+            </li>
+           </ul>
+          </div>
+         </div>
+         <!-- end card body -->
+        </div>
+        <!-- end card -->
+        <div class="card">
+         <div class="card-body">
+          <h5 class="card-title mb-3">
+           Similar Profiles
+          </h5>
+          <div class="list-group list-group-flush">
+           <a class="list-group-item list-group-item-action" href="#">
+            <div class="d-flex align-items-center">
+             <div class="avatar-sm flex-shrink-0 me-3">
+              <img alt="" class="img-thumbnail rounded-circle" src="assets/images/users/avatar-1.jpg"/>
+             </div>
+             <div class="flex-grow-1">
+              <div>
+               <h5 class="font-size-14 mb-1">
+                James Nix
+               </h5>
+               <p class="font-size-13 text-muted mb-0">
+                Full Stack Developer
+               </p>
+              </div>
+             </div>
+            </div>
+           </a>
+           <a class="list-group-item list-group-item-action" href="#">
+            <div class="d-flex align-items-center">
+             <div class="avatar-sm flex-shrink-0 me-3">
+              <img alt="" class="img-thumbnail rounded-circle" src="assets/images/users/avatar-3.jpg"/>
+             </div>
+             <div class="flex-grow-1">
+              <div>
+               <h5 class="font-size-14 mb-1">
+                Darlene Smith
+               </h5>
+               <p class="font-size-13 text-muted mb-0">
+                UI/UX Designer
+               </p>
+              </div>
+             </div>
+            </div>
+           </a>
+           <a class="list-group-item list-group-item-action" href="#">
+            <div class="d-flex align-items-center">
+             <div class="avatar-sm flex-shrink-0 me-3">
+              <div class="avatar-title bg-light-subtle text-light rounded-circle font-size-22">
+               <i class="bx bxs-user-circle">
+               </i>
+              </div>
+             </div>
+             <div class="flex-grow-1">
+              <div>
+               <h5 class="font-size-14 mb-1">
+                William Swift
+               </h5>
+               <p class="font-size-13 text-muted mb-0">
+                Backend Developer
+               </p>
+              </div>
+             </div>
+            </div>
+           </a>
+          </div>
+         </div>
+         <!-- end card body -->
+        </div>
+        <!-- end card -->
+       </div>
+       <!-- end col -->
+      </div>
+      <!-- end row -->
+     </div>
+     <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+    <footer class="footer">
+     <div class="container-fluid">
+      <div class="row">
+       <div class="col-sm-6">
+        <script>
+         document.write(new Date().getFullYear())
+        </script>
+       © StarCode Kh.
+       </div>
+       <div class="col-sm-6">
+        <div class="col-sm-6">
+                            <div class="text-sm-end d-none d-sm-block"> Design &amp; Custom by
+                                <a class="text-decoration-underline" href="https://www.admintem.com/" target="_blank">admintem.com</a>
+                            </div>
+                        </div>
+       </div>
+      </div>
+     </div>
+    </footer>
+   </div>
+   <!-- end main content-->
+  </div>
+  <!-- END layout-wrapper -->
+  <!-- Right Sidebar -->
+  <div class="right-bar">
+   <div class="h-100" data-simplebar="">
+    <div class="rightbar-title d-flex align-items-center p-3">
+     <h5 class="m-0 me-2">
+      Theme Customizer
+     </h5>
+     <a class="right-bar-toggle ms-auto" href="javascript:void(0);">
+      <i class="mdi mdi-close noti-icon">
+      </i>
+     </a>
+    </div>
+    <!-- Settings -->
+    <hr class="m-0">
+     <div class="p-4">
+      <h6 class="mb-3">
+       Layout
+      </h6>
+      <div class="form-check form-check-inline">
+       <input class="form-check-input" id="layout-vertical" name="layout" type="radio" value="vertical"/>
+       <label class="form-check-label" for="layout-vertical">
+        Vertical
+       </label>
+      </div>
+      <div class="form-check form-check-inline">
+       <input class="form-check-input" id="layout-horizontal" name="layout" type="radio" value="horizontal"/>
+       <label class="form-check-label" for="layout-horizontal">
+        Horizontal
+       </label>
+      </div>
+      <h6 class="mt-4 mb-3 pt-2">
+       Layout Mode
+      </h6>
+      <div class="form-check form-check-inline">
+       <input class="form-check-input" id="layout-mode-light" name="layout-mode" type="radio" value="light"/>
+       <label class="form-check-label" for="layout-mode-light">
+        Light
+       </label>
+      </div>
+      <div class="form-check form-check-inline">
+       <input class="form-check-input" id="layout-mode-dark" name="layout-mode" type="radio" value="dark"/>
+       <label class="form-check-label" for="layout-mode-dark">
+        Dark
+       </label>
+      </div>
+      <h6 class="mt-4 mb-3 pt-2">
+       Layout Width
+      </h6>
+      <div class="form-check form-check-inline">
+       <input class="form-check-input" id="layout-width-fuild" name="layout-width" onchange="document.body.setAttribute('data-layout-size', 'fluid')" type="radio" value="fuild"/>
+       <label class="form-check-label" for="layout-width-fuild">
+        Fluid
+       </label>
+      </div>
+      <div class="form-check form-check-inline">
+       <input class="form-check-input" id="layout-width-boxed" name="layout-width" onchange="document.body.setAttribute('data-layout-size', 'boxed')" type="radio" value="boxed"/>
+       <label class="form-check-label" for="layout-width-boxed">
+        Boxed
+       </label>
+      </div>
+      <h6 class="mt-4 mb-3 pt-2">
+       Layout Position
+      </h6>
+      <div class="form-check form-check-inline">
+       <input class="form-check-input" id="layout-position-fixed" name="layout-position" onchange="document.body.setAttribute('data-layout-scrollable', 'false')" type="radio" value="fixed"/>
+       <label class="form-check-label" for="layout-position-fixed">
+        Fixed
+       </label>
+      </div>
+      <div class="form-check form-check-inline">
+       <input class="form-check-input" id="layout-position-scrollable" name="layout-position" onchange="document.body.setAttribute('data-layout-scrollable', 'true')" type="radio" value="scrollable"/>
+       <label class="form-check-label" for="layout-position-scrollable">
+        Scrollable
+       </label>
+      </div>
+      <h6 class="mt-4 mb-3 pt-2">
+       Topbar Color
+      </h6>
+      <div class="form-check form-check-inline">
+       <input class="form-check-input" id="topbar-color-light" name="topbar-color" onchange="document.body.setAttribute('data-topbar', 'light')" type="radio" value="light"/>
+       <label class="form-check-label" for="topbar-color-light">
+        Light
+       </label>
+      </div>
+      <div class="form-check form-check-inline">
+       <input class="form-check-input" id="topbar-color-dark" name="topbar-color" onchange="document.body.setAttribute('data-topbar', 'dark')" type="radio" value="dark"/>
+       <label class="form-check-label" for="topbar-color-dark">
+        Dark
+       </label>
+      </div>
+      <h6 class="mt-4 mb-3 pt-2 sidebar-setting">
+       Sidebar Size
+      </h6>
+      <div class="form-check sidebar-setting">
+       <input class="form-check-input" id="sidebar-size-default" name="sidebar-size" onchange="document.body.setAttribute('data-sidebar-size', 'lg')" type="radio" value="default"/>
+       <label class="form-check-label" for="sidebar-size-default">
+        Default
+       </label>
+      </div>
+      <div class="form-check sidebar-setting">
+       <input class="form-check-input" id="sidebar-size-compact" name="sidebar-size" onchange="document.body.setAttribute('data-sidebar-size', 'md')" type="radio" value="compact"/>
+       <label class="form-check-label" for="sidebar-size-compact">
+        Compact
+       </label>
+      </div>
+      <div class="form-check sidebar-setting">
+       <input class="form-check-input" id="sidebar-size-small" name="sidebar-size" onchange="document.body.setAttribute('data-sidebar-size', 'sm')" type="radio" value="small"/>
+       <label class="form-check-label" for="sidebar-size-small">
+        Small (Icon View)
+       </label>
+      </div>
+      <h6 class="mt-4 mb-3 pt-2 sidebar-setting">
+       Sidebar Color
+      </h6>
+      <div class="form-check sidebar-setting">
+       <input class="form-check-input" id="sidebar-color-light" name="sidebar-color" onchange="document.body.setAttribute('data-sidebar', 'light')" type="radio" value="light"/>
+       <label class="form-check-label" for="sidebar-color-light">
+        Light
+       </label>
+      </div>
+      <div class="form-check sidebar-setting">
+       <input class="form-check-input" id="sidebar-color-dark" name="sidebar-color" onchange="document.body.setAttribute('data-sidebar', 'dark')" type="radio" value="dark"/>
+       <label class="form-check-label" for="sidebar-color-dark">
+        Dark
+       </label>
+      </div>
+      <div class="form-check sidebar-setting">
+       <input class="form-check-input" id="sidebar-color-brand" name="sidebar-color" onchange="document.body.setAttribute('data-sidebar', 'brand')" type="radio" value="brand"/>
+       <label class="form-check-label" for="sidebar-color-brand">
+        Brand
+       </label>
+      </div>
+      <h6 class="mt-4 mb-3 pt-2">
+       Direction
+      </h6>
+      <div class="form-check form-check-inline">
+       <input class="form-check-input" id="layout-direction-ltr" name="layout-direction" type="radio" value="ltr"/>
+       <label class="form-check-label" for="layout-direction-ltr">
+        LTR
+       </label>
+      </div>
+      <div class="form-check form-check-inline">
+       <input class="form-check-input" id="layout-direction-rtl" name="layout-direction" type="radio" value="rtl"/>
+       <label class="form-check-label" for="layout-direction-rtl">
+        RTL
+       </label>
+      </div>
+     </div>
+    </hr>
+   </div>
+   <!-- end slimscroll-menu-->
+  </div>
+  <!-- /Right-bar -->
+  <!-- Right bar overlay-->
+  <div class="rightbar-overlay">
+  </div>
+  <!-- JAVASCRIPT -->
+  <script src="assets/libs/jquery/jquery.min.js">
+  </script>
+  <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js">
+  </script>
+  <script src="assets/libs/metismenu/metisMenu.min.js">
+  </script>
+  <script src="assets/libs/simplebar/simplebar.min.js">
+  </script>
+  <script src="assets/libs/node-waves/waves.min.js">
+  </script>
+  <script src="assets/libs/feather-icons/feather.min.js">
+  </script>
+  <!-- pace js -->
+  <script src="assets/libs/pace-js/pace.min.js">
+  </script>
+  <script src="assets/js/app.js">
+  </script>
+ </body>
+</html>
