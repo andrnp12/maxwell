@@ -46,7 +46,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-xl-6 col-md-6">
-                            <div class="card">
+                            <div class="card mb-3">
                                 <div class="row g-0 align-items-center">
                                     <div class="col-3 text-center">
                                         <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-xl-6 col-md-6">
-                            <div class="card">
+                            <div class="card mb-3">
                                 <div class="row g-0 align-items-center">
                                     <div class="col-3 text-center">
                                         <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-xl-6 col-md-6">
-                            <div class="card">
+                            <div class="card mb-3">
                                 <div class="row g-0 align-items-center">
                                     <div class="col-3 text-center">
                                         <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">

@@ -19,10 +19,10 @@
                         <div class="col-12">
                             <div class="row d-sm-flex align-items-center justify-content-between mb-2">
                                 <h4 class="mb-sm-0 font-weight-bold mb-1">
-                                    Modul Edukasi
+                                    Skill Saya
                                 </h4>
                                 <p class="text-muted">
-                                    Jelajahi berbagai modul edukasi yang tersedia!
+                                    Kelola kompetensi Anda dengan mudah!
                                 </p>
                             </div>
                         </div>
@@ -30,15 +30,70 @@
                     <!-- end page title -->
                     <!-- end row -->
                     <div class="row">
+                        <!-- end card header -->
                         <div class="col-12">
-                            <div class="page-title-box d-flex align-items-center justify-content-between pb-4">
+                            <div class="carousel slide pointer-event" data-bs-ride="carousel" id="carouselExampleCaption">
+                                <div class="carousel-inner" role="listbox">
+                                    <div class="carousel-item">
+                                        <img alt="..." class="d-block img-fluid mx-auto" src="assets/images/small/img-7.jpg">
+                                        <div class="carousel-caption d-block text-white-50">
+                                            <h5 class="text-white">
+                                                First slide label
+                                            </h5>
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img alt="..." class="d-block img-fluid mx-auto" src="assets/images/small/img-5.jpg">
+                                        <div class="carousel-caption d-block text-white-50">
+                                            <h5 class="text-white">
+                                                Second slide label
+                                            </h5>
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-item active">
+                                        <img alt="..." class="d-block img-fluid mx-auto" src="assets/images/small/img-4.jpg">
+                                        <div class="carousel-caption d-block text-white-50">
+                                            <h5 class="text-white">
+                                                Third slide label
+                                            </h5>
+                                            <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a class="carousel-control-prev" data-bs-slide="prev" href="#carouselExampleCaption" role="button">
+                                    <span aria-hidden="true" class="carousel-control-prev-icon">
+                                    </span>
+                                    <span class="sr-only">
+                                        Previous
+                                    </span>
+                                </a>
+                                <a class="carousel-control-next" data-bs-slide="next" href="#carouselExampleCaption" role="button">
+                                    <span aria-hidden="true" class="carousel-control-next-icon">
+                                    </span>
+                                    <span class="sr-only">
+                                        Next
+                                    </span>
+                                </a>
+                            </div>
+                            <!-- end carousel -->
+                        </div>
+                        <div class="col-12">
+                            <div class="page-title-box d-flex align-items-center justify-content-between py-4">
                                 <h5 class="mb-sm-0">
-                                    Daftar Komunitas
+                                    Daftar Skill
                                 </h5>
                                 <div class="page-title-right">
                                     <div class="btn-group">
                                         <button aria-expanded="false" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" type="button">
-                                            Filter Materi
+                                            Filter Skill
                                             <i class="mdi mdi-chevron-down">
                                             </i>
                                         </button>

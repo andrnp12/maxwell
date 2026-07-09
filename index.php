@@ -22,9 +22,9 @@
                <div class="row">
                   <div class="col-12">
                      <div class="row d-sm-flex align-items-center justify-content-between">
-                        <h5 class="mb-sm-0 font-weight-bold mb-1">
-                           Halo, Davied Indra Lesmana!
-                        </h5>
+                        <h4 class="mb-sm-0 font-weight-bold mb-1">
+                           Halo, Davied Indra!
+                        </h4>
                         <p class="text-muted">
                            Siap untuk belajar lagi hari ini? Ayo mulai!
                         </p>

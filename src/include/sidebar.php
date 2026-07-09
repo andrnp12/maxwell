@@ -26,6 +26,15 @@
                </a>
             </li>
             <li>
+               <a href="skill.php">
+                  <i data-feather="award">
+                  </i>
+                  <span data-key="t-skill">
+                     Skill
+                  </span>
+               </a>
+            </li>
+            <li>
                <a href="komunitas.php">
                   <i data-feather="users">
                   </i>
