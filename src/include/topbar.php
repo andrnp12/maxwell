@@ -61,117 +61,13 @@
                </form>
             </div>
          </div>
-         <div class="dropdown d-none d-sm-inline-block">
-            <button aria-expanded="false" aria-haspopup="true" class="btn header-item" data-bs-toggle="dropdown" type="button">
-               <img alt="Header Language" height="16" id="header-lang-img" src="assets/images/flags/us.jpg" />
-            </button>
-            <div class="dropdown-menu dropdown-menu-end">
-               <!-- item-->
-               <a class="dropdown-item notify-item language" data-lang="en" href="javascript:void(0);">
-                  <img alt="user-image" class="me-1" height="12" src="assets/images/flags/us.jpg" />
-                  <span class="align-middle">
-                     English
-                  </span>
-               </a>
-               <!-- item-->
-               <a class="dropdown-item notify-item language" data-lang="sp" href="javascript:void(0);">
-                  <img alt="user-image" class="me-1" height="12" src="assets/images/flags/spain.jpg" />
-                  <span class="align-middle">
-                     Spanish
-                  </span>
-               </a>
-               <!-- item-->
-               <a class="dropdown-item notify-item language" data-lang="gr" href="javascript:void(0);">
-                  <img alt="user-image" class="me-1" height="12" src="assets/images/flags/germany.jpg" />
-                  <span class="align-middle">
-                     German
-                  </span>
-               </a>
-               <!-- item-->
-               <a class="dropdown-item notify-item language" data-lang="it" href="javascript:void(0);">
-                  <img alt="user-image" class="me-1" height="12" src="assets/images/flags/italy.jpg" />
-                  <span class="align-middle">
-                     Italian
-                  </span>
-               </a>
-               <!-- item-->
-               <a class="dropdown-item notify-item language" data-lang="ru" href="javascript:void(0);">
-                  <img alt="user-image" class="me-1" height="12" src="assets/images/flags/russia.jpg" />
-                  <span class="align-middle">
-                     Russian
-                  </span>
-               </a>
-            </div>
-         </div>
-         <div class="dropdown d-none d-sm-inline-block">
+         <div class="dropdown d-sm-inline-block">
             <button class="btn header-item" id="mode-setting-btn" type="button">
                <i class="icon-lg layout-mode-dark" data-feather="moon">
                </i>
                <i class="icon-lg layout-mode-light" data-feather="sun">
                </i>
             </button>
-         </div>
-         <div class="dropdown d-none d-lg-inline-block ms-1">
-            <button aria-expanded="false" aria-haspopup="true" class="btn header-item" data-bs-toggle="dropdown" type="button">
-               <i class="icon-lg" data-feather="grid">
-               </i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-               <div class="p-2">
-                  <div class="row g-0">
-                     <div class="col">
-                        <a class="dropdown-icon-item" href="#">
-                           <img alt="Github" src="assets/images/brands/github.png" />
-                           <span>
-                              GitHub
-                           </span>
-                        </a>
-                     </div>
-                     <div class="col">
-                        <a class="dropdown-icon-item" href="#">
-                           <img alt="bitbucket" src="assets/images/brands/bitbucket.png" />
-                           <span>
-                              Bitbucket
-                           </span>
-                        </a>
-                     </div>
-                     <div class="col">
-                        <a class="dropdown-icon-item" href="#">
-                           <img alt="dribbble" src="assets/images/brands/dribbble.png" />
-                           <span>
-                              Dribbble
-                           </span>
-                        </a>
-                     </div>
-                  </div>
-                  <div class="row g-0">
-                     <div class="col">
-                        <a class="dropdown-icon-item" href="#">
-                           <img alt="dropbox" src="assets/images/brands/dropbox.png" />
-                           <span>
-                              Dropbox
-                           </span>
-                        </a>
-                     </div>
-                     <div class="col">
-                        <a class="dropdown-icon-item" href="#">
-                           <img alt="mail_chimp" src="assets/images/brands/mail_chimp.png" />
-                           <span>
-                              Mail Chimp
-                           </span>
-                        </a>
-                     </div>
-                     <div class="col">
-                        <a class="dropdown-icon-item" href="#">
-                           <img alt="slack" src="assets/images/brands/slack.png" />
-                           <span>
-                              Slack
-                           </span>
-                        </a>
-                     </div>
-                  </div>
-               </div>
-            </div>
          </div>
          <div class="dropdown d-inline-block me-2">
             <button aria-expanded="false" aria-haspopup="true" class="btn header-item noti-icon position-relative" data-bs-toggle="dropdown" id="page-header-notifications-dropdown" type="button">
@@ -311,14 +207,8 @@
                </div>
             </div>
          </div>
-         <!-- <div class="dropdown d-inline-block">
-                     <button class="btn header-item right-bar-toggle me-2" type="button">
-                     <i class="icon-lg" data-feather="settings">
-                     </i>
-                     </button>
-                  </div> -->
-         <div class="dropdown d-inline-block">
-            <button aria-expanded="false" aria-haspopup="true" class="btn header-item bg-light-subtle border-start border-end" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
+         <div class="dropdown d-none d-lg-block">
+            <button aria-expanded="false" aria-haspopup="true" class="btn header-item bg-light-subtle border-start border-end page-header-user-dropdown" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
                <img alt="Header Avatar" class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" />
                <span class="d-none d-xl-inline-block ms-1 fw-medium">
                   StarCode Kh
