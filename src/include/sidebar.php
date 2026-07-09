@@ -12,34 +12,34 @@
                   <i data-feather="home">
                   </i>
                   <span data-key="t-dashboard">
-                     Dashboard
+                     Beranda
                   </span>
                </a>
             </li>
             <li>
-               <a href="#">
-                  <i data-feather="grid">
+               <a href="belajar.php">
+                  <i data-feather="book">
                   </i>
-                  <span data-key="t-apps">
-                     Apps
+                  <span data-key="t-belajar">
+                     Belajar
                   </span>
                </a>
             </li>
             <li>
-               <a href="#">
+               <a href="komunitas.php">
                   <i data-feather="users">
                   </i>
-                  <span data-key="t-authentication">
-                     Authentication
+                  <span data-key="t-komunitas">
+                     Komunitas
                   </span>
                </a>
             </li>
             <li>
-               <a href="#">
-                  <i data-feather="file-text">
+               <a href="profile.php">
+                  <i data-feather="user">
                   </i>
-                  <span data-key="t-pages">
-                     Pages
+                  <span data-key="t-akun">
+                     Akun
                   </span>
                </a>
             </li>

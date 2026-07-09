@@ -21,11 +21,11 @@
                <!-- start page title -->
                <div class="row">
                   <div class="col-12">
-                     <div class="d-sm-flex align-items-center justify-content-between">
-                        <h5 class="mb-sm-0 font-weight-bold">
+                     <div class="row d-sm-flex align-items-center justify-content-between">
+                        <h5 class="mb-sm-0 font-weight-bold mb-1">
                            Halo, Davied Indra Lesmana!
                         </h5>
-                        <p>
+                        <p class="text-muted">
                            Siap untuk belajar lagi hari ini? Ayo mulai!
                         </p>
                      </div>
@@ -52,8 +52,6 @@
                                  <div class="mt-4 mt-sm-0">
                                     <div>
                                        <p class="mb-2">
-                                          <!-- <i class="mdi mdi-circle align-middle font-size-10 me-2 text-success">
-                                          </i> -->
                                           Terus belajar dan kembangkan diri kamu untuk menjadi lebih baik lagi!
                                        </p>
                                        <button class="btn btn-primary btn-rounded btn-sm waves-effect waves-light" type="button">
