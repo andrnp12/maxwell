@@ -482,7 +482,7 @@ body[data-layout="horizontal"] .footer {
   width: 16px;
   color: var(--bs-sidebar-menu-item-icon-color);
   fill: var(--bs-sidebar-menu-item-icon-effact-color);
-  margin-right: 10px;
+  /* margin-right: 10px; */
   margin-top: -3px;
 }
 #sidebar-menu ul li a:hover {
