@@ -34,7 +34,7 @@ class auth
                 $_SESSION['id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
-                // $_SESSION['is_logged_in'] = true;
+                $_SESSION['is_logged_in'] = true;
 
                 return true;
             }
@@ -42,18 +42,27 @@ class auth
         return false;
     }
 
-    public function register(string $username, string $password): bool
+    public function register(string $username, string $password, string $role = 'user'): bool
     {
+        $checkSql = "SELECT id FROM users WHERE username = ?";
+        $stmtCheck = $this->conn->prepare($checkSql);
+        $stmtCheck->bind_param("s", $username);
+        $stmtCheck->execute();
+
+        if ($stmtCheck->get_result()->num_rows > 0) {
+            // Username sudah ada, gagalkan registrasi
+            return false;
+        }
         // Hash password sebelum disimpan
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = $this->conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, ?)");
 
         if (!$stmt) {
             die("Error pada query: " . $this->conn->error);
         }
 
-        $stmt->bind_param("ss", $username, $hashedPassword);
+        $stmt->bind_param("sss", $username, $hashedPassword, $role);
         return $stmt->execute();
     }
 

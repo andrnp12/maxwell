@@ -1,3 +1,14 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+   session_start();
+}
+
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
+   header('Location: login.php');
+   exit;
+}
+?>
+
 <!--header start-->
 <?php include('src/include/header.php'); ?>
 <!--header end-->
@@ -222,6 +233,7 @@
    <!-- javascript -->
    <?php include("src/include/script.php"); ?>
    <!-- end javascript -->
+
 </body>
 
 </html>
