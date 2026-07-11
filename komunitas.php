@@ -36,12 +36,12 @@
                                     Daftar Komunitas
                                 </h5>
                                 <div class="page-title-right">
-                                    <button class="btn btn-primary btn-rounded btn-sm waves-effect waves-light" type="button">
+                                    <a class="btn btn-primary btn-rounded btn-sm waves-effect waves-light" href="daftar-komunitas.php">
                                         Lihat Semua
                                         <span>
                                             <i class="fas fa-angle-right"></i>
                                         </span>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -124,12 +124,12 @@
                                     Hubungi Konseling
                                 </h5>
                                 <div class="page-title-right">
-                                    <button class="btn btn-primary btn-rounded btn-sm waves-effect waves-light" type="button">
+                                    <a class="btn btn-primary btn-rounded btn-sm waves-effect waves-light" href="daftar-konseling.php">
                                         Lihat Semua
                                         <span>
                                             <i class="fas fa-angle-right"></i>
                                         </span>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>

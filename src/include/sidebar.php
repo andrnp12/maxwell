@@ -27,11 +27,8 @@
             </li>
             <li>
                <a href="skill.php">
-                  <i data-feather="award">
-                  </i>
-                  <span data-key="t-skill">
-                     Skill
-                  </span>
+                  <i data-feather="award"></i>
+                  <span data-key="t-skill">Skill</span>
                </a>
             </li>
             <li>

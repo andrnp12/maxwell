@@ -17,13 +17,21 @@
                     <!-- start page title -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="row d-sm-flex align-items-center justify-content-between mb-2">
-                                <h4 class="mb-sm-0 font-weight-bold mb-1">
-                                    Modul Edukasi
-                                </h4>
-                                <p class="text-muted">
-                                    Jelajahi berbagai modul edukasi yang tersedia!
-                                </p>
+                            <div class="mb-4">
+                                <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="komunitas.php">
+                                    <span>
+                                        <i class="fas fa-angle-left"></i>
+                                    </span>
+                                    Kembali
+                                </a>
+                                <div class="row align-items-center mb-2">
+                                    <h4 class="mb-0 font-weight-bold">
+                                        Temukan Komunitas Kamu
+                                    </h4>
+                                    <p class="text-muted mb-0">
+                                        Temukan komunitas yang sesuai dengan minat Anda.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -33,7 +41,7 @@
                         <div class="col-12">
                             <div class="page-title-box d-flex align-items-center justify-content-between pb-4">
                                 <h5 class="mb-sm-0">
-                                    Kategori Belajar
+                                    Daftar Komunitas
                                 </h5>
                                 <div class="page-title-right">
                                     <div class="btn-group">
@@ -62,8 +70,8 @@
                                 </div>
                             </div>
                         </div>
-                        <a class="col-12 col-xl-6 col-md-6" href="daftar-materi.php">
-                            <div class="card mb-3 border border-primary">
+                        <div class="col-12 col-xl-6 col-md-6">
+                            <div class="card mb-3">
                                 <div class="row g-0 align-items-center">
                                     <div class="col-3 text-center">
                                         <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
@@ -75,23 +83,16 @@
                                             <h5 class="card-title mb-0 font-weight-bold">
                                                 Sahabat Tumbuh
                                             </h5>
-                                            <p class="card-text mb-0">
+                                            <p class="card-text">
                                                 <small class="text-muted">
                                                     Perkumpulan tumbuh bersama.
-                                                </small>
-                                            </p>
-                                            <p class="card-text">
-                                                <small class="badge bg-primary text-white px-2 py-1 rounded-pill">
-                                                    <i class="mdi mdi-check-circle"></i>
-                                                    2 Selesai / 5 Materi
                                                 </small>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </a>
-                        <!-- end col -->
+                        </div>
                         <div class="col-12 col-xl-6 col-md-6">
                             <div class="card mb-3">
                                 <div class="row g-0 align-items-center">
@@ -115,7 +116,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- end col -->
                         <div class="col-12 col-xl-6 col-md-6">
                             <div class="card mb-3">
                                 <div class="row g-0 align-items-center">

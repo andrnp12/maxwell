@@ -38,33 +38,42 @@
                                         <img alt="..." class="d-block img-fluid mx-auto" src="assets/images/small/img-7.jpg">
                                         <div class="carousel-caption d-block text-white-50">
                                             <h5 class="text-white">
-                                                First slide label
+                                                Komunikasi Asertif
                                             </h5>
                                             <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                                Kemampuan untuk menyampaikan pikiran dan perasaan dengan jelas dan sopan.
                                             </p>
+                                            <a class="btn btn-primary btn-sm btn-rounded" href="">
+                                                Coba Sekarang
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="carousel-item">
                                         <img alt="..." class="d-block img-fluid mx-auto" src="assets/images/small/img-5.jpg">
                                         <div class="carousel-caption d-block text-white-50">
                                             <h5 class="text-white">
-                                                Second slide label
+                                                Problem Solving
                                             </h5>
                                             <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                                Kemampuan untuk menyelesaikan masalah secara efektif dan efisien.
                                             </p>
+                                            <a class="btn btn-primary btn-sm btn-rounded" href="">
+                                                Coba Sekarang
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="carousel-item active">
                                         <img alt="..." class="d-block img-fluid mx-auto" src="assets/images/small/img-4.jpg">
                                         <div class="carousel-caption d-block text-white-50">
                                             <h5 class="text-white">
-                                                Third slide label
+                                                Leadership
                                             </h5>
                                             <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                                Kemampuan untuk memimpin dan menginspirasi orang lain.
                                             </p>
+                                            <a class="btn btn-primary btn-sm btn-rounded" href="">
+                                                Coba Sekarang
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -88,7 +97,7 @@
                         <div class="col-12">
                             <div class="page-title-box d-flex align-items-center justify-content-between py-4">
                                 <h5 class="mb-sm-0">
-                                    Daftar Skill
+                                    Daftar Skill Tes
                                 </h5>
                                 <div class="page-title-right">
                                     <div class="btn-group">
@@ -117,8 +126,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 col-xl-6 col-md-6">
-                            <div class="card mb-3">
+                        <a class="col-12 col-xl-6 col-md-6" href="skill-detail.php">
+                            <div class="card mb-3 border border-success">
                                 <div class="row g-0 align-items-center">
                                     <div class="col-3 text-center">
                                         <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
@@ -130,16 +139,22 @@
                                             <h5 class="card-title mb-0 font-weight-bold">
                                                 Sahabat Tumbuh
                                             </h5>
-                                            <p class="card-text">
+                                            <p class="card-text mb-0">
                                                 <small class="text-muted">
                                                     Perkumpulan tumbuh bersama.
+                                                </small>
+                                            </p>
+                                            <p class="card-text">
+                                                <small class="badge bg-success text-white px-2 py-1 rounded-pill">
+                                                    <i class="mdi mdi-check-circle"></i>
+                                                    Telah Lulus
                                                 </small>
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         <div class="col-12 col-xl-6 col-md-6">
                             <div class="card mb-3">
                                 <div class="row g-0 align-items-center">
