@@ -17,53 +17,29 @@
                     <!-- start page title -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="row d-sm-flex align-items-center justify-content-between mb-2">
-                                <h4 class="mb-sm-0 font-weight-bold mb-1">
-                                    Modul Edukasi
-                                </h4>
-                                <p class="text-muted">
-                                    Jelajahi berbagai modul edukasi yang tersedia!
-                                </p>
+                            <div class="mb-4">
+                                <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="belajar.php">
+                                    <span>
+                                        <i class="fas fa-angle-left"></i>
+                                    </span>
+                                    Kembali
+                                </a>
+                                <div class="row align-items-center mb-2">
+                                    <h4 class="mb-0 font-weight-bold">
+                                        Sahabat Tumbuh
+                                    </h4>
+                                    <p class="text-muted mb-0">
+                                        Temukan materi yang relevan dengan anda.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <!-- end page title -->
                     <!-- end row -->
                     <div class="row">
-                        <div class="col-12">
-                            <div class="page-title-box d-flex align-items-center justify-content-between pb-4">
-                                <h5 class="mb-sm-0">
-                                    Kategori Belajar
-                                </h5>
-                                <div class="page-title-right">
-                                    <div class="btn-group">
-                                        <button aria-expanded="false" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" type="button">
-                                            Filter Kategori
-                                            <i class="mdi mdi-chevron-down">
-                                            </i>
-                                        </button>
-                                        <div class="dropdown-menu dropdownmenu-primary" style="">
-                                            <a class="dropdown-item" href="#">
-                                                Semua Materi
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Terbaru
-                                            </a>
-                                            <a class="dropdown-item" href="#">
-                                                Populer
-                                            </a>
-                                            <div class="dropdown-divider">
-                                            </div>
-                                            <a class="dropdown-item" href="#">
-                                                Selesai Dibaca
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <a class="col-12 col-xl-6 col-md-6" href="daftar-materi.php">
-                            <div class="card mb-3 border border-primary">
+                        <a class="col-12 col-xl-6 col-md-6" href="detail-materi.php">
+                            <div class="card mb-3 border border-success">
                                 <div class="row g-0 align-items-center">
                                     <div class="col-3 text-center">
                                         <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
@@ -81,9 +57,9 @@
                                                 </small>
                                             </p>
                                             <p class="card-text">
-                                                <small class="badge bg-primary text-white px-2 py-1 rounded-pill">
+                                                <small class="badge bg-success text-white px-2 py-1 rounded-pill">
                                                     <i class="mdi mdi-check-circle"></i>
-                                                    2 Selesai / 5 Materi
+                                                    Telah Dipelajari
                                                 </small>
                                             </p>
                                         </div>

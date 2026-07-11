@@ -17,13 +17,18 @@
                     <!-- start page title -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="row d-sm-flex align-items-center justify-content-between mb-2">
-                                <h4 class="mb-sm-0 font-weight-bold mb-1">
-                                    Akun Saya
-                                </h4>
-                                <p class="text-muted">
-                                    Kelola pengaturan akun dan informasi pribadi Anda.
-                                </p>
+                            <div class="mb-4">
+                                <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="daftar-konseling.php">
+                                    <span>
+                                        <i class="fas fa-angle-left"></i>
+                                    </span>
+                                    Kembali
+                                </a>
+                                <div class="row align-items-center mb-2">
+                                    <h4 class="mb-0 font-weight-bold">
+                                        Profil Konselor
+                                    </h4>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -52,15 +57,15 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-auto order-1 order-sm-2">
+                                        <!-- <div class="col-sm-auto order-1 order-sm-2">
                                             <div class="d-flex align-items-center justify-content-end gap-2">
                                                 <div>
-                                                    <a class="mdi mdi-pencil-box-outline text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" href="edit-profile.php">
+                                                    <i class="mdi mdi-pencil-box-outline text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                                         Edit
-                                                    </a>
+                                                    </i>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                                 <!-- end card body -->
@@ -71,7 +76,7 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title mb-0">
-                                                Tentang Saya
+                                                Tentang Konselor
                                             </h5>
                                         </div>
                                         <div class="card-body">
@@ -102,22 +107,22 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h5 class="card-title mb-0">
-                                        Pengaturan Akun
+                                        Interaksi
                                     </h5>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
                                         <a class="pb-2 d-block text-muted" href="#">
-                                            <i class="mdi mdi-note-text-outline text-primary me-1">
+                                            <i class="mdi mdi-whatsapp text-primary me-1">
                                             </i>
-                                            Ubah Profil
+                                            Hubungi via Whatsapp
                                         </a>
                                     </li>
                                     <li class="list-group-item">
                                         <a class="pb-2 d-block text-muted" href="#">
-                                            <i class="mdi mdi-note-text-outline text-primary me-1">
+                                            <i class="mdi mdi-email-outline text-primary me-1">
                                             </i>
-                                            Logout
+                                            Kirim Email
                                         </a>
                                     </li>
                                 </ul>
