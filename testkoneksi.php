@@ -9,3 +9,4 @@ if ($db->conn) {
     echo "✅ Koneksi Berhasil!<br>";
     echo "Versi MySQL Server: " . $db->conn->server_info;
 }
+

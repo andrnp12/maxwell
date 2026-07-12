@@ -7,36 +7,31 @@ header('Content-Type: application/json');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
+    $role = 'user';
 
     if (empty($username) || empty($password)) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Username dan password harus diisi.'
+            'message' => 'Username, password, dan role harus diisi.'
         ]);
         exit;
     }
 
     $auth = new auth();
 
-    $loginSuccess = $auth->login($username, $password);
+    $registerSuccess = $auth->register($username, $password, $role);
 
-    if ($loginSuccess) {
-        $redirectUrl = ($_SESSION['role'] === "admin") ? 'admin/index.php' : 'index.php';
-
+    if ($registerSuccess) {
         echo json_encode([
             'status' => 'success',
-            'message' => 'Login berhasil.',
-            'redirect' => $redirectUrl
+            'message' => 'Registrasi berhasil.',
+            'redirect' => 'login.php'
         ]);
     } else {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Username atau password salah.'
+            'message' => 'Registrasi gagal.'
         ]);
     }
-} else {
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Metode request tidak valid.'
-    ]);
+    exit;
 }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>
-        Login | StarCode Kh - Minimal Admin &amp; Dashboard Template
+        Register | StarCode Kh - Minimal Admin &amp; Dashboard Template
     </title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="Premium Multipurpose Admin &amp; Dashboard Template" name="description">
@@ -43,62 +43,58 @@
                                 <div class="auth-content my-auto">
                                     <div class="text-center">
                                         <h5 class="mb-0">
-                                            Welcome Back !
+                                            Register Account
                                         </h5>
                                         <p class="text-muted mt-2">
-                                            Sign in to continue to StarCode Kh.
+                                            Get your free StarCode Kh account now.
                                         </p>
                                     </div>
-                                    <form id="loginForm" class="mt-4 pt-2">
+                                    <form id="registerForm" class="needs-validation mt-4 pt-2" novalidate="">
+                                        <!-- <div class="mb-3">
+                                            <label class="form-label" for="useremail">
+                                                Email
+                                            </label>
+                                            <input class="form-control" id="useremail" placeholder="Enter email" required="" type="email" />
+                                            <div class="invalid-feedback">
+                                                Please Enter Email
+                                            </div>
+                                        </div> -->
                                         <div class="mb-3">
-                                            <label class="form-label">
+                                            <label class="form-label" for="username">
                                                 Username
                                             </label>
-                                            <input class="form-control" name="username" id="username" placeholder="Enter username" type="text" />
+                                            <input class="form-control" id="username" name="username" placeholder="Enter username" required="" type="text" />
+                                            <div class="invalid-feedback">
+                                                Please Enter Username
+                                            </div>
                                         </div>
                                         <div class="mb-3">
-                                            <div class="d-flex align-items-start">
-                                                <div class="flex-grow-1">
-                                                    <label class="form-label">
-                                                        Password
-                                                    </label>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <div class="">
-                                                        <a class="text-muted" href="auth-recoverpw.html">
-                                                            Forgot password?
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="input-group auth-pass-inputgroup">
-                                                <input aria-describedby="password-addon" aria-label="Password" class="form-control" placeholder="Enter password" name="password" type="password" />
-                                                <button class="btn btn-light shadow-none ms-0" id="password-addon" type="button">
-                                                    <i class="mdi mdi-eye-outline">
-                                                    </i>
-                                                </button>
+                                            <label class="form-label" for="userpassword">
+                                                Password
+                                            </label>
+                                            <input class="form-control" id="userpassword" name="password" placeholder="Enter password" required="" type="password" />
+                                            <div class="invalid-feedback">
+                                                Please Enter Password
                                             </div>
                                         </div>
-                                        <div class="row mb-4">
-                                            <div class="col">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" id="remember-check" type="checkbox" />
-                                                    <label class="form-check-label" for="remember-check">
-                                                        Remember me
-                                                    </label>
-                                                </div>
-                                            </div>
+                                        <div class="mb-4">
+                                            <p class="mb-0">
+                                                By registering you agree to the StarCode Kh
+                                                <a class="text-primary" href="#">
+                                                    Terms of Use
+                                                </a>
+                                            </p>
                                         </div>
                                         <div class="mb-3">
                                             <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">
-                                                Log In
+                                                Register
                                             </button>
                                         </div>
                                     </form>
                                     <div class="mt-4 pt-2 text-center">
                                         <div class="signin-other-title">
                                             <h5 class="font-size-14 mb-3 text-muted fw-medium">
-                                                - Sign in with -
+                                                - Sign up using -
                                             </h5>
                                         </div>
                                         <ul class="list-inline mb-0">
@@ -124,9 +120,9 @@
                                     </div>
                                     <div class="mt-5 text-center">
                                         <p class="text-muted mb-0">
-                                            Don't have an account ?
-                                            <a class="text-primary fw-semibold" href="register.php">
-                                                Signup now
+                                            Already have an account ?
+                                            <a class="text-primary fw-semibold" href="auth-login.html">
+                                                Login
                                             </a>
                                         </p>
                                     </div>
@@ -306,34 +302,31 @@
     <!-- pace js -->
     <script src="assets/libs/pace-js/pace.min.js">
     </script>
-    <!-- password addon init -->
-    <script src="assets/js/pages/pass-addon.init.js">
+    <!-- validation init -->
+    <script src="assets/js/pages/validation.init.js">
     </script>
-
     <script>
-        const form = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        registerForm.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const formData = new FormData(form);
-            try {
-                const response = await fetch("actions/proses_login.php", {
-                    method: "POST",
+            const formData = new FormData(registerForm);
+            fetch('actions/proses_register.php', {
+                    method: 'POST',
                     body: formData
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        window.location.href = result.redirect;
+                    } else {
+                        alert("registration failed");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat memproses pendaftaran. Silakan coba lagi.');
                 });
-
-                const result = await response.json();
-
-                if (result.status == 'success') {
-                    window.location.href = result.redirect;
-                } else {
-                    alert("username atau password salah");
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                alert("Terjadi kesalahan saat memproses login. Silakan coba lagi.");
-            }
         });
     </script>
 </body>

@@ -230,11 +230,11 @@
                </a>
                <div class="dropdown-divider">
                </div>
-               <a class="dropdown-item" href="auth-logout.html">
+               <button class="dropdown-item" onclick="window.location.href='actions/proses_logout.php'">
                   <i class="mdi mdi-logout font-size-16 align-middle me-1">
                   </i>
                   Logout
-               </a>
+               </button>
             </div>
          </div>
       </div>
