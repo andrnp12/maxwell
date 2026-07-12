@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $loginSuccess = $auth->login($username, $password);
 
     if ($loginSuccess) {
-        $redirectUrl = ($_SESSION['role'] === "1") ? 'admin/dashboard.php' : 'index.php';
+        $redirectUrl = ($_SESSION['role'] === "admin") ? 'admin/index.php' : 'index.php';
 
         echo json_encode([
             'status' => 'success',

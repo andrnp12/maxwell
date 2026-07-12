@@ -125,7 +125,7 @@
                                     <div class="mt-5 text-center">
                                         <p class="text-muted mb-0">
                                             Don't have an account ?
-                                            <a class="text-primary fw-semibold" href="auth-register.html">
+                                            <a class="text-primary fw-semibold" href="register.php">
                                                 Signup now
                                             </a>
                                         </p>
