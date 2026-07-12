@@ -11,7 +11,7 @@ if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
 
 <!--header start-->
 <?php include('src/include/header.php'); ?>
-<!--header end-->
+<!--headere end-->
 
 <body>
    <!-- <body data-layout="horizontal"> -->
