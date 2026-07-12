@@ -1,6 +1,6 @@
 <!--header start-->
 <?php include('src/include/header.php'); ?>
-<!--header end-->
+<!--headere end-->
 
 <body>
    <!-- <body data-layout="horizontal"> -->
