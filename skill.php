@@ -35,7 +35,7 @@
                             <div class="carousel slide pointer-event" data-bs-ride="carousel" id="carouselExampleCaption">
                                 <div class="carousel-inner" role="listbox">
                                     <div class="carousel-item">
-                                        <img alt="..." class="d-block img-fluid mx-auto" src="assets/images/small/img-7.jpg">
+                                        <img alt="..." class="d-block img-fluid mx-auto w-100" src="assets/images/small/img-7.jpg">
                                         <div class="carousel-caption d-block text-white-50">
                                             <h5 class="text-white">
                                                 Komunikasi Asertif
@@ -49,7 +49,7 @@
                                         </div>
                                     </div>
                                     <div class="carousel-item">
-                                        <img alt="..." class="d-block img-fluid mx-auto" src="assets/images/small/img-5.jpg">
+                                        <img alt="..." class="d-block img-fluid mx-auto w-100" src="assets/images/small/img-5.jpg">
                                         <div class="carousel-caption d-block text-white-50">
                                             <h5 class="text-white">
                                                 Problem Solving
@@ -63,7 +63,7 @@
                                         </div>
                                     </div>
                                     <div class="carousel-item active">
-                                        <img alt="..." class="d-block img-fluid mx-auto" src="assets/images/small/img-4.jpg">
+                                        <img alt="..." class="d-block img-fluid mx-auto w-100" src="assets/images/small/img-4.jpg">
                                         <div class="carousel-caption d-block text-white-50">
                                             <h5 class="text-white">
                                                 Leadership
