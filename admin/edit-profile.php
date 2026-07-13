@@ -1,12 +1,12 @@
-<?php include 'src/include/header.php'; ?>
+<?php include 'component/header.php'; ?>
 
 <body>
     <!-- <body data-layout="horizontal"> -->
     <!-- Begin page -->
     <div id="layout-wrapper">
-        <?php include 'src/include/topbar.php'; ?>
+        <?php include 'component/topbar.php'; ?>
         <!-- ========== Left Sidebar Start ========== -->
-        <?php include 'src/include/sidebar.php'; ?>
+        <?php include 'component/sidebar.php'; ?>
         <!-- Left Sidebar End -->
         <!-- ============================================================== -->
         <!-- Start right Content here -->
@@ -106,19 +106,19 @@
             <!-- container-fluid -->
         </div>
         <!-- End Page-content -->
-        <?php include 'src/include/footer.php'; ?>
+        <?php include 'component/footer.php'; ?>
     </div>
     <!-- end main content-->
     </div>
     <!-- END layout-wrapper -->
     <!-- Right Sidebar -->
-    <?php include 'src/include/right-sidebar.php'; ?>
+    <?php include 'component/right-sidebar.php'; ?>
     <!-- /Right-bar -->
     <!-- Right bar overlay-->
     <div class="rightbar-overlay">
     </div>
     <!-- JAVASCRIPT -->
-    <?php include 'src/include/script.php'; ?>
+    <?php include 'component/script.php'; ?>
 </body>
 
 </html>

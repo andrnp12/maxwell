@@ -118,26 +118,26 @@
                                                     </div>
                                                     <div class="d-grid gap-2">
                                                         <div class="form-check border rounded p-3">
-                                                            <input class="form-check-input" type="radio" name="jawaban" id="jawaban1" value="A">
-                                                            <label class="form-check-label w-100" for="jawaban1">
+                                                            <input class="form-check-input" type="radio" name="jawaban1" id="jawaban1_1" value="A">
+                                                            <label class="form-check-label w-100" for="jawaban1_1">
                                                                 A. Jawaban Benar
                                                             </label>
                                                         </div>
                                                         <div class="form-check border rounded p-3">
-                                                            <input class="form-check-input" type="radio" name="jawaban" id="jawaban2" value="B">
-                                                            <label class="form-check-label w-100" for="jawaban2">
+                                                            <input class="form-check-input" type="radio" name="jawaban1" id="jawaban1_2" value="B">
+                                                            <label class="form-check-label w-100" for="jawaban1_2">
                                                                 B. Jawaban Salah
                                                             </label>
                                                         </div>
                                                         <div class="form-check border rounded p-3">
-                                                            <input class="form-check-input" type="radio" name="jawaban" id="jawaban3" value="C">
-                                                            <label class="form-check-label w-100" for="jawaban3">
+                                                            <input class="form-check-input" type="radio" name="jawaban1" id="jawaban1_3" value="C">
+                                                            <label class="form-check-label w-100" for="jawaban1_3">
                                                                 C. Jawaban Tidak Salah Tidak Benar
                                                             </label>
                                                         </div>
                                                         <div class="form-check border rounded p-3">
-                                                            <input class="form-check-input" type="radio" name="jawaban" id="jawaban4" value="D">
-                                                            <label class="form-check-label w-100" for="jawaban4">
+                                                            <input class="form-check-input" type="radio" name="jawaban1" id="jawaban1_4" value="D">
+                                                            <label class="form-check-label w-100" for="jawaban1_4">
                                                                 D. Tidak Ada Jawaban Yang Benar
                                                             </label>
                                                         </div>
@@ -176,26 +176,26 @@
                                                         </div>
                                                         <div class="d-grid gap-2">
                                                             <div class="form-check border rounded p-3">
-                                                                <input class="form-check-input" type="radio" name="jawaban" id="jawaban1" value="A">
-                                                                <label class="form-check-label w-100" for="jawaban1">
+                                                                <input class="form-check-input" type="radio" name="jawaban2" id="jawaban2_1" value="A">
+                                                                <label class="form-check-label w-100" for="jawaban2_1">
                                                                     A. Jawaban Benar
                                                                 </label>
                                                             </div>
                                                             <div class="form-check border rounded p-3">
-                                                                <input class="form-check-input" type="radio" name="jawaban" id="jawaban2" value="B">
-                                                                <label class="form-check-label w-100" for="jawaban2">
+                                                                <input class="form-check-input" type="radio" name="jawaban2" id="jawaban2_2" value="B">
+                                                                <label class="form-check-label w-100" for="jawaban2_2">
                                                                     B. Jawaban Salah
                                                                 </label>
                                                             </div>
                                                             <div class="form-check border rounded p-3">
-                                                                <input class="form-check-input" type="radio" name="jawaban" id="jawaban3" value="C">
-                                                                <label class="form-check-label w-100" for="jawaban3">
+                                                                <input class="form-check-input" type="radio" name="jawaban2" id="jawaban2_3" value="C">
+                                                                <label class="form-check-label w-100" for="jawaban2_3">
                                                                     C. Jawaban Tidak Salah Tidak Benar
                                                                 </label>
                                                             </div>
                                                             <div class="form-check border rounded p-3">
-                                                                <input class="form-check-input" type="radio" name="jawaban" id="jawaban4" value="D">
-                                                                <label class="form-check-label w-100" for="jawaban4">
+                                                                <input class="form-check-input" type="radio" name="jawaban2" id="jawaban2_4" value="D">
+                                                                <label class="form-check-label w-100" for="jawaban2_4">
                                                                     D. Tidak Ada Jawaban Yang Benar
                                                                 </label>
                                                             </div>
@@ -242,26 +242,26 @@
                                                         </div>
                                                         <div class="d-grid gap-2">
                                                             <div class="form-check border rounded p-3">
-                                                                <input class="form-check-input" type="radio" name="jawaban" id="jawaban1" value="A">
-                                                                <label class="form-check-label w-100" for="jawaban1">
+                                                                <input class="form-check-input" type="radio" name="jawaban3" id="jawaban3_1" value="A">
+                                                                <label class="form-check-label w-100" for="jawaban3_1">
                                                                     A. Jawaban Benar
                                                                 </label>
                                                             </div>
                                                             <div class="form-check border rounded p-3">
-                                                                <input class="form-check-input" type="radio" name="jawaban" id="jawaban2" value="B">
-                                                                <label class="form-check-label w-100" for="jawaban2">
+                                                                <input class="form-check-input" type="radio" name="jawaban3" id="jawaban3_2" value="B">
+                                                                <label class="form-check-label w-100" for="jawaban3_2">
                                                                     B. Jawaban Salah
                                                                 </label>
                                                             </div>
                                                             <div class="form-check border rounded p-3">
-                                                                <input class="form-check-input" type="radio" name="jawaban" id="jawaban3" value="C">
-                                                                <label class="form-check-label w-100" for="jawaban3">
+                                                                <input class="form-check-input" type="radio" name="jawaban3" id="jawaban3_3" value="C">
+                                                                <label class="form-check-label w-100" for="jawaban3_3">
                                                                     C. Jawaban Tidak Salah Tidak Benar
                                                                 </label>
                                                             </div>
                                                             <div class="form-check border rounded p-3">
-                                                                <input class="form-check-input" type="radio" name="jawaban" id="jawaban4" value="D">
-                                                                <label class="form-check-label w-100" for="jawaban4">
+                                                                <input class="form-check-input" type="radio" name="jawaban3" id="jawaban3_4" value="D">
+                                                                <label class="form-check-label w-100" for="jawaban3_4">
                                                                     D. Tidak Ada Jawaban Yang Benar
                                                                 </label>
                                                             </div>

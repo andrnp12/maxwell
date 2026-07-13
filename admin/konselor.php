@@ -34,18 +34,18 @@
                         <div class="col-12 d-sm-flex align-items-center justify-content-between mb-2">
                             <div class="row">
                                 <h4 class="mb-sm-0 font-weight-bold mb-1">
-                                    Lihat Semua Komunitas
+                                    Lihat Semua Konselor
                                 </h4>
                                 <p class="text-muted">
-                                    Kelola komunitas anda.
+                                    Kelola konselor Anda.
                                 </p>
                             </div>
                             <div>
-                                <a class="btn btn-primary btn-rounded waves-effect mb-2" href="tambah-komunitas.php">
+                                <a class="btn btn-primary btn-rounded waves-effect mb-2" href="tambah-konselor.php">
                                     <span>
                                         <i class="fas fa-plus"></i>
                                     </span>
-                                    Tambah Komunitas
+                                    Tambah Konselor
                                 </a>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">
-                                        Daftar Komunitas
+                                        Daftar Konselor
                                     </h4>
                                 </div>
                                 <div class="card-body">

@@ -1,12 +1,12 @@
-<?php include 'src/include/header.php'; ?>
+<?php include 'component/header.php'; ?>
 
 <body>
     <!-- <body data-layout="horizontal"> -->
     <!-- Begin page -->
     <div id="layout-wrapper">
-        <?php include 'src/include/topbar.php'; ?>
+        <?php include 'component/topbar.php'; ?>
         <!-- ========== Left Sidebar Start ========== -->
-        <?php include 'src/include/sidebar.php'; ?>
+        <?php include 'component/sidebar.php'; ?>
         <!-- Left Sidebar End -->
         <!-- ============================================================== -->
         <!-- Start right Content here -->
@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="mb-4">
-                                <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="profile.php">
+                                <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="komunitas.php">
                                     <span>
                                         <i class="fas fa-angle-left"></i>
                                     </span>
@@ -26,11 +26,8 @@
                                 </a>
                                 <div class="row align-items-center mb-2">
                                     <h4 class="mb-0 font-weight-bold">
-                                        Edit Profil Saya
+                                        Tambah Komunitas
                                     </h4>
-                                    <p class="text-muted mb-0">
-                                        Kelola pengaturan akun dan informasi pribadi Anda.
-                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -42,14 +39,14 @@
                                 <div class="card-body">
                                     <div class="mt-2">
                                         <h5 class="font-weight-bold mb-3">
-                                            Informasi Akun
+                                            Detail Informasi
                                         </h5>
                                         <form>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="commentprofile-input">
-                                                            Ganti Foto Profil
+                                                            Ganti Foto Komunitas
                                                         </label>
                                                         <input class="form-control" id="commentprofile-input" placeholder="Ganti Foto Profil" type="file">
                                                     </div>
@@ -57,7 +54,7 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="commentname-input">
-                                                            Nama
+                                                            Nama Komunitas
                                                         </label>
                                                         <input class="form-control" id="commentname-input" placeholder="Masukkan nama" type="text">
                                                     </div>
@@ -65,25 +62,19 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="commentemail-input">
-                                                            Email
+                                                            Link Whatsapp Komunitas
                                                         </label>
-                                                        <input class="form-control" id="commentemail-input" placeholder="Masukkan email" type="email">
+                                                        <input class="form-control" id="commentemail-input" placeholder="Masukkan link" type="text">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="commentpassword-input">
-                                                            Password
+                                                        <label class="form-label" for="commentemail-input">
+                                                            Deskripsi Singkat Komunitas
                                                         </label>
-                                                        <input class="form-control" id="commentpassword-input" placeholder="Masukkan password" type="password">
+                                                        <input class="form-control" id="commentemail-input" placeholder="Deskripsi singkat" type="text">
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label" for="commentmessage-input">
-                                                    Ringkasan Singkat Anda
-                                                </label>
-                                                <textarea class="form-control" id="commentmessage-input" placeholder="Ringkasan..." rows="3"></textarea>
                                             </div>
                                             <div class="text-end">
                                                 <button class="btn btn-primary btn-sm btn-rounded" type="submit">
@@ -106,19 +97,19 @@
             <!-- container-fluid -->
         </div>
         <!-- End Page-content -->
-        <?php include 'src/include/footer.php'; ?>
+        <?php include 'component/footer.php'; ?>
     </div>
     <!-- end main content-->
     </div>
     <!-- END layout-wrapper -->
     <!-- Right Sidebar -->
-    <?php include 'src/include/right-sidebar.php'; ?>
+    <?php include 'component/right-sidebar.php'; ?>
     <!-- /Right-bar -->
     <!-- Right bar overlay-->
     <div class="rightbar-overlay">
     </div>
     <!-- JAVASCRIPT -->
-    <?php include 'src/include/script.php'; ?>
+    <?php include 'component/script.php'; ?>
 </body>
 
 </html>

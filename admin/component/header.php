@@ -10,17 +10,22 @@
    <meta content="Premium Multipurpose Admin &amp; Dashboard Template" name="description">
    <meta content="admintem.com" name="author" />
    <!-- App favicon -->
-   <link href="assets/images/favicon.ico" rel="shortcut icon" />
+   <link href="../../assets/images/favicon.ico" rel="shortcut icon" />
    <!-- plugin css -->
-   <link href="assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css">
+   <link href="../../assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css">
+   <!-- DataTables -->
+   <link href="../../assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
+   <link href="../../assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+   <!-- Responsive datatable examples -->
+   <link href="../../assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
    <!-- preloader css -->
-   <link href="assets/css/preloader.min.css" rel="stylesheet" type="text/css" />
+   <link href="../../assets/css/preloader.min.css" rel="stylesheet" type="text/css" />
    <!-- Bootstrap Css -->
-   <link href="assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+   <link href="../../assets/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
    <!-- Icons Css -->
-   <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+   <link href="../../assets/css/icons.min.css" rel="stylesheet" type="text/css" />
    <!-- App Css-->
-   <link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+   <link href="../../assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 
    <!-- CUSTOM CSS UNTUK MOBILE BOTTOM NAV START -->
    <style>
@@ -138,9 +143,71 @@
          .vertical-menu .logo-box {
             display: none !important;
          }
+
+         /* 11. Sembunyikan sub-menu dan arrow di mobile */
+         #side-menu li a.has-arrow::after {
+            display: none !important;
+         }
+
+         #side-menu li a.has-arrow {
+            cursor: pointer;
+         }
+
+         #side-menu .sub-menu {
+            display: none !important;
+         }
+
+         /* 12. MODAL SUBMENU STYLING */
+         .modal-bottom .modal-dialog {
+            margin: 0;
+            margin-top: auto;
+         }
+
+         .modal-bottom .modal-content {
+            border-radius: 15px 15px 15px 15px;
+         }
+
+         #submenuContent {
+            max-height: 60vh;
+            overflow-y: auto;
+         }
+
+         #submenuContent a {
+            display: block;
+            /* padding: 12px 15px; */
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f0f0f0;
+            font-weight: 500;
+         }
+
+         #submenuContent a:last-child {
+            border-bottom: none;
+         }
+
+         #submenuContent a:hover {
+            background-color: #f8f9fa;
+            color: #405189;
+         }
       }
    </style>
    <!-- CUSTOM CSS UNTUK MOBILE BOTTOM NAV END -->
 
    </meta>
 </head>
+
+<!-- MODAL UNTUK SUBMENU MOBILE -->
+<div class="modal fade" id="mobileSubmenuModal" tabindex="-1" aria-labelledby="mobileSubmenuLabel" aria-hidden="true">
+   <div class="modal-dialog modal-bottom">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="mobileSubmenuLabel">Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body pt-0" id="submenuContent">
+            <!-- Submenu items akan di-load di sini via JavaScript -->
+         </div>
+      </div>
+   </div>
+</div>
+<!-- END MODAL SUBMENU MOBILE -->

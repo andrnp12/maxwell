@@ -34,19 +34,11 @@
                         <div class="col-12 d-sm-flex align-items-center justify-content-between mb-2">
                             <div class="row">
                                 <h4 class="mb-sm-0 font-weight-bold mb-1">
-                                    Lihat Semua Komunitas
+                                    Lihat Ringkasan Pengguna
                                 </h4>
                                 <p class="text-muted">
-                                    Kelola komunitas anda.
+                                    Kelola pengguna anda.
                                 </p>
-                            </div>
-                            <div>
-                                <a class="btn btn-primary btn-rounded waves-effect mb-2" href="tambah-komunitas.php">
-                                    <span>
-                                        <i class="fas fa-plus"></i>
-                                    </span>
-                                    Tambah Komunitas
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -56,7 +48,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">
-                                        Daftar Komunitas
+                                        Daftar Pengguna
                                     </h4>
                                 </div>
                                 <div class="card-body">
@@ -79,7 +71,7 @@
                                                     Start date
                                                 </th>
                                                 <th>
-                                                    Salary
+                                                    Aksi
                                                 </th>
                                             </tr>
                                         </thead>
@@ -101,7 +93,7 @@
                                                     2011/04/25
                                                 </td>
                                                 <td>
-                                                    $320,800
+                                                    $120,000
                                                 </td>
                                             </tr>
                                             <tr>
@@ -181,7 +173,11 @@
                                                     2008/11/28
                                                 </td>
                                                 <td>
-                                                    $162,700
+                                                    <div>
+                                                        <a class="btn btn-primary btn-sm" href="detail-user.php">
+                                                            <i class="fas fa-eye"></i> Detail
+                                                        </a>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr>
