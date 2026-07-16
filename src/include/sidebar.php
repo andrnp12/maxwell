@@ -1,3 +1,7 @@
+<?php
+global $sudahPreTest, $sudahPostTest;
+?>
+
 <div class="vertical-menu">
    <div class="h-100" data-simplebar="">
       <!--- Sidemenu -->
@@ -48,6 +52,36 @@
                      Akun
                   </span>
                </a>
+            </li>
+            <li>
+               <a href="preposttest.php">
+                  <i data-feather="user">
+                  </i>
+                  <span data-key="t-akun">
+                     pre post test (trial)
+                  </span>
+               </a>
+            </li>
+            <li>
+               Pre-Test:
+               <?php if (!$sudahPreTest): ?>
+                  <a href="preposttest.php?type=pre"><button>Mulai Pre-Test</button></a>
+               <?php else: ?>
+                  <span style="color: green;">✔ Sudah Dikerjakan</span>
+               <?php endif; ?>
+            </li>
+            <!-- Logika Tombol Post-Test -->
+            <li>
+               Post-Test:
+               <?php if (!$sudahPreTest): ?>
+                  <span style="color: gray;">Kerjakan Pre-Test terlebih dahulu</span>
+               <?php elseif ($sudahPreTest && !$sudahPostTest): ?>
+                  <a href="preposttest.php?type=post"><button>Mulai Post-Test</button></a>
+               <?php else: ?>
+                  <!-- Tombol berubah jika sudah pernah dikerjakan -->
+                  <span style="color: green;">✔ Nilai Resmi Tersimpan</span>
+                  <a href="preposttest.php?type=post"><button style="background-color: orange;">Kerjakan Ulang (Latihan)</button></a>
+               <?php endif; ?>
             </li>
          </ul>
       </div>
