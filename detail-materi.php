@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="mb-4">
-                                <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="daftar-materi.php">
+                                <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="belajar.php">
                                     <span>
                                         <i class="fas fa-angle-left"></i>
                                     </span>
