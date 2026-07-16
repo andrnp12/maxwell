@@ -42,33 +42,11 @@
                                             Detail Informasi
                                         </h5>
                                         <form>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="commentname-input">
-                                                            Nama Materi
-                                                        </label>
-                                                        <input class="form-control" id="commentname-input" placeholder="Masukkan nama" type="text">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label">
-                                                            Kategori Subtopik
-                                                        </label>
-                                                        <select class="form-select">
-                                                            <option>
-                                                                Select
-                                                            </option>
-                                                            <option>
-                                                                Large select
-                                                            </option>
-                                                            <option>
-                                                                Small select
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                            <div class="mb-3">
+                                                <label class="form-label" for="commentname-input">
+                                                    Nama Materi
+                                                </label>
+                                                <input class="form-control" id="commentname-input" placeholder="Masukkan nama" type="text">
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label" for="commentprofile-input">

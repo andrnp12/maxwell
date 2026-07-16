@@ -62,8 +62,8 @@
                                 </div>
                             </div>
                         </div>
-                        <a class="col-12 col-xl-6 col-md-6" href="daftar-materi.php">
-                            <div class="card mb-3 border border-primary">
+                        <a class="col-12 col-xl-6 col-md-6" href="detail-materi.php">
+                            <div class="card mb-3 border border-success">
                                 <div class="row g-0 align-items-center">
                                     <div class="col-3 text-center">
                                         <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
@@ -81,9 +81,9 @@
                                                 </small>
                                             </p>
                                             <p class="card-text">
-                                                <small class="badge bg-primary text-white px-2 py-1 rounded-pill">
+                                                <small class="badge bg-success text-white px-2 py-1 rounded-pill">
                                                     <i class="mdi mdi-check-circle"></i>
-                                                    2 Selesai / 5 Materi
+                                                    Telah Dipelajari
                                                 </small>
                                             </p>
                                         </div>

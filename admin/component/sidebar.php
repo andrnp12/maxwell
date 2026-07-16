@@ -35,29 +35,13 @@
                     </a>
                 </li>
                 <li>
-                    <a class="has-arrow" href="javascript: void(0);">
+                    <a href="materi.php">
                         <i data-feather="book">
                         </i>
-                        <span data-key="t-apps">
+                        <span data-key="t-skill">
                             Materi
                         </span>
                     </a>
-                    <ul aria-expanded="false" class="sub-menu">
-                        <li>
-                            <a href="subtopik.php">
-                                <span data-key="t-subtopik">
-                                    Subtopik
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="materi.php">
-                                <span data-key="t-materi">
-                                    Topik Materi
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
                 <li>
                     <a class="has-arrow" href="javascript: void(0);">

@@ -106,10 +106,10 @@
                                         <div class="row d-flex">
                                             <div class="col-lg-6 flex-wrap mb-2">
                                                 <h6 class="mb-0">
-                                                    Subtopik Materi
+                                                    Pembelajaran
                                                 </h6>
                                                 <span class="badge bg-primary rounded-pill my-2 py-1">
-                                                    <i class="mdi mdi-check-circle"></i> 3 Selesai / 5 Subtopik
+                                                    <i class="mdi mdi-check-circle"></i> 3 Selesai / 5 Materi
                                                 </span>
                                                 <h6 class="mb-0 text-muted">
                                                     Materi terakhir yang dipelajari
