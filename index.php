@@ -21,6 +21,8 @@ if (!$sudahPreTest) {
    header('Location: preposttest.php?type=pre');
    exit;
 }
+
+global $sudahPreTest, $sudahPostTest;
 ?>
 
 <!--header start-->
@@ -228,6 +230,27 @@ if (!$sudahPreTest) {
                      <!-- end card -->
                   </div>
                   <!-- end col -->
+                  <div class="col-6 col-xl-3 col-md-6">
+                     <div class="card card-h-100">
+                        <div class="card-body">
+                           <div class="row align-items-center">
+                              <div class="col-12">
+                                 <h4 class="mb-3">
+                                    <img src="assets/icon/notes.webp" alt="icon" style="width: 40px; height: 40px;" />
+                                 </h4>
+                                 <?php if (!$sudahPreTest): ?>
+                                    <span style="color: gray;">Kerjakan Pre-Test terlebih dahulu</span>
+                                 <?php elseif ($sudahPreTest && !$sudahPostTest): ?>
+                                    <a href="preposttest.php?type=post"><button class="btn btn-primary btn-sm">Mulai Post-Test</button></a>
+                                 <?php else: ?>
+                                    <span class="text-success">✔ Nilai Resmi Tersimpan</span>
+                                    <a href="preposttest.php?type=post"><button class="btn btn-warning btn-sm" style="margin-left:6px;">Kerjakan Ulang (Latihan)</button></a>
+                                 <?php endif; ?>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
                </div>
                <!-- end row-->
             </div>
