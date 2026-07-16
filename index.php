@@ -1,12 +1,26 @@
 <?php
-// if (session_status() === PHP_SESSION_NONE) {
-//    session_start();
-// }
+if (session_status() === PHP_SESSION_NONE) {
+   session_start();
+}
 
-// if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
-//    header('Location: login.php');
-//    exit;
-// }
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
+   header('Location: login.php');
+   exit;
+}
+
+require_once __DIR__ . '/classes/tests.php';
+
+$testManager = new tests();
+$userId = $_SESSION['id'];
+
+$idAktif = $_SESSION['id'];
+$sudahPreTest = $testManager->hasUserTakenTest($userId, $idAktif, 'pre');
+$sudahPostTest = $testManager->hasUserTakenTest($userId, $idAktif, 'post');
+
+if (!$sudahPreTest) {
+   header('Location: preposttest.php?type=pre');
+   exit;
+}
 ?>
 
 <!--header start-->
