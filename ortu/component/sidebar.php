@@ -1,0 +1,41 @@
+<div class="vertical-menu">
+    <div class="h-100" data-simplebar="">
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title" data-key="t-menu">
+                    Menu
+                </li>
+                <li>
+                    <a href="index.php">
+                        <i data-feather="home">
+                        </i>
+                        <span data-key="t-dashboard">
+                            Beranda
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="belajar.php">
+                        <i data-feather="book">
+                        </i>
+                        <span data-key="t-belajar">
+                            Belajar
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="profile.php">
+                        <i data-feather="user">
+                        </i>
+                        <span data-key="t-akun">
+                            Akun
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>
