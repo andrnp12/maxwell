@@ -45,7 +45,11 @@ class Materi
                 ];
             }
 
-            $namaFileTersimpan = uniqid('materi_') . time() . '.' . $ekstensi;
+            $judulFile = strtolower($judul);
+            $judulFile = preg_replace('/[^a-z0-9]/', '_', $judulFile);
+            $judulFile = trim($judulFile, '_');
+
+            $namaFileTersimpan = 'materi_' . $judulFile . '_' . '.' . $ekstensi;
             $tujuanUpload = $uploadDir . $namaFileTersimpan;
 
             if (!move_uploaded_file($file['tmp_name'], $tujuanUpload)) {
@@ -166,7 +170,11 @@ class Materi
                 ];
             }
 
-            $namaFileTersimpan = uniqid('materi_') . time() . '.' . $ekstensi;
+            $judulFile = strtolower($judul);
+            $judulFile = preg_replace('/[^a-z0-9]/', '_', $judulFile);
+            $judulFile = trim($judulFile, '_');
+
+            $namaFileTersimpan = 'Materi_' . $judulFile . '_' . time() . '.' . $ekstensi;
             if (!move_uploaded_file($file['tmp_name'], $uploadDir . $namaFileTersimpan)) {
                 return [
                     'status' => 'error',

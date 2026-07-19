@@ -1,3 +1,19 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+require_once '../classes/materi.php';
+
+$materi = new Materi();
+
+$dataMateri = $materi->getAllMateri();
+
+?>
 <?php include 'component/header.php'; ?>
 
 <body>
@@ -42,27 +58,30 @@
                                             Detail Informasi
                                         </h5>
                                         <form>
+                                            <?php
+                                            foreach ($dataMateri as $materi) : ?>
+                                                <div class="mb-3">
+                                                    <label class="form-label">
+                                                        Materi
+                                                    </label>
+                                                    <select class="form-select" aria-label="Default select example" required>
+                                                        <option>
+                                                            <?= htmlspecialchars($materi['judul']) ?>
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            <?php endforeach; ?>
                                             <div class="mb-3">
-                                                <label class="form-label">
-                                                    Kategori Subtopik
+                                                <label class="form-label" for="commentmessage-input">
+                                                    Judul Kuis
                                                 </label>
-                                                <select class="form-select">
-                                                    <option>
-                                                        Select
-                                                    </option>
-                                                    <option>
-                                                        Large select
-                                                    </option>
-                                                    <option>
-                                                        Small select
-                                                    </option>
-                                                </select>
+                                                <input class="form-control" id="commentmessage-input" placeholder="Masukkan judul kuis" type="text" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label" for="commentmessage-input">
-                                                    Pertanyaan Kuis Skill
+                                                    Passing Grade
                                                 </label>
-                                                <textarea class="form-control" id="commentmessage-input" placeholder="Ringkasan..." rows="5"></textarea>
+                                                <input class="form-control" id="commentmessage-input" placeholder="Masukkan judul kuis" type="number" min="0" max="100" required>
                                             </div>
                                             <div class="text-end">
                                                 <button class="btn btn-primary btn-sm btn-rounded" type="submit">
