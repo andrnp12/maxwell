@@ -178,7 +178,7 @@ if (!$dataMateri) {
 
                 if (result.status === 'success') {
                     alert('Sukses: ' + result.message);
-                    // window.location.href = 'menu_utama.php';
+                    window.location.href = 'materi.php';
                 } else {
                     alert('Gagal: ' + result.message);
                 }
