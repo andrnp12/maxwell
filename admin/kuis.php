@@ -1,12 +1,19 @@
 <?php
-// if (session_status() === PHP_SESSION_NONE) {
-//     session_start();
-// }
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
-//     header('Location: login.php');
-//     exit;
-// }
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+
+require_once '../classes/kuis.php';
+
+$kuis = new Kuis();
+
+$dataKuis = $kuis->getAllKuis();
+
 ?>
 
 <!--header start-->
@@ -82,25 +89,27 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    1
-                                                </td>
-                                                <td>
-                                                    Kuis 1
-                                                </td>
-                                                <td>
-                                                    Materi 1
-                                                </td>
-                                                <td>
-                                                    80
-                                                </td>
-                                                <td>
-                                                    <a href="edit-kuis.php" class="btn btn-sm btn-warning">Edit</a>
-                                                    <button type="button" " class=" btn btn-delete btn-sm btn-danger">Hapus</button>
-                                                    <a href="list-kuis.php" class="btn btn-sm btn-info">Lihat Pertanyaan</a>
-                                                </td>
-                                            </tr>
+                                            <?php foreach ($dataKuis as $kuis) : ?>
+                                                <tr>
+                                                    <td>
+
+                                                    </td>
+                                                    <td>
+                                                        <?= htmlspecialchars($kuis['judul_materi']) ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= htmlspecialchars($kuis['judul_kuis']) ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= htmlspecialchars($kuis['passing_grade']) ?>
+                                                    </td>
+                                                    <td>
+                                                        <a href="edit-kuis.php" class="btn btn-sm btn-warning">Edit</a>
+                                                        <button type="button" " class=" btn btn-delete btn-sm btn-danger">Hapus</button>
+                                                        <a href="list-kuis.php" class="btn btn-sm btn-info">Lihat Pertanyaan</a>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
                                         </tbody>
                                     </table>
                                 </div>
