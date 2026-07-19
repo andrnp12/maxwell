@@ -26,7 +26,7 @@
 ?>
 
 <!--header start-->
-<?php include('src/include/header.php'); ?>
+<?php include('component/header.php'); ?>
 <!--headere end-->
 
 <body>
@@ -34,10 +34,10 @@
    <!-- Begin page -->
    <div id="layout-wrapper">
       <!-- ========== Topbar Start ========== -->
-      <?php include('src/include/topbar.php'); ?>
+      <?php include('component/topbar.php'); ?>
       <!-- ========== Topbar End ========== -->
       <!-- ========== Left Sidebar Start ========== -->
-      <?php include('src/include/sidebar.php'); ?>
+      <?php include('component/sidebar.php'); ?>
       <!-- Left Sidebar End -->
       <!-- ============================================================== -->
       <!-- Start right Content here -->
@@ -104,7 +104,7 @@
                         Daftar Menu
                      </h5>
                   </div>
-                  <div class="col-6 col-xl-3 col-md-6">
+                  <div class="col-12">
                      <!-- card -->
                      <div class="card card-h-100">
                         <!-- card body -->
@@ -112,7 +112,7 @@
                            <div class="row align-items-center">
                               <div class="col-12">
                                  <h4 class="mb-3">
-                                    <img src="assets/icon/mortarboard.webp" alt="icon" style="width: 40px; height: 40px;" />
+                                    <img src="../assets/icon/mortarboard.webp" alt="icon" style="width: 40px; height: 40px;" />
                                  </h4>
                                  <span class="text-muted lh-1 d-block text-truncate">
                                     Modul Edukasi
@@ -125,91 +125,6 @@
                      <!-- end card -->
                   </div>
                   <!-- end col -->
-                  <div class="col-6 col-xl-3 col-md-6">
-                     <!-- card -->
-                     <div class="card card-h-100">
-                        <!-- card body -->
-                        <a class="card-body" href="skill.php">
-                           <div class="row align-items-center">
-                              <div class="col-12">
-                                 <h4 class="mb-3">
-                                    <img src="assets/icon/edition.webp" alt="icon" style="width: 40px; height: 40px;" />
-                                 </h4>
-                                 <span class="text-muted lh-1 d-block text-truncate">
-                                    Kelas Skill
-                                 </span>
-                              </div>
-                           </div>
-                        </a>
-                        <!-- end card body -->
-                     </div>
-                     <!-- end card -->
-                  </div>
-                  <!-- end col -->
-                  <div class="col-6 col-xl-3 col-md-6">
-                     <!-- card -->
-                     <div class="card card-h-100">
-                        <!-- card body -->
-                        <a class="card-body" href="daftar-komunitas.php">
-                           <div class="row align-items-center">
-                              <div class="col-12">
-                                 <h4 class="mb-3">
-                                    <img src="assets/icon/slack.webp" alt="icon" style="width: 40px; height: 40px;" />
-                                 </h4>
-                                 <span class="text-muted lh-1 d-block text-truncate">
-                                    Kom. Sebaya
-                                 </span>
-                              </div>
-                           </div>
-                        </a>
-                        <!-- end card body -->
-                     </div>
-                     <!-- end card -->
-                  </div>
-                  <!-- end col -->
-                  <div class="col-6 col-xl-3 col-md-6">
-                     <!-- card -->
-                     <div class="card card-h-100">
-                        <!-- card body -->
-                        <a class="card-body" href="daftar-konseling.php">
-                           <div class="row align-items-center">
-                              <div class="col-12">
-                                 <h4 class="mb-3">
-                                    <img src="assets/icon/whatsapp.webp" alt="icon" style="width: 40px; height: 40px;" />
-                                 </h4>
-                                 <span class="text-muted lh-1 d-block text-truncate">
-                                    Konseling
-                                 </span>
-                              </div>
-                           </div>
-                        </a>
-                        <!-- end card body -->
-                     </div>
-                     <!-- end card -->
-                  </div>
-                  <!-- end col -->
-                  <!-- end col -->
-                  <div class="col-12">
-                     <div class="card card-h-100">
-                        <div class="card-body">
-                           <div class="row align-items-center">
-                              <div class="col-12">
-                                 <h4 class="mb-3">
-                                    <img src="assets/icon/notes.webp" alt="icon" style="width: 40px; height: 40px;" />
-                                 </h4>
-                                 <?php if (!$sudahPreTest): ?>
-                                    <span style="color: gray;">Kerjakan Pre-Test terlebih dahulu</span>
-                                 <?php elseif ($sudahPreTest && !$sudahPostTest): ?>
-                                    <a href="preposttest.php?type=post"><button class="btn btn-primary btn-sm">Mulai Post-Test</button></a>
-                                 <?php else: ?>
-                                    <span class="text-success">✔ Nilai Resmi Tersimpan</span>
-                                    <a href="preposttest.php?type=post"><button class="btn btn-warning btn-sm" style="margin-left:6px;">Kerjakan Ulang (Latihan)</button></a>
-                                 <?php endif; ?>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
                </div>
                <!-- end row-->
             </div>
@@ -217,17 +132,17 @@
          </div>
          <!-- End Page-content -->
          <!-- Footer Start -->
-         <?php include("src/include/footer.php"); ?>
+         <?php include("component/footer.php"); ?>
          <!-- end Footer -->
       </div>
       <!-- end main content-->
    </div>
    <!-- END layout-wrapper -->
    <!-- Right Sidebar -->
-   <?php include("src/include/right-sidebar.php"); ?>
+   <?php include("component/right-sidebar.php"); ?>
    <!-- /Right-bar -->
    <!-- javascript -->
-   <?php include("src/include/script.php"); ?>
+   <?php include("component/script.php"); ?>
    <!-- end javascript -->
 
 </body>

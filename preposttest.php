@@ -1,10 +1,10 @@
 <?php
 // 1. Proteksi Halaman
-session_start();
-if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
-    header("Location: login.php");
-    exit;
-}
+// session_start();
+// if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
+//     header("Location: login.php");
+//     exit;
+// }
 
 require_once __DIR__ . '/classes/tests.php'; // Sesuaikan path
 
