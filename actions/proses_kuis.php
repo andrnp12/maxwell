@@ -14,12 +14,12 @@ if (!isset($_SESSION['is_logged_in']) || $_SESSION['role'] !== 'admin') {
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
-    $materi = $_POST['materi'] ?? '';
+    $id_materi = $_POST['id_materi'] ?? '';
     $judul = $_POST['judul'] ?? '';
     $passingGrade = $_POST['passing_grade'] ?? '';
 
     $kuis = new Kuis();
-    $result = $kuis->addKuis($materi, $judul, $passingGrade);
+    $result = $kuis->addKuis($id_materi, $judul, $passingGrade);
 
     if ($result['status'] === 'success') {
         echo json_encode([

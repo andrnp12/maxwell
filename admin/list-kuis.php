@@ -45,7 +45,7 @@
                                     <span>
                                         <i class="fas fa-plus"></i>
                                     </span>
-                                    Tambah Kuis
+                                    Tambah Pertanyaan
                                 </a>
                             </div>
                         </div>

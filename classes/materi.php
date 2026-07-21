@@ -210,4 +210,19 @@ class Materi
 
         return $materiList;
     }
+
+    public function getMateriNonKuis(): array
+    {
+        $result = $this->conn->query("SELECT m.* 
+FROM materials m
+LEFT JOIN quizzes k ON m.id = k.material_id
+WHERE k.material_id IS NULL;");
+        $MateriNonKuis = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $MateriNonKuis[] = $row;
+        }
+
+        return $MateriNonKuis;
+    }
 }

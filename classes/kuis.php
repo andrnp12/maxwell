@@ -12,14 +12,14 @@ class Kuis
         $this->conn = $this->db->conn;
     }
 
-    public function addKuis(string $materi, string $judul, int $passingGrade): array
+    public function addKuis(int $id_materi, string $judul, int $passingGrade): array
     {
         $stmt = $this->conn->prepare("INSERT INTO quizzes (material_id, judul, passing_grade) VALUES (?, ?, ?)");
         if (!$stmt) {
             die("Error pada query: " . $this->conn->error);
         }
 
-        $stmt->bind_param("sii", $materi, $judul, $passingGrade);
+        $stmt->bind_param("isi", $id_materi, $judul, $passingGrade);
 
         if ($stmt->execute()) {
             return [
