@@ -1,12 +1,12 @@
 <?php
-// if (session_status() === PHP_SESSION_NONE) {
-//     session_start();
-// }
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
-//     header('Location: login.php');
-//     exit;
-// }
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
+    header('Location: ../login.php');
+    exit;
+}
 ?>
 
 <!--header start-->

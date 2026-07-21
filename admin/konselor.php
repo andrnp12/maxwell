@@ -1,12 +1,17 @@
 <?php
-// if (session_status() === PHP_SESSION_NONE) {
-//     session_start();
-// }
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
-//     header('Location: login.php');
-//     exit;
-// }
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+
+require_once '../classes/konselor.php';
+
+$konsultan = new Konsultan();
+$dataKonsultan = $konsultan->getAllKonsultan();
 ?>
 
 <!--header start-->
@@ -41,7 +46,7 @@
                                 </p>
                             </div>
                             <div>
-                                <a class="btn btn-primary btn-rounded waves-effect mb-2" href="tambah-konselor.php">
+                                <a class="btn btn-primary btn-rounded waves-effect mb-2" href="#" data-bs-toggle="modal" data-bs-target="#modalTambahKonselor">
                                     <span>
                                         <i class="fas fa-plus"></i>
                                     </span>
@@ -60,1170 +65,43 @@
                                     </h4>
                                 </div>
                                 <div class="card-body">
-                                    <table class="table table-bordered dt-responsive nowrap w-100" id="datatable">
+                                    <table class="table table-bordered dt-responsive nowrap w-100 align-middle" id="datatable">
                                         <thead>
                                             <tr>
-                                                <th>
-                                                    Name
-                                                </th>
-                                                <th>
-                                                    Position
-                                                </th>
-                                                <th>
-                                                    Office
-                                                </th>
-                                                <th>
-                                                    Age
-                                                </th>
-                                                <th>
-                                                    Start date
-                                                </th>
-                                                <th>
-                                                    Salary
-                                                </th>
+                                                <th>#</th>
+                                                <th>Foto</th>
+                                                <th>Nama Konsultan</th>
+                                                <th>Nomor WA</th>
+                                                <th>Email</th>
+                                                <th>Ringkasan</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    Tiger Nixon
-                                                </td>
-                                                <td>
-                                                    System Architect
-                                                </td>
-                                                <td>
-                                                    Edinburgh
-                                                </td>
-                                                <td>
-                                                    61
-                                                </td>
-                                                <td>
-                                                    2011/04/25
-                                                </td>
-                                                <td>
-                                                    $320,800
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Garrett Winters
-                                                </td>
-                                                <td>
-                                                    Accountant
-                                                </td>
-                                                <td>
-                                                    Tokyo
-                                                </td>
-                                                <td>
-                                                    63
-                                                </td>
-                                                <td>
-                                                    2011/07/25
-                                                </td>
-                                                <td>
-                                                    $170,750
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Ashton Cox
-                                                </td>
-                                                <td>
-                                                    Junior Technical Author
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    66
-                                                </td>
-                                                <td>
-                                                    2009/01/12
-                                                </td>
-                                                <td>
-                                                    $86,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Cedric Kelly
-                                                </td>
-                                                <td>
-                                                    Senior Javascript Developer
-                                                </td>
-                                                <td>
-                                                    Edinburgh
-                                                </td>
-                                                <td>
-                                                    22
-                                                </td>
-                                                <td>
-                                                    2012/03/29
-                                                </td>
-                                                <td>
-                                                    $433,060
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Airi Satou
-                                                </td>
-                                                <td>
-                                                    Accountant
-                                                </td>
-                                                <td>
-                                                    Tokyo
-                                                </td>
-                                                <td>
-                                                    33
-                                                </td>
-                                                <td>
-                                                    2008/11/28
-                                                </td>
-                                                <td>
-                                                    $162,700
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Brielle Williamson
-                                                </td>
-                                                <td>
-                                                    Integration Specialist
-                                                </td>
-                                                <td>
-                                                    New York
-                                                </td>
-                                                <td>
-                                                    61
-                                                </td>
-                                                <td>
-                                                    2012/12/02
-                                                </td>
-                                                <td>
-                                                    $372,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Herrod Chandler
-                                                </td>
-                                                <td>
-                                                    Sales Assistant
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    59
-                                                </td>
-                                                <td>
-                                                    2012/08/06
-                                                </td>
-                                                <td>
-                                                    $137,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Rhona Davidson
-                                                </td>
-                                                <td>
-                                                    Integration Specialist
-                                                </td>
-                                                <td>
-                                                    Tokyo
-                                                </td>
-                                                <td>
-                                                    55
-                                                </td>
-                                                <td>
-                                                    2010/10/14
-                                                </td>
-                                                <td>
-                                                    $327,900
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Colleen Hurst
-                                                </td>
-                                                <td>
-                                                    Javascript Developer
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    39
-                                                </td>
-                                                <td>
-                                                    2009/09/15
-                                                </td>
-                                                <td>
-                                                    $205,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Sonya Frost
-                                                </td>
-                                                <td>
-                                                    Software Engineer
-                                                </td>
-                                                <td>
-                                                    Edinburgh
-                                                </td>
-                                                <td>
-                                                    23
-                                                </td>
-                                                <td>
-                                                    2008/12/13
-                                                </td>
-                                                <td>
-                                                    $103,600
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Jena Gaines
-                                                </td>
-                                                <td>
-                                                    Office Manager
-                                                </td>
-                                                <td>
-                                                    London
-                                                </td>
-                                                <td>
-                                                    30
-                                                </td>
-                                                <td>
-                                                    2008/12/19
-                                                </td>
-                                                <td>
-                                                    $90,560
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Quinn Flynn
-                                                </td>
-                                                <td>
-                                                    Support Lead
-                                                </td>
-                                                <td>
-                                                    Edinburgh
-                                                </td>
-                                                <td>
-                                                    22
-                                                </td>
-                                                <td>
-                                                    2013/03/03
-                                                </td>
-                                                <td>
-                                                    $342,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Charde Marshall
-                                                </td>
-                                                <td>
-                                                    Regional Director
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    36
-                                                </td>
-                                                <td>
-                                                    2008/10/16
-                                                </td>
-                                                <td>
-                                                    $470,600
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Haley Kennedy
-                                                </td>
-                                                <td>
-                                                    Senior Marketing Designer
-                                                </td>
-                                                <td>
-                                                    London
-                                                </td>
-                                                <td>
-                                                    43
-                                                </td>
-                                                <td>
-                                                    2012/12/18
-                                                </td>
-                                                <td>
-                                                    $313,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Tatyana Fitzpatrick
-                                                </td>
-                                                <td>
-                                                    Regional Director
-                                                </td>
-                                                <td>
-                                                    London
-                                                </td>
-                                                <td>
-                                                    19
-                                                </td>
-                                                <td>
-                                                    2010/03/17
-                                                </td>
-                                                <td>
-                                                    $385,750
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Michael Silva
-                                                </td>
-                                                <td>
-                                                    Marketing Designer
-                                                </td>
-                                                <td>
-                                                    London
-                                                </td>
-                                                <td>
-                                                    66
-                                                </td>
-                                                <td>
-                                                    2012/11/27
-                                                </td>
-                                                <td>
-                                                    $198,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Paul Byrd
-                                                </td>
-                                                <td>
-                                                    Chief Financial Officer (CFO)
-                                                </td>
-                                                <td>
-                                                    New York
-                                                </td>
-                                                <td>
-                                                    64
-                                                </td>
-                                                <td>
-                                                    2010/06/09
-                                                </td>
-                                                <td>
-                                                    $725,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Gloria Little
-                                                </td>
-                                                <td>
-                                                    Systems Administrator
-                                                </td>
-                                                <td>
-                                                    New York
-                                                </td>
-                                                <td>
-                                                    59
-                                                </td>
-                                                <td>
-                                                    2009/04/10
-                                                </td>
-                                                <td>
-                                                    $237,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Bradley Greer
-                                                </td>
-                                                <td>
-                                                    Software Engineer
-                                                </td>
-                                                <td>
-                                                    London
-                                                </td>
-                                                <td>
-                                                    41
-                                                </td>
-                                                <td>
-                                                    2012/10/13
-                                                </td>
-                                                <td>
-                                                    $132,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Dai Rios
-                                                </td>
-                                                <td>
-                                                    Personnel Lead
-                                                </td>
-                                                <td>
-                                                    Edinburgh
-                                                </td>
-                                                <td>
-                                                    35
-                                                </td>
-                                                <td>
-                                                    2012/09/26
-                                                </td>
-                                                <td>
-                                                    $217,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Jenette Caldwell
-                                                </td>
-                                                <td>
-                                                    Development Lead
-                                                </td>
-                                                <td>
-                                                    New York
-                                                </td>
-                                                <td>
-                                                    30
-                                                </td>
-                                                <td>
-                                                    2011/09/03
-                                                </td>
-                                                <td>
-                                                    $345,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Yuri Berry
-                                                </td>
-                                                <td>
-                                                    Chief Marketing Officer (CMO)
-                                                </td>
-                                                <td>
-                                                    New York
-                                                </td>
-                                                <td>
-                                                    40
-                                                </td>
-                                                <td>
-                                                    2009/06/25
-                                                </td>
-                                                <td>
-                                                    $675,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Caesar Vance
-                                                </td>
-                                                <td>
-                                                    Pre-Sales Support
-                                                </td>
-                                                <td>
-                                                    New York
-                                                </td>
-                                                <td>
-                                                    21
-                                                </td>
-                                                <td>
-                                                    2011/12/12
-                                                </td>
-                                                <td>
-                                                    $106,450
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Doris Wilder
-                                                </td>
-                                                <td>
-                                                    Sales Assistant
-                                                </td>
-                                                <td>
-                                                    Sidney
-                                                </td>
-                                                <td>
-                                                    23
-                                                </td>
-                                                <td>
-                                                    2010/09/20
-                                                </td>
-                                                <td>
-                                                    $85,600
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Angelica Ramos
-                                                </td>
-                                                <td>
-                                                    Chief Executive Officer (CEO)
-                                                </td>
-                                                <td>
-                                                    London
-                                                </td>
-                                                <td>
-                                                    47
-                                                </td>
-                                                <td>
-                                                    2009/10/09
-                                                </td>
-                                                <td>
-                                                    $1,200,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Gavin Joyce
-                                                </td>
-                                                <td>
-                                                    Developer
-                                                </td>
-                                                <td>
-                                                    Edinburgh
-                                                </td>
-                                                <td>
-                                                    42
-                                                </td>
-                                                <td>
-                                                    2010/12/22
-                                                </td>
-                                                <td>
-                                                    $92,575
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Jennifer Chang
-                                                </td>
-                                                <td>
-                                                    Regional Director
-                                                </td>
-                                                <td>
-                                                    Singapore
-                                                </td>
-                                                <td>
-                                                    28
-                                                </td>
-                                                <td>
-                                                    2010/11/14
-                                                </td>
-                                                <td>
-                                                    $357,650
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Brenden Wagner
-                                                </td>
-                                                <td>
-                                                    Software Engineer
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    28
-                                                </td>
-                                                <td>
-                                                    2011/06/07
-                                                </td>
-                                                <td>
-                                                    $206,850
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Fiona Green
-                                                </td>
-                                                <td>
-                                                    Chief Operating Officer (COO)
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    48
-                                                </td>
-                                                <td>
-                                                    2010/03/11
-                                                </td>
-                                                <td>
-                                                    $850,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Shou Itou
-                                                </td>
-                                                <td>
-                                                    Regional Marketing
-                                                </td>
-                                                <td>
-                                                    Tokyo
-                                                </td>
-                                                <td>
-                                                    20
-                                                </td>
-                                                <td>
-                                                    2011/08/14
-                                                </td>
-                                                <td>
-                                                    $163,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Michelle House
-                                                </td>
-                                                <td>
-                                                    Integration Specialist
-                                                </td>
-                                                <td>
-                                                    Sidney
-                                                </td>
-                                                <td>
-                                                    37
-                                                </td>
-                                                <td>
-                                                    2011/06/02
-                                                </td>
-                                                <td>
-                                                    $95,400
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Suki Burks
-                                                </td>
-                                                <td>
-                                                    Developer
-                                                </td>
-                                                <td>
-                                                    London
-                                                </td>
-                                                <td>
-                                                    53
-                                                </td>
-                                                <td>
-                                                    2009/10/22
-                                                </td>
-                                                <td>
-                                                    $114,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Prescott Bartlett
-                                                </td>
-                                                <td>
-                                                    Technical Author
-                                                </td>
-                                                <td>
-                                                    London
-                                                </td>
-                                                <td>
-                                                    27
-                                                </td>
-                                                <td>
-                                                    2011/05/07
-                                                </td>
-                                                <td>
-                                                    $145,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Gavin Cortez
-                                                </td>
-                                                <td>
-                                                    Team Leader
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    22
-                                                </td>
-                                                <td>
-                                                    2008/10/26
-                                                </td>
-                                                <td>
-                                                    $235,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Martena Mccray
-                                                </td>
-                                                <td>
-                                                    Post-Sales support
-                                                </td>
-                                                <td>
-                                                    Edinburgh
-                                                </td>
-                                                <td>
-                                                    46
-                                                </td>
-                                                <td>
-                                                    2011/03/09
-                                                </td>
-                                                <td>
-                                                    $324,050
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Unity Butler
-                                                </td>
-                                                <td>
-                                                    Marketing Designer
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    47
-                                                </td>
-                                                <td>
-                                                    2009/12/09
-                                                </td>
-                                                <td>
-                                                    $85,675
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Howard Hatfield
-                                                </td>
-                                                <td>
-                                                    Office Manager
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    51
-                                                </td>
-                                                <td>
-                                                    2008/12/16
-                                                </td>
-                                                <td>
-                                                    $164,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Hope Fuentes
-                                                </td>
-                                                <td>
-                                                    Secretary
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    41
-                                                </td>
-                                                <td>
-                                                    2010/02/12
-                                                </td>
-                                                <td>
-                                                    $109,850
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Vivian Harrell
-                                                </td>
-                                                <td>
-                                                    Financial Controller
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    62
-                                                </td>
-                                                <td>
-                                                    2009/02/14
-                                                </td>
-                                                <td>
-                                                    $452,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Timothy Mooney
-                                                </td>
-                                                <td>
-                                                    Office Manager
-                                                </td>
-                                                <td>
-                                                    London
-                                                </td>
-                                                <td>
-                                                    37
-                                                </td>
-                                                <td>
-                                                    2008/12/11
-                                                </td>
-                                                <td>
-                                                    $136,200
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Jackson Bradshaw
-                                                </td>
-                                                <td>
-                                                    Director
-                                                </td>
-                                                <td>
-                                                    New York
-                                                </td>
-                                                <td>
-                                                    65
-                                                </td>
-                                                <td>
-                                                    2008/09/26
-                                                </td>
-                                                <td>
-                                                    $645,750
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Olivia Liang
-                                                </td>
-                                                <td>
-                                                    Support Engineer
-                                                </td>
-                                                <td>
-                                                    Singapore
-                                                </td>
-                                                <td>
-                                                    64
-                                                </td>
-                                                <td>
-                                                    2011/02/03
-                                                </td>
-                                                <td>
-                                                    $234,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Bruno Nash
-                                                </td>
-                                                <td>
-                                                    Software Engineer
-                                                </td>
-                                                <td>
-                                                    London
-                                                </td>
-                                                <td>
-                                                    38
-                                                </td>
-                                                <td>
-                                                    2011/05/03
-                                                </td>
-                                                <td>
-                                                    $163,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Sakura Yamamoto
-                                                </td>
-                                                <td>
-                                                    Support Engineer
-                                                </td>
-                                                <td>
-                                                    Tokyo
-                                                </td>
-                                                <td>
-                                                    37
-                                                </td>
-                                                <td>
-                                                    2009/08/19
-                                                </td>
-                                                <td>
-                                                    $139,575
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Thor Walton
-                                                </td>
-                                                <td>
-                                                    Developer
-                                                </td>
-                                                <td>
-                                                    New York
-                                                </td>
-                                                <td>
-                                                    61
-                                                </td>
-                                                <td>
-                                                    2013/08/11
-                                                </td>
-                                                <td>
-                                                    $98,540
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Finn Camacho
-                                                </td>
-                                                <td>
-                                                    Support Engineer
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    47
-                                                </td>
-                                                <td>
-                                                    2009/07/07
-                                                </td>
-                                                <td>
-                                                    $87,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Serge Baldwin
-                                                </td>
-                                                <td>
-                                                    Data Coordinator
-                                                </td>
-                                                <td>
-                                                    Singapore
-                                                </td>
-                                                <td>
-                                                    64
-                                                </td>
-                                                <td>
-                                                    2012/04/09
-                                                </td>
-                                                <td>
-                                                    $138,575
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Zenaida Frank
-                                                </td>
-                                                <td>
-                                                    Software Engineer
-                                                </td>
-                                                <td>
-                                                    New York
-                                                </td>
-                                                <td>
-                                                    63
-                                                </td>
-                                                <td>
-                                                    2010/01/04
-                                                </td>
-                                                <td>
-                                                    $125,250
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Zorita Serrano
-                                                </td>
-                                                <td>
-                                                    Software Engineer
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    56
-                                                </td>
-                                                <td>
-                                                    2012/06/01
-                                                </td>
-                                                <td>
-                                                    $115,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Jennifer Acosta
-                                                </td>
-                                                <td>
-                                                    Junior Javascript Developer
-                                                </td>
-                                                <td>
-                                                    Edinburgh
-                                                </td>
-                                                <td>
-                                                    43
-                                                </td>
-                                                <td>
-                                                    2013/02/01
-                                                </td>
-                                                <td>
-                                                    $75,650
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Cara Stevens
-                                                </td>
-                                                <td>
-                                                    Sales Assistant
-                                                </td>
-                                                <td>
-                                                    New York
-                                                </td>
-                                                <td>
-                                                    46
-                                                </td>
-                                                <td>
-                                                    2011/12/06
-                                                </td>
-                                                <td>
-                                                    $145,600
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Hermione Butler
-                                                </td>
-                                                <td>
-                                                    Regional Director
-                                                </td>
-                                                <td>
-                                                    London
-                                                </td>
-                                                <td>
-                                                    47
-                                                </td>
-                                                <td>
-                                                    2011/03/21
-                                                </td>
-                                                <td>
-                                                    $356,250
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Lael Greer
-                                                </td>
-                                                <td>
-                                                    Systems Administrator
-                                                </td>
-                                                <td>
-                                                    London
-                                                </td>
-                                                <td>
-                                                    21
-                                                </td>
-                                                <td>
-                                                    2009/02/27
-                                                </td>
-                                                <td>
-                                                    $103,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Jonas Alexander
-                                                </td>
-                                                <td>
-                                                    Developer
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    30
-                                                </td>
-                                                <td>
-                                                    2010/07/14
-                                                </td>
-                                                <td>
-                                                    $86,500
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Shad Decker
-                                                </td>
-                                                <td>
-                                                    Regional Director
-                                                </td>
-                                                <td>
-                                                    Edinburgh
-                                                </td>
-                                                <td>
-                                                    51
-                                                </td>
-                                                <td>
-                                                    2008/11/13
-                                                </td>
-                                                <td>
-                                                    $183,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Michael Bruce
-                                                </td>
-                                                <td>
-                                                    Javascript Developer
-                                                </td>
-                                                <td>
-                                                    Singapore
-                                                </td>
-                                                <td>
-                                                    29
-                                                </td>
-                                                <td>
-                                                    2011/06/27
-                                                </td>
-                                                <td>
-                                                    $183,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Donna Snider
-                                                </td>
-                                                <td>
-                                                    Customer Support
-                                                </td>
-                                                <td>
-                                                    New York
-                                                </td>
-                                                <td>
-                                                    27
-                                                </td>
-                                                <td>
-                                                    2011/01/25
-                                                </td>
-                                                <td>
-                                                    $112,000
-                                                </td>
-                                            </tr>
+                                            <?php $no = 1;
+                                            foreach ($dataKonsultan as $konsultan) : ?>
+                                                <tr id="row-<?= $konsultan['id'] ?>">
+                                                    <td><?= $no++ ?></td>
+                                                    <td><img src="../uploads/profile/<?= htmlspecialchars($konsultan['foto']) ?>" alt="icon" class="avatar-sm rounded-circle" /></td>
+                                                    <td><?= htmlspecialchars($konsultan['nama']) ?></td>
+                                                    <td><?= htmlspecialchars($konsultan['nomor']) ?></td>
+                                                    <td><?= htmlspecialchars($konsultan['email']) ?></td>
+                                                    <td><?= htmlspecialchars($konsultan['deskripsi']) ?></td>
+                                                    <td>
+                                                        <a href="#"
+                                                            data-id="<?= $konsultan['id'] ?>"
+                                                            data-nama="<?= htmlspecialchars($konsultan['nama'], ENT_QUOTES) ?>"
+                                                            data-nomor="<?= htmlspecialchars($konsultan['nomor'], ENT_QUOTES) ?>"
+                                                            data-email="<?= htmlspecialchars($konsultan['email'], ENT_QUOTES) ?>"
+                                                            data-deskripsi="<?= htmlspecialchars($konsultan['deskripsi'], ENT_QUOTES) ?>"
+                                                            data-foto="<?= htmlspecialchars($konsultan['foto'], ENT_QUOTES) ?>"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#modalEditKonselor"
+                                                            class="btn btn-sm btn-warning btn-edit">Edit</a>
+                                                        <button type="button" data-id="<?= $konsultan['id'] ?>" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus">Hapus</button>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1236,6 +114,131 @@
                 <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
+            <!-- ========================================================= -->
+            <!-- Bagian Pop-up tambah konselor (Modal) -->
+            <!-- ========================================================= -->
+            <div class="modal fade" id="modalTambahKonselor" tabindex="-1" aria-labelledby="modalTambahKonselorLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Header Modal -->
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalTambahKonselorLabel">Form Tambah Konselor</h5>
+                            <!-- Tombol silang untuk menutup modal -->
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <!-- Isi Pop-up (Form Anda masuk ke sini) -->
+                        <form id="formKonselor">
+                            <div class="modal-body">
+                                <!-- Contoh Inputan -->
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="foto">
+                                        Foto Konselor
+                                    </label>
+                                    <input class="form-control" id="foto" name="foto" placeholder="Ganti Foto Profil" type="file" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="nama">
+                                        Nama Konselor
+                                    </label>
+                                    <input class="form-control" id="nama" name="nama" placeholder="Masukkan nama" type="text" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="nomor">
+                                        Nomor Whatsapp Konselor
+                                    </label>
+                                    <input class="form-control" id="nomor" name="nomor" placeholder="Masukkan link" type="text" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="email">
+                                        Email Konselor
+                                    </label>
+                                    <input class="form-control" id="email" name="email" placeholder="Masukkan email" type="text" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="ringkasan">
+                                        Ringkasan Singkat Konselor
+                                    </label>
+                                    <textarea class="form-control" id="ringkasan" name="ringkasan" placeholder="Ringkasan..." rows="3" required></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Footer Modal (Tombol Aksi) -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-primary" id="btnTambah">Simpan Konselor</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <!-- ========================================================= -->
+            <!-- Bagian Pop-up edit konselor (Modal) -->
+            <!-- ========================================================= -->
+            <div class="modal fade" id="modalEditKonselor" tabindex="-1" aria-labelledby="modalEditKonselorLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Header Modal -->
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalTambahKonselorLabel">Form Edit Konselor</h5>
+                            <!-- Tombol silang untuk menutup modal -->
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <!-- Isi Pop-up (Form Anda masuk ke sini) -->
+                        <form id="formEditKonselor">
+                            <div class="modal-body">
+                                <!-- Contoh Inputan -->
+                                <input type="hidden" name="id" id="edit_id" value="">
+                                <input type="hidden" name="existing_foto" id="edit_existing_foto" value="">
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="edit_foto">
+                                        Ganti Foto Konselor
+                                    </label>
+                                    <input class="form-control" id="edit_foto" name="foto" type="file">
+                                    <small class="form-text text-muted">Biarkan kosong jika tidak ingin mengganti foto.</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="edit_nama">
+                                        Nama Konselor
+                                    </label>
+                                    <input class="form-control" id="edit_nama" name="nama" type="text" value="">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="edit_nomor">
+                                        Nomor Whatsapp Konselor
+                                    </label>
+                                    <input class="form-control" id="edit_nomor" name="nomor" type="text" value="">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="edit_email">
+                                        Email Konselor
+                                    </label>
+                                    <input class="form-control" id="edit_email" name="email" type="text" value="">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="edit_ringkasan">
+                                        Ringkasan Singkat Konselor
+                                    </label>
+                                    <textarea class="form-control" id="edit_ringkasan" name="ringkasan" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <!-- Footer Modal (Tombol Aksi) -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-primary" id="btnEdit">Simpan Perubahan</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <?php include("component/toast.php"); ?>
             <!-- Footer Start -->
             <?php include("component/footer.php"); ?>
             <!-- end Footer -->
@@ -1249,5 +252,385 @@
     <!-- javascript -->
     <?php include("component/script.php"); ?>
     <!-- end javascript -->
+
+    <script>
+        const formKonselor = document.getElementById('formKonselor');
+        const btnTambah = document.getElementById('btnTambah');
+        const formEditKonselor = document.getElementById('formEditKonselor');
+        const btnEdit = document.getElementById('btnEdit');
+        const modalEditKonselor = document.getElementById('modalEditKonselor');
+        const elemenModalNotif = document.getElementById('modalNotifikasi');
+        const elemenToastNotif = elemenModalNotif ? elemenModalNotif.querySelector('.toast') : null;
+        const dataTable = window.jQuery && window.jQuery.fn && window.jQuery.fn.dataTable && window.jQuery.fn.dataTable.isDataTable('#datatable') ?
+            window.jQuery('#datatable').DataTable() :
+            null;
+        let modalNotifInstance = null;
+
+        function tampilkanNotif(judul, pesan, status = 'success') {
+            if (!elemenToastNotif) return;
+
+            const toastEl = elemenToastNotif;
+            const header = toastEl.querySelector('.toast-header');
+            const body = toastEl.querySelector('.toast-body');
+
+            ['bg-success', 'bg-danger'].forEach(c => {
+                toastEl.classList.remove(c);
+                if (header) header.classList.remove(c);
+                if (body) body.classList.remove(c);
+            });
+
+            if (status === 'success') {
+                toastEl.classList.add('bg-success');
+                if (header) header.classList.add('bg-success');
+                if (body) body.classList.add('bg-success');
+            } else {
+                toastEl.classList.add('bg-danger');
+                if (header) header.classList.add('bg-danger');
+                if (body) body.classList.add('bg-danger');
+            }
+
+            if (header) header.classList.add('text-white');
+            if (body) body.classList.add('text-white');
+
+            document.getElementById('judulNotifikasi').textContent = judul;
+            document.getElementById('pesanNotifikasi').textContent = pesan;
+            // document.getElementById('toastBody').textContent = pesan;
+
+            if (!modalNotifInstance) {
+                modalNotifInstance = bootstrap.Toast.getOrCreateInstance(toastEl, {
+                    autohide: true,
+                    delay: 3000
+                });
+            }
+
+            modalNotifInstance.show();
+        }
+
+        async function kirimForm(formElement, submitButton, successMessage) {
+            if (!formElement || !submitButton) return;
+
+            submitButton.disabled = true;
+            submitButton.innerText = 'Memproses...';
+
+            const formData = new FormData(formElement);
+            formData.append('action', 'save');
+
+            try {
+                const response = await fetch('/../actions/proses_konselor.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+
+                    // 1. TUTUP MODAL DULU
+                    if (formElement === formKonselor) {
+                        bootstrap.Modal.getOrCreateInstance(document.getElementById('modalTambahKonselor')).hide();
+                    } else if (formElement === formEditKonselor) {
+                        bootstrap.Modal.getOrCreateInstance(modalEditKonselor).hide();
+                    }
+
+                    // 2. RESET FORM
+                    if (formElement === formKonselor) {
+                        const id = result.id;
+                        const foto = result.foto ? result.foto : '';
+                        const nomor = formElement.querySelector('[name=nomor]').value;
+                        const nama = formElement.querySelector('[name=nama]').value;
+                        const email = formElement.querySelector('[name=email]').value;
+                        const deskripsi = formElement.querySelector('[name=ringkasan]').value;
+
+                        formKonselor.reset();
+                        const tambahModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalTambahKonselor'));
+                        tambahModal.hide();
+
+                        tambahRow({
+                            id,
+                            foto,
+                            nama,
+                            nomor,
+                            email,
+                            deskripsi
+                        });
+                    }
+
+                    if (formElement === formEditKonselor) {
+                        const editModal = bootstrap.Modal.getOrCreateInstance(modalEditKonselor);
+                        editModal.hide();
+
+                        const id = document.getElementById('edit_id').value;
+                        const foto = result.foto ? result.foto : document.getElementById('edit_existing_foto').value;
+                        const nomor = formElement.querySelector('[name=nomor]').value;
+                        const nama = formElement.querySelector('[name=nama]').value;
+                        const email = formElement.querySelector('[name=email]').value;
+                        const deskripsi = formElement.querySelector('[name=ringkasan]').value;
+
+                        updateRow({
+                            id,
+                            foto,
+                            nama,
+                            nomor,
+                            email,
+                            deskripsi
+                        });
+                    }
+                    tampilkanNotif('Berhasil', result.message, 'success');
+                } else {
+                    tampilkanNotif('Gagal', result.message, 'error');
+                }
+            } catch (error) {
+                tampilkanNotif('Koneksi Gagal', 'Terjadi kesalahan koneksi jaringan.', 'error');
+                console.error(error);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerText = formElement === formKonselor ? 'Simpan Konselor' : 'Simpan Kuis';
+            }
+        }
+
+        function tambahRow(data) {
+            const rowData = [
+                data.id,
+                `<img src="../uploads/profile/${data.foto}" alt="icon" class="avatar-sm rounded-circle" />`,
+                escapeHtml(data.nama),
+                escapeHtml(data.nomor),
+                escapeHtml(data.email),
+                escapeHtml(data.deskripsi),
+                `<a href="#" \
+                       data-id="${data.id}" \
+                       data-nama="${escapeHtml(data.nama, true)}" \
+                       data-nomor="${escapeHtml(data.nomor, true)}" \
+                       data-email="${escapeHtml(data.email, true)}" \
+                       data-deskripsi="${escapeHtml(data.deskripsi, true)}" \
+                       data-foto="${escapeHtml(data.foto, true)}" \
+                       data-bs-toggle="modal" \
+                       data-bs-target="#modalEditKonselor" \
+                       class="btn btn-sm btn-warning btn-edit">Edit</a>\
+                    <button type="button" data-id="${data.id}" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus">Hapus</button>`
+            ];
+
+            if (dataTable) {
+                const row = dataTable.row.add(rowData).draw(false).node();
+                if (row) row.id = 'row-' + data.id;
+                return;
+            }
+
+            const table = document.getElementById('datatable');
+            if (!table) return;
+            const tbody = table.querySelector('tbody');
+            if (!tbody) return;
+
+            const tr = document.createElement('tr');
+            tr.id = 'row-' + data.id;
+            tr.innerHTML = `
+                <td>${data.id}</td>
+                <td><img src="../uploads/profile/${data.foto}" alt="icon" class="avatar-sm rounded-circle" /></td>
+                <td>${escapeHtml(data.nama)}</td>
+                <td>${escapeHtml(data.nomor)}</td>
+                <td>${escapeHtml(data.email)}</td>
+                <td>${escapeHtml(data.deskripsi)}</td>
+                <td>
+                    <a href="#" 
+                       data-id="${data.id}"
+                       data-nama="${escapeHtml(data.nama, true)}"
+                       data-nomor="${escapeHtml(data.nomor, true)}"
+                       data-email="${escapeHtml(data.email, true)}"
+                       data-deskripsi="${escapeHtml(data.deskripsi, true)}"
+                       data-foto="${escapeHtml(data.foto, true)}"
+                       data-bs-toggle="modal"
+                       data-bs-target="#modalEditKonselor"
+                       class="btn btn-sm btn-warning btn-edit">Edit</a>
+                    <button type="button" data-id="${data.id}" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus">Hapus</button>
+                </td>`;
+            tbody.appendChild(tr);
+        }
+
+        function updateRow(data) {
+            const rowData = [
+                data.id,
+                `<img src="../uploads/profile/${data.foto}" alt="icon" class="avatar-sm rounded-circle" />`,
+                escapeHtml(data.nama),
+                escapeHtml(data.nomor),
+                escapeHtml(data.email),
+                escapeHtml(data.deskripsi),
+                `<a href="#" \
+                       data-id="${data.id}" \
+                       data-nama="${escapeHtml(data.nama, true)}" \
+                       data-nomor="${escapeHtml(data.nomor, true)}" \
+                       data-email="${escapeHtml(data.email, true)}" \
+                       data-deskripsi="${escapeHtml(data.deskripsi, true)}" \
+                       data-foto="${escapeHtml(data.foto, true)}" \
+                       data-bs-toggle="modal" \
+                       data-bs-target="#modalEditKonselor" \
+                       class="btn btn-sm btn-warning btn-edit">Edit</a>\
+                    <button type="button" data-id="${data.id}" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus">Hapus</button>`
+            ];
+
+            if (dataTable) {
+                const row = dataTable.row('#row-' + data.id);
+                if (row.length) {
+                    row.data(rowData).draw(false);
+                    const node = row.node();
+                    if (node) node.id = 'row-' + data.id;
+                }
+                return;
+            }
+
+            const row = document.getElementById('row-' + data.id);
+            if (!row) return;
+            row.innerHTML = `
+                <td>${data.id}</td>
+                <td><img src="../uploads/profile/${data.foto}" alt="icon" class="avatar-sm rounded-circle" /></td>
+                <td>${escapeHtml(data.nama)}</td>
+                <td>${escapeHtml(data.nomor)}</td>
+                <td>${escapeHtml(data.email)}</td>
+                <td>${escapeHtml(data.deskripsi)}</td>
+                <td>
+                    <a href="#" 
+                       data-id="${data.id}"
+                       data-nama="${escapeHtml(data.nama, true)}"
+                       data-nomor="${escapeHtml(data.nomor, true)}"
+                       data-email="${escapeHtml(data.email, true)}"
+                       data-deskripsi="${escapeHtml(data.deskripsi, true)}"
+                       data-foto="${escapeHtml(data.foto, true)}"
+                       data-bs-toggle="modal"
+                       data-bs-target="#modalEditKonselor"
+                       class="btn btn-sm btn-warning btn-edit">Edit</a>
+                    <button type="button" data-id="${data.id}" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus">Hapus</button>
+                </td>`;
+        }
+
+        function escapeHtml(text, attr = false) {
+            if (text === null || text === undefined) return '';
+            let escaped = String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+            return attr ? escaped.replace(/`/g, '&#096;') : escaped;
+        }
+
+        formKonselor.addEventListener('submit', function(e) {
+            e.preventDefault();
+            kirimForm(formKonselor, btnTambah, 'Data berhasil ditambahkan');
+        });
+
+        if (formEditKonselor) {
+            formEditKonselor.addEventListener('submit', function(e) {
+                e.preventDefault();
+                kirimForm(formEditKonselor, btnEdit, 'Data berhasil diperbarui');
+            });
+        }
+
+        if (modalEditKonselor) {
+            modalEditKonselor.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                if (!button) return;
+
+                const id = button.getAttribute('data-id');
+                const nama = button.getAttribute('data-nama') || '';
+                const nomor = button.getAttribute('data-nomor') || '';
+                const email = button.getAttribute('data-email') || '';
+                const deskripsi = button.getAttribute('data-deskripsi') || '';
+                const foto = button.getAttribute('data-foto') || '';
+
+                document.getElementById('edit_id').value = id;
+                document.getElementById('edit_existing_foto').value = foto;
+                document.getElementById('edit_nama').value = nama;
+                document.getElementById('edit_nomor').value = nomor;
+                document.getElementById('edit_email').value = email;
+                document.getElementById('edit_ringkasan').value = deskripsi;
+            });
+        }
+
+        let konselorIdToDelete = null;
+        let konselorRowToDelete = null;
+
+        const datatableElement = document.getElementById('datatable');
+        if (datatableElement) {
+            datatableElement.addEventListener('click', function(event) {
+                const editButton = event.target.closest('.btn-edit');
+                if (editButton) {
+                    event.preventDefault();
+
+                    const id = editButton.getAttribute('data-id');
+                    if (!id) return;
+
+                    const nama = editButton.getAttribute('data-nama') || '';
+                    const nomor = editButton.getAttribute('data-nomor') || '';
+                    const email = editButton.getAttribute('data-email') || '';
+                    const deskripsi = editButton.getAttribute('data-deskripsi') || '';
+                    const foto = editButton.getAttribute('data-foto') || '';
+
+                    document.getElementById('edit_id').value = id;
+                    document.getElementById('edit_existing_foto').value = foto;
+                    document.getElementById('edit_nama').value = nama;
+                    document.getElementById('edit_nomor').value = nomor;
+                    document.getElementById('edit_email').value = email;
+                    document.getElementById('edit_ringkasan').value = deskripsi;
+
+                    const editModal = bootstrap.Modal.getOrCreateInstance(modalEditKonselor);
+                    editModal.show();
+                    return;
+                }
+
+                const deleteButton = event.target.closest('.btn-delete');
+                if (!deleteButton) return;
+
+                const id = deleteButton.getAttribute('data-id');
+                if (!id) return;
+
+                konselorIdToDelete = id;
+                konselorRowToDelete = document.getElementById('row-' + id);
+
+                const modalDelete = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus'));
+                modalDelete.show();
+            });
+        }
+
+        document.getElementById('btnEksekusiHapus').addEventListener('click', async function() {
+            if (!konselorIdToDelete) return;
+
+            const button = this;
+            const originalText = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = 'Menghapus...';
+
+            try {
+                const response = await fetch('/../actions/proses_konselor.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `action=delete&id=${encodeURIComponent(konselorIdToDelete)}`
+                });
+
+                const result = await response.json();
+
+                const modalDelete = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus'));
+                modalDelete.hide();
+
+                if (result.status === 'success') {
+                    if (konselorRowToDelete) {
+                        if (dataTable) {
+                            dataTable.row(konselorRowToDelete).remove().draw(false);
+                        } else {
+                            konselorRowToDelete.remove();
+                        }
+                    }
+                    tampilkanNotif('Berhasil', result.message, 'success');
+                } else {
+                    tampilkanNotif('Gagal', result.message, 'error');
+                }
+            } catch (error) {
+                tampilkanNotif('Gagal', 'Terjadi kesalahan koneksi jaringan.', 'error');
+                console.error(error);
+            } finally {
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+        });
+    </script>
 
 </body>
