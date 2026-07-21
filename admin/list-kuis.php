@@ -204,7 +204,7 @@
             <!-- ========================================================= -->
             <!-- Bagian Pop-up edit kuis (Modal) -->
             <!-- ========================================================= -->
-            <div class="modal fade" id="modalEditKuis" tabindex="-1" aria-labelledby="modalEditKuisLabel" aria-hidden="true">
+            <div class="modal fade" id="modalEditKuis" z-index="999" aria-labelledby="modalEditKuisLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
 

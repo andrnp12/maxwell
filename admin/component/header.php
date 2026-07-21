@@ -52,7 +52,7 @@
             /* background: #ffffff !important; */
             /* Ganti ke warna tema Anda jika ingin gelap */
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
-            z-index: 9999 !important;
+            z-index: 99 !important;
             transition: none !important;
             border-radius: 0 !important;
          }
