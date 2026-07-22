@@ -63,6 +63,7 @@ $dataMateri = $materi->getMateriNonKuis();
                                                     Materi
                                                 </label>
                                                 <select name="id_materi" class="form-select" aria-label="Default select example" required>
+                                                    <option value="" selected disabled>-- Pilih Materi --</option>
                                                     <?php foreach ($dataMateri as $materi) : ?>
                                                         <option value="<?= $materi['id'] ?>">
                                                             <?= htmlspecialchars($materi['judul']) ?>
@@ -139,7 +140,7 @@ $dataMateri = $materi->getMateriNonKuis();
                 if (result.status === 'success') {
                     alert('Sukses: ' + result.message);
                     formKuis.reset();
-                    // window.location.href = 'kuis.php';
+                    window.location.href = 'kuis.php';
                 } else {
                     alert('Error: ' + result.message);
                 }

@@ -106,7 +106,7 @@ $dataKuis = $kuis->getAllKuis();
                                                     <td>
                                                         <a href="edit-kuis.php" class="btn btn-sm btn-warning">Edit</a>
                                                         <button type="button" " class=" btn btn-delete btn-sm btn-danger">Hapus</button>
-                                                        <a href="list-kuis.php" class="btn btn-sm btn-info">Lihat Pertanyaan</a>
+                                                        <a href="list-kuis.php?id=<?= $kuis['id_kuis'] ?>" class="btn btn-sm btn-info">Lihat Pertanyaan</a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
