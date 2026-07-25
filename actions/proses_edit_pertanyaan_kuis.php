@@ -31,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === "GET") {
             ]);
         }
     } else {
-        // TAMBAHKAN BAGIAN INI: Handle jika ID tidak ada atau 0
         echo json_encode([
             'status' => 'error',
             'message' => 'ID tidak valid atau tidak dikirim.'

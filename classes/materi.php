@@ -211,18 +211,35 @@ class Materi
         return $materiList;
     }
 
-    public function getMateriNonKuis(): array
+    // Tambahkan parameter $current_material_id (opsional, diset null jika untuk form tambah)
+    public function getMateriNonKuis($current_material_id = null): array
     {
-        $result = $this->conn->query("SELECT m.* 
-FROM materials m
-LEFT JOIN quizzes k ON m.id = k.material_id
-WHERE k.material_id IS NULL;");
-        $MateriNonKuis = [];
-
-        while ($row = $result->fetch_assoc()) {
-            $MateriNonKuis[] = $row;
+        if ($current_material_id) {
+            // Jika sedang edit, ambil materi yang kosong ATAU materi yang sedang dipakai kuis ini
+            $stmt = $this->conn->prepare("
+            SELECT m.* 
+            FROM materials m
+            LEFT JOIN quizzes k ON m.id = k.material_id
+            WHERE k.material_id IS NULL OR m.id = ?
+        ");
+            $stmt->bind_param("i", $current_material_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+        } else {
+            // Jika sedang tambah data baru (tidak ada ID), pakai query lama Anda
+            $result = $this->conn->query("
+            SELECT m.* 
+            FROM materials m
+            LEFT JOIN quizzes k ON m.id = k.material_id
+            WHERE k.material_id IS NULL
+        ");
         }
 
-        return $MateriNonKuis;
+        $MateriPilihan = [];
+        while ($row = $result->fetch_assoc()) {
+            $MateriPilihan[] = $row;
+        }
+
+        return $MateriPilihan;
     }
 }
