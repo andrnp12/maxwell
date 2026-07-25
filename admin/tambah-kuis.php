@@ -11,7 +11,7 @@ require_once '../classes/materi.php';
 
 $materi = new Materi();
 
-$dataMateri = $materi->getAllMateri();
+$dataMateri = $materi->getMateriNonKuis();
 
 ?>
 <?php include 'component/header.php'; ?>
@@ -57,34 +57,34 @@ $dataMateri = $materi->getAllMateri();
                                         <h5 class="font-weight-bold mb-3">
                                             Detail Informasi
                                         </h5>
-                                        <form>
-                                            <?php
-                                            foreach ($dataMateri as $materi) : ?>
-                                                <div class="mb-3">
-                                                    <label class="form-label">
-                                                        Materi
-                                                    </label>
-                                                    <select class="form-select" aria-label="Default select example" required>
-                                                        <option>
+                                        <form id="formKuis">
+                                            <div class="mb-3">
+                                                <label class="form-label">
+                                                    Materi
+                                                </label>
+                                                <select name="id_materi" class="form-select" aria-label="Default select example" required>
+                                                    <option value="" selected disabled>-- Pilih Materi --</option>
+                                                    <?php foreach ($dataMateri as $materi) : ?>
+                                                        <option value="<?= $materi['id'] ?>">
                                                             <?= htmlspecialchars($materi['judul']) ?>
                                                         </option>
-                                                    </select>
-                                                </div>
-                                            <?php endforeach; ?>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
                                             <div class="mb-3">
-                                                <label class="form-label" for="commentmessage-input">
+                                                <label class="form-label" class="form-label" for="commentmessage-input">
                                                     Judul Kuis
                                                 </label>
-                                                <input class="form-control" id="commentmessage-input" placeholder="Masukkan judul kuis" type="text" required>
+                                                <input class="form-control" name="judul" id="commentmessage-input" placeholder="Masukkan judul kuis" type="text" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label" for="commentmessage-input">
                                                     Passing Grade
                                                 </label>
-                                                <input class="form-control" id="commentmessage-input" placeholder="Masukkan judul kuis" type="number" min="0" max="100" required>
+                                                <input class="form-control" name="passing_grade" id="commentmessage-input" placeholder="Masukkan judul kuis" type="number" min="0" max="100" required>
                                             </div>
                                             <div class="text-end">
-                                                <button class="btn btn-primary btn-sm btn-rounded" type="submit">
+                                                <button class="btn btn-primary btn-sm btn-rounded" id="btnSubmit" type="submit">
                                                     Simpan Perubahan
                                                 </button>
                                             </div>
@@ -117,6 +117,41 @@ $dataMateri = $materi->getAllMateri();
     </div>
     <!-- JAVASCRIPT -->
     <?php include 'component/script.php'; ?>
+    <script>
+        const formKuis = document.getElementById('formKuis');
+        const btnSubmit = document.getElementById('btnSubmit');
+
+        formKuis.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = 'Memproses...';
+
+            const formData = new FormData(formKuis);
+
+            try {
+                const response = await fetch('/../actions/proses_kuis.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    alert('Sukses: ' + result.message);
+                    formKuis.reset();
+                    window.location.href = 'kuis.php';
+                } else {
+                    alert('Error: ' + result.message);
+                }
+
+            } catch (error) {
+                alert('Terjadi kesalahan koneksi jaringan.');
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = 'simpan';
+            }
+        });
+    </script>
 </body>
 
 </html>
