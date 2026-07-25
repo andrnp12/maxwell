@@ -111,50 +111,7 @@ $dataMateri = $materi->getAllMateri();
             </div>
             <!-- End Page-content -->
 
-            <!-- Modal Konfirmasi Hapus -->
-            <div class="modal fade" id="modalKonfirmasiHapus" tabindex="-1" aria-labelledby="modalKonfirmasiLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalKonfirmasiLabel">Konfirmasi Hapus</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            Apakah Anda yakin ingin menghapus materi ini? Data yang dihapus tidak dapat dikembalikan.
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <!-- Tombol aksi hapus di dalam modal -->
-                            <button type="button" class="btn btn-danger" id="btnEksekusiHapus">Ya, Hapus</button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal sukses dan gagal -->
-            <div class="modal fade" id="modalNotifikasi" tabindex="-1" aria-labelledby="modalNotifikasiLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-sm"> <!-- modal-sm agar ukurannya kecil rapi -->
-                    <div class="modal-content">
-
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="judulNotifikasi">Notifikasi</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body text-center" id="pesanNotifikasi">
-                        </div>
-
-                        <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+            <?php include("component/toast.php"); ?>
             <!-- Footer Start -->
             <?php include("component/footer.php"); ?>
             <!-- end Footer -->
@@ -177,14 +134,48 @@ $dataMateri = $materi->getAllMateri();
 
         const elemenModalHapus = document.getElementById('modalKonfirmasiHapus');
         const elemenModalNotif = document.getElementById('modalNotifikasi');
+        const elemenToastNotif = elemenModalNotif ? elemenModalNotif.querySelector('.toast') : null;
 
-        function tampilkanNotif(judul, pesan) {
-            document.getElementById('judulNotifikasi').innerHTML = judul;
-            document.getElementById('pesanNotifikasi').innerHTML = pesan;
+        function tampilkanNotif(judul, pesan, status = 'success') {
+            if (!elemenToastNotif) return;
+
+            const toastEl = elemenToastNotif;
+            const header = toastEl.querySelector('.toast-header');
+            const body = toastEl.querySelector('.toast-body');
+
+            // remove previous status classes
+            ['bg-success', 'bg-danger'].forEach(c => {
+                toastEl.classList.remove(c);
+                if (header) header.classList.remove(c);
+                if (body) body.classList.remove(c);
+            });
+
+            // apply new status
+            if (status === 'success') {
+                toastEl.classList.add('bg-success');
+                if (header) header.classList.add('bg-success');
+                if (body) body.classList.add('bg-success');
+            } else {
+                toastEl.classList.add('bg-danger');
+                if (header) header.classList.add('bg-danger');
+                if (body) body.classList.add('bg-danger');
+            }
+
+            // ensure white text
+            if (header) header.classList.add('text-white');
+            if (body) body.classList.add('text-white');
+
+            document.getElementById('judulNotifikasi').textContent = judul;
+            document.getElementById('pesanNotifikasi').textContent = pesan;
+            document.getElementById('toastBody').textContent = pesan;
 
             if (!modalNotifInstance) {
-                modalNotifInstance = bootstrap.Modal.getOrCreateInstance(elemenModalNotif);
+                modalNotifInstance = bootstrap.Toast.getOrCreateInstance(toastEl, {
+                    autohide: true,
+                    delay: 3000
+                });
             }
+
             modalNotifInstance.show();
         }
 
@@ -216,7 +207,7 @@ $dataMateri = $materi->getAllMateri();
             //     .then(data => {
             setTimeout(() => {
                     const data = {
-                        status: 'success',
+                        status: 'error',
                         message: 'Data berhasil dihapus'
                     }
 
@@ -231,10 +222,10 @@ $dataMateri = $materi->getAllMateri();
                             if (barisMateriToDelete) {
                                 barisMateriToDelete.remove();
                             }
-                            tampilkanNotif('Sukses', 'Materi berhasil dihapus.');
+                            tampilkanNotif('Sukses', data.message || 'Materi berhasil dihapus.', 'success');
 
                         } else {
-                            tampilkanNotif('Error', 'Gagal menghapus materi.');
+                            tampilkanNotif('Error', data.message || 'Gagal menghapus materi.', 'error');
                         }
                     }, 500); // 500 milidetik
 
@@ -248,7 +239,7 @@ $dataMateri = $materi->getAllMateri();
 
                     // Tambahkan jeda juga untuk notifikasi error
                     setTimeout(() => {
-                        tampilkanNotif('Error', 'Terjadi kesalahan saat menghapus materi.');
+                        tampilkanNotif('Error', 'Terjadi kesalahan saat menghapus materi.', 'error');
                     }, 500);
 
                 }).finally(() => {

@@ -34,6 +34,9 @@
 <!-- Datatable init js -->
 <script src="../../assets/js/pages/datatables.init.js">
 </script>
+<!-- Bootstrap Toasts Js -->
+<script src="../../assets/js/pages/bootstrap-toasts.init.js">
+</script>
 <script src="../../assets/js/app.js"></script>
 
 <!-- CUSTOM SCRIPT UNTUK MOBILE SUBMENU MODAL -->

@@ -212,7 +212,7 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
             <!-- ========================================================= -->
             <!-- Bagian Pop-up tambah kuis (Modal) -->
             <!-- ========================================================= -->
-            <div class="modal fade" id="modalTambahKuis" tabindex="-1" aria-labelledby="modalTambahKuisLabel" aria-hidden="true">
+            <div class="modal fade" id="modalTambahKuis" z-index="999" aria-labelledby="modalTambahKuisLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
 
