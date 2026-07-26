@@ -3,7 +3,7 @@
       <div class="d-flex">
          <!-- LOGO -->
          <div class="navbar-brand-box">
-            <a class="logo logo-dark" href="index.html">
+            <a class="logo logo-dark" href="index.php">
                <span class="logo-sm">
                   <img alt="" height="24" src="assets/images/logo-sm.svg" />
                </span>
@@ -14,7 +14,7 @@
                   </span>
                </span>
             </a>
-            <a class="logo logo-light" href="index.html">
+            <a class="logo logo-light" href="index.php">
                <span class="logo-sm">
                   <img alt="" height="24" src="assets/images/logo-sm.svg" />
                </span>
@@ -42,24 +42,10 @@
          </form>
       </div>
       <div class="d-flex">
-         <div class="dropdown d-inline-block d-lg-none ms-2">
-            <button aria-expanded="false" aria-haspopup="true" class="btn header-item" data-bs-toggle="dropdown" id="page-header-search-dropdown" type="button">
-               <i class="icon-lg" data-feather="search">
-               </i>
-            </button>
-            <div aria-labelledby="page-header-search-dropdown" class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
-               <form class="p-3">
-                  <div class="form-group m-0">
-                     <div class="input-group">
-                        <input aria-label="Search Result" class="form-control" placeholder="Search ..." type="text" />
-                        <button class="btn btn-primary" type="submit">
-                           <i class="mdi mdi-magnify">
-                           </i>
-                        </button>
-                     </div>
-                  </div>
-               </form>
-            </div>
+         <div class="d-sm-inline-block ms-2">
+            <a href="chat.php" class="btn header-item d-flex align-items-center justify-content-center">
+               <i class="icon-lg" data-feather="message-square"></i>
+            </a>
          </div>
          <div class="dropdown d-sm-inline-block">
             <button class="btn header-item" id="mode-setting-btn" type="button">
@@ -218,15 +204,15 @@
             </button>
             <div class="dropdown-menu dropdown-menu-end">
                <!-- item-->
-               <a class="dropdown-item" href="apps-contacts-profile.html">
+               <a class="dropdown-item" href="profile.php">
                   <i class="mdi mdi mdi-face-man font-size-16 align-middle me-1">
                   </i>
                   Profile
                </a>
-               <a class="dropdown-item" href="auth-lock-screen.html">
-                  <i class="mdi mdi-lock font-size-16 align-middle me-1">
+               <a class="dropdown-item" href="edit-profile.php">
+                  <i class="mdi mdi-pencil font-size-16 align-middle me-1">
                   </i>
-                  Lock Screen
+                  Edit Profile
                </a>
                <div class="dropdown-divider">
                </div>
