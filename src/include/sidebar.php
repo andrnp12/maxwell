@@ -40,7 +40,7 @@ global $sudahPreTest, $sudahPostTest;
                   <i data-feather="users">
                   </i>
                   <span data-key="t-komunitas">
-                     Komunitas
+                     Forum
                   </span>
                </a>
             </li>
@@ -50,6 +50,15 @@ global $sudahPreTest, $sudahPostTest;
                   </i>
                   <span data-key="t-akun">
                      Akun
+                  </span>
+               </a>
+            </li>
+            <li>
+               <a href="chat.php">
+                  <i data-feather="message-square">
+                  </i>
+                  <span data-key="t-akun">
+                     chat
                   </span>
                </a>
             </li>

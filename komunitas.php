@@ -19,7 +19,7 @@
                         <div class="col-12">
                             <div class="row d-sm-flex align-items-center justify-content-between mb-2">
                                 <h4 class="mb-sm-0 font-weight-bold mb-1">
-                                    Komunitas
+                                    Forum
                                 </h4>
                                 <p class="text-muted">
                                     Bergabunglah dengan komunitas dan berinteraksi dengan sesama!

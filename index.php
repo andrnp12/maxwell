@@ -17,10 +17,10 @@ $idAktif = $_SESSION['id'];
 $sudahPreTest = $testManager->hasUserTakenTest($userId, $idAktif, 'pre');
 $sudahPostTest = $testManager->hasUserTakenTest($userId, $idAktif, 'post');
 
-if (!$sudahPreTest) {
-   header('Location: preposttest.php?type=pre');
-   exit;
-}
+// if (!$sudahPreTest) {
+//    header('Location: preposttest.php?type=pre');
+//    exit;
+// }
 
 global $sudahPreTest, $sudahPostTest;
 ?>

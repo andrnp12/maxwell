@@ -42,6 +42,7 @@ class auth
         return false;
     }
 
+// Fungsi untuk melakukan registrasi perlu di revisi untuk bagian role nya, jadi agar saat register tidak otomatis jadi user
     public function register(string $username, string $password, string $role = 'user'): bool
     {
         $checkSql = "SELECT id FROM users WHERE username = ?";
