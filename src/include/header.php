@@ -26,6 +26,11 @@
    <style>
       @media (max-width: 991px) {
 
+         .chat-leftsidebar.mobile-hide,
+         .user-chat.mobile-hide {
+            display: none !important;
+         }
+
          /* 0. SEMBUNYIKAN TOMBOL HAMBURGER */
          /* Menghapus tombol toggle menu di navbar */
          .vertical-menu-btn,
