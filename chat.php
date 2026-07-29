@@ -20,10 +20,6 @@ if ($role == 'user') {
     $id_konsultan = $id_login;
 }
 
-// echo "Role Saya: " . $role . "<br>";
-// echo "ID User di Query: " . $id_user . "<br>";
-// echo "ID Konsultan di Query: " . $id_konsultan . "<br>";
-
 require_once 'classes/chat.php';
 
 $objChat = new chat();
@@ -157,6 +153,7 @@ if ($id_lawan !== 0) {
                                     </li>
                                 </ul>
                                 <div class="tab-content">
+                                    <!-- tab Chat -->
                                     <div class="tab-pane show active" id="chat">
                                         <div class="chat-message-list" data-simplebar="">
                                             <div class="pt-3">
@@ -165,9 +162,11 @@ if ($id_lawan !== 0) {
                                                         Recent
                                                     </h5>
                                                 </div>
+
+                                                <!-- user chat list -->
                                                 <ul class="list-unstyled chat-list">
                                                     <?php foreach ($listChat as $list) : ?>
-                                                        <li class="active">
+                                                        <li class="<?= $id_lawan == $list['id_lawan'] ? 'active' : '' ?>">
                                                             <a href="chat.php?id_lawan=<?= $list['id_lawan'] ?>">
                                                                 <div class="d-flex align-items-start">
                                                                     <div class="flex-shrink-0 user-img online align-self-center me-3">
@@ -177,58 +176,27 @@ if ($id_lawan !== 0) {
                                                                     </div>
                                                                     <div class="flex-grow-1 overflow-hidden">
                                                                         <h5 class="text-truncate font-size-14 mb-1">
-                                                                            Jennie Sherlock
+                                                                            <?= htmlspecialchars($list['nama']) ?>
                                                                         </h5>
                                                                         <p class="text-truncate mb-0">
-                                                                            Hey! there I'm available
+                                                                            <?= htmlspecialchars(mb_strimwidth($list['pesan_terakhir'], 0, 40, '...')) ?>
                                                                         </p>
                                                                     </div>
                                                                     <div class="flex-shrink-0">
                                                                         <div class="font-size-11">
-                                                                            02 min
+                                                                            <?= date('H:i', strtotime($list['time_stamp'])) ?>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </a>
                                                         </li>
-                                                        <li class="unread">
-                                                            <a href="#">
-                                                                <div class="d-flex align-items-start">
-                                                                    <div class="flex-shrink-0 user-img online align-self-center me-3">
-                                                                        <div class="avatar-sm align-self-center">
-                                                                            <span class="avatar-title rounded-circle bg-primary-subtle text-primary">
-                                                                                S
-                                                                            </span>
-                                                                        </div>
-                                                                        <span class="user-status">
-                                                                        </span>
-                                                                    </div>
-                                                                    <div class="flex-grow-1 overflow-hidden">
-                                                                        <h5 class="text-truncate font-size-14 mb-1">
-                                                                            Stacie Dube
-                                                                        </h5>
-                                                                        <p class="text-truncate mb-0">
-                                                                            I've finished it! See you so
-                                                                        </p>
-                                                                    </div>
-                                                                    <div class="flex-shrink-0">
-                                                                        <div class="font-size-11">
-                                                                            10 min
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="unread-message">
-                                                                        <span class="badge bg-danger rounded-pill">
-                                                                            1
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </a>
-                                                        </li>
+
                                                     <?php endforeach; ?>
                                                 </ul>
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- tab group -->
                                     <div class="tab-pane" id="groups">
                                         <div class="chat-message-list" data-simplebar="">
                                             <div class="pt-3">
@@ -274,6 +242,7 @@ if ($id_lawan !== 0) {
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- tab contact -->
                                     <div class="tab-pane" id="contacts">
                                         <div class="chat-message-list" data-simplebar="">
                                             <div class="pt-3">
@@ -313,193 +282,126 @@ if ($id_lawan !== 0) {
                         </div>
                         <!-- end chat-leftsidebar -->
                         <div id="userChat" class="w-100 user-chat mt-sm-0 ms-lg-1">
-                            <div class="card">
-                                <div class="p-3 px-lg-4 border-bottom">
-                                    <div class="row">
-                                        <div class="col-xl-4 col-7">
-                                            <div class="d-flex align-items-center">
-                                                <button type="button" id="btnBackChat" class="btn btn-light btn-sm d-lg-none me-2"><i class="bx bx-arrow-back"></i></button>
-                                                <div class="flex-shrink-0 avatar-sm me-3 d-sm-block d-none">
-                                                    <img alt="" class="img-fluid d-block rounded-circle" src="assets/images/users/avatar-2.jpg" />
+                            <div class="card h-100">
+                                <?php if ($id_lawan > 0) : ?>
+                                    <!-- header profil chat -->
+                                    <div class="p-3 px-lg-4 border-bottom">
+                                        <div class="row">
+                                            <div class="col-xl-4 col-7">
+                                                <div class="d-flex align-items-center">
+                                                    <button type="button" id="btnBackChat" class="btn btn-light btn-sm d-lg-none me-2"><i class="bx bx-arrow-back"></i></button>
+                                                    <div class="flex-shrink-0 avatar-sm me-3 d-sm-block d-none">
+                                                        <img alt="" class="img-fluid d-block rounded-circle" src="assets/images/users/avatar-2.jpg" />
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <h5 class="font-size-14 mb-1 text-truncate">
+                                                            <a class="text-dark" href="#">
+                                                                Jennie Sherlock
+                                                            </a>
+                                                        </h5>
+                                                        <p class="text-muted text-truncate mb-0">
+                                                            Online
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                                <div class="flex-grow-1">
-                                                    <h5 class="font-size-14 mb-1 text-truncate">
-                                                        <a class="text-dark" href="#">
-                                                            Jennie Sherlock
-                                                        </a>
-                                                    </h5>
-                                                    <p class="text-muted text-truncate mb-0">
-                                                        Online
-                                                    </p>
-                                                </div>
+                                            </div>
+                                            <div class="col-xl-8 col-5">
+                                                <ul class="list-inline user-chat-nav text-end mb-0">
+                                                    <li class="list-inline-item">
+                                                        <div class="dropdown">
+                                                            <button aria-expanded="false" aria-haspopup="true" class="btn nav-btn dropdown-toggle" data-bs-toggle="dropdown" type="button">
+                                                                <i class="bx bx-search">
+                                                                </i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-md p-2">
+                                                                <form class="px-2">
+                                                                    <div>
+                                                                        <input class="form-control border bg-light-subtle" placeholder="Search..." type="text" />
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="list-inline-item">
+                                                        <div class="dropdown">
+                                                            <button aria-expanded="false" aria-haspopup="true" class="btn nav-btn dropdown-toggle" data-bs-toggle="dropdown" type="button">
+                                                                <i class="bx bx-dots-horizontal-rounded">
+                                                                </i>
+                                                            </button>
+                                                            <div class="dropdown-menu dropdown-menu-end">
+                                                                <a class="dropdown-item" href="#">
+                                                                    Profile
+                                                                </a>
+                                                                <a class="dropdown-item" href="#">
+                                                                    Archive
+                                                                </a>
+                                                                <a class="dropdown-item" href="#">
+                                                                    Muted
+                                                                </a>
+                                                                <a class="dropdown-item" href="#">
+                                                                    Delete
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
-                                        <div class="col-xl-8 col-5">
-                                            <ul class="list-inline user-chat-nav text-end mb-0">
-                                                <li class="list-inline-item">
-                                                    <div class="dropdown">
-                                                        <button aria-expanded="false" aria-haspopup="true" class="btn nav-btn dropdown-toggle" data-bs-toggle="dropdown" type="button">
-                                                            <i class="bx bx-search">
-                                                            </i>
-                                                        </button>
-                                                        <div class="dropdown-menu dropdown-menu-end dropdown-menu-md p-2">
-                                                            <form class="px-2">
-                                                                <div>
-                                                                    <input class="form-control border bg-light-subtle" placeholder="Search..." type="text" />
-                                                                </div>
-                                                            </form>
-                                                        </div>
+                                    </div>
+
+                                    <!-- isi chat -->
+                                    <div class="chat-conversation p-3 px-2" id="chatBody" data-simplebar="">
+                                        <ul class="list-unstyled mb-0" id="chatMessages">
+
+                                        </ul>
+                                    </div>
+
+                                    <!-- form input chat -->
+                                    <div class="p-3 border-top">
+                                        <div class="row">
+                                            <form id="formChat">
+                                                <input
+                                                    type="hidden"
+                                                    name="id_lawan"
+                                                    id="idKonsultan"
+                                                    value="<?= $id_lawan ?>">
+                                                <div class="col">
+                                                    <div class="position-relative">
+                                                        <input class="form-control border bg-light-subtle" name="isi_chat" id="messageInput" placeholder="Enter Message..." type="text" />
                                                     </div>
-                                                </li>
-                                                <li class="list-inline-item">
-                                                    <div class="dropdown">
-                                                        <button aria-expanded="false" aria-haspopup="true" class="btn nav-btn dropdown-toggle" data-bs-toggle="dropdown" type="button">
-                                                            <i class="bx bx-dots-horizontal-rounded">
-                                                            </i>
-                                                        </button>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" href="#">
-                                                                Profile
-                                                            </a>
-                                                            <a class="dropdown-item" href="#">
-                                                                Archive
-                                                            </a>
-                                                            <a class="dropdown-item" href="#">
-                                                                Muted
-                                                            </a>
-                                                            <a class="dropdown-item" href="#">
-                                                                Delete
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <button class="btn btn-primary chat-send w-md waves-effect waves-light" id="btnKirim" type="submit">
+                                                        <span class="d-none d-sm-inline-block me-2" id="btnText">
+                                                            Send
+                                                        </span>
+                                                        <i class="mdi mdi-send float-end" id="btnIcon">
+                                                        </i>
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="chat-conversation p-3 px-2" data-simplebar="">
-                                    <ul class="list-unstyled mb-0">
-                                        <li class="chat-day-title">
-                                            <span class="title">
-                                                Today
-                                            </span>
-                                        </li>
-                                        <?php foreach ($dataChat as $pesan) : ?>
-                                            <?php
-                                            // Format waktu dari database (contoh: 2026-07-26 10:30:00 menjadi 10:30)
-                                            $waktu = date('H:i', strtotime($pesan['time_stamp']));
-                                            $isi_chat = htmlspecialchars($pesan['chat']);
-                                            ?>
-                                            <?php if ($pesan['pengirim'] == $role) : ?>
-                                                <li>
-                                                    <div class="conversation-list">
-                                                        <div class="ctext-wrap">
-                                                            <div class="ctext-wrap-content">
-                                                                <h5 class="conversation-name">
-                                                                    <a class="user-name" href="#">
-                                                                        Jennie Sherlock
-                                                                    </a>
-                                                                    <span class="time">
-                                                                        <?= $waktu ?>
-                                                                    </span>
-                                                                </h5>
-                                                                <p class="mb-0">
-                                                                    <?= $isi_chat ?>
-                                                                </p>
-                                                            </div>
-                                                            <div class="dropdown align-self-start">
-                                                                <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
-                                                                    <i class="bx bx-dots-vertical-rounded">
-                                                                    </i>
-                                                                </a>
-                                                                <div class="dropdown-menu">
-                                                                    <a class="dropdown-item" href="#">
-                                                                        Copy
-                                                                    </a>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        Save
-                                                                    </a>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        Forward
-                                                                    </a>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        Delete
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            <?php else : ?>
-                                                <li class="right">
-                                                    <div class="conversation-list">
-                                                        <div class="ctext-wrap">
-                                                            <div class="ctext-wrap-content">
-                                                                <h5 class="conversation-name">
-                                                                    <a class="user-name" href="#">
-                                                                        Shawn
-                                                                    </a>
-                                                                    <span class="time">
-                                                                        <?= $waktu ?>
-                                                                    </span>
-                                                                </h5>
-                                                                <p class="mb-0">
-                                                                    <?= $isi_chat ?>
-                                                                </p>
-                                                            </div>
-                                                            <div class="dropdown align-self-start">
-                                                                <a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
-                                                                    <i class="bx bx-dots-vertical-rounded">
-                                                                    </i>
-                                                                </a>
-                                                                <div class="dropdown-menu">
-                                                                    <a class="dropdown-item" href="#">
-                                                                        Copy
-                                                                    </a>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        Save
-                                                                    </a>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        Forward
-                                                                    </a>
-                                                                    <a class="dropdown-item" href="#">
-                                                                        Delete
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                </div>
-                                <div class="p-3 border-top">
-                                    <div class="row">
-                                        <form id="formChat">
-                                            <input
-                                                type="hidden"
-                                                name="id_lawan"
-                                                id="idKonsultan"
-                                                value="<?= $id_lawan ?>">
-                                            <div class="col">
-                                                <div class="position-relative">
-                                                    <input class="form-control border bg-light-subtle" name="isi_chat" id="messageInput" placeholder="Enter Message..." type="text" />
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <button class="btn btn-primary chat-send w-md waves-effect waves-light" id="btnKirim" type="submit">
-                                                    <span class="d-none d-sm-inline-block me-2">
-                                                        Send
-                                                    </span>
-                                                    <i class="mdi mdi-send float-end">
-                                                    </i>
-                                                </button>
-                                            </div>
-                                        </form>
+                                <?php else : ?>
+                                    <div class="d-flex h-100 align-items-center justify-content-center text-center">
+
+                                        <div>
+                                            <i class="bx bx-message-rounded-dots display-3 text-muted"></i>
+
+                                            <h5 class="mt-3">
+                                                Belum ada percakapan yang dipilih
+                                            </h5>
+
+                                            <p class="text-muted mb-0">
+                                                Pilih salah satu kontak di sebelah kiri untuk mulai mengobrol.
+                                            </p>
+                                        </div>
+
                                     </div>
-                                </div>
+
+                                <?php endif; ?>
                             </div>
+                            <!-- <div class="card"></div> -->
                         </div>
                         <!-- end user chat -->
                     </div>
@@ -532,14 +434,23 @@ if ($id_lawan !== 0) {
             }
 
             function init() {
+                const params = new URLSearchParams(window.location.search);
+                const hasChat = params.has("id_lawan");
+
                 if (mobile()) {
-                    chat.classList.add("mobile-hide");
-                    sidebar.classList.remove("mobile-hide");
+                    if (hasChat) {
+                        sidebar.classList.add("mobile-hide");
+                        chat.classList.remove("mobile-hide");
+                    } else {
+                        sidebar.classList.remove("mobile-hide");
+                        chat.classList.add("mobile-hide");
+                    }
                 } else {
-                    chat.classList.remove("mobile-hide");
                     sidebar.classList.remove("mobile-hide");
+                    chat.classList.remove("mobile-hide");
                 }
             }
+
             init();
             document.querySelectorAll(".chat-list li").forEach(function(li) {
                 li.addEventListener("click", function() {
@@ -557,46 +468,64 @@ if ($id_lawan !== 0) {
             window.addEventListener("resize", init);
         });
 
-        function tambahPesanUser(chat) {
+        let lastId = 0
 
-            const chatBody = document.getElementById('chatBody');
+        function appendChat(chat) {
+            console.log(chat);
+            const chatList = document.getElementById("chatMessages");
 
-            const messageRow = document.createElement('div');
+            const li = document.createElement("li");
 
-            messageRow.className = 'message-row user';
+            if (chat.pengirim === "<?= $role ?>") {
+                li.className = "right";
+            }
 
-            const sekarang = new Date();
+            const waktu = chat.time_stamp.substring(11, 16);
 
-            const jam = sekarang.toLocaleTimeString('id-ID', {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
+            li.innerHTML = `
+        <div class="conversation-list">
+            <div class="ctext-wrap">
 
-            messageRow.innerHTML = `
-        <div class="message-bubble">
+                <div class="ctext-wrap-content">
 
-            <span class="message-text"></span>
+                    <h5 class="conversation-name">
+                        <span class="time">${waktu}</span>
+                    </h5>
 
-            <span class="message-time">
-                ${jam}
-                <i class="bi bi-check2 ms-1"></i>
-            </span>
+                    <p class="mb-0"></p>
 
+                </div>
+
+            </div>
         </div>
     `;
 
-            // Gunakan textContent agar isi pesan tidak dianggap HTML
-            messageRow.querySelector('.message-text').textContent =
-                chat.chat;
+            li.querySelector("p").textContent = chat.chat;
 
-            chatBody.appendChild(messageRow);
+            chatList.appendChild(li);
 
-            // Scroll otomatis ke bawah
-            chatBody.scrollTop = chatBody.scrollHeight;
+            lastId = chat.id;
+
+        }
+
+        function renderChat(data) {
+
+            const chatList = document.getElementById("chatMessages");
+
+            chatList.innerHTML = "";
+
+            data.forEach(chat => {
+
+                appendChat(chat);
+
+            });
+
         }
 
         const formChat = document.getElementById('formChat');
         const btnKirim = document.getElementById('btnKirim');
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
         const messageInput = document.getElementById('messageInput');
 
         formChat.addEventListener('submit', async function(e) {
@@ -611,16 +540,8 @@ if ($id_lawan !== 0) {
             // Disable tombol sementara
             btnKirim.disabled = true;
 
-            // Simpan icon awal
-            const originalButton = btnKirim.innerHTML;
-
-            // Tampilkan loading
-            btnKirim.innerHTML = `
-        <span
-            class="spinner-border spinner-border-sm"
-            role="status"
-        ></span>
-    `;
+            btnText.textContent = "Mengirim...";
+            btnIcon.className = "spinner-border spinner-border-sm";
 
             // Ambil semua data dari form
             const formData = new FormData(formChat);
@@ -638,16 +559,11 @@ if ($id_lawan !== 0) {
 
                 if (result.status === 'success') {
 
-                    tambahPesanUser(result.data);
-
-                    // Kosongkan input
                     messageInput.value = '';
-
-                    // Fokus kembali ke input
                     messageInput.focus();
 
-                    // console.log(result.message);
-
+                    await tarikChatTerbaru();
+                    scrollKeBawah();
                 } else {
 
                     alert('Error: ' + result.message);
@@ -663,33 +579,81 @@ if ($id_lawan !== 0) {
             } finally {
 
                 btnKirim.disabled = false;
-
-                btnKirim.innerHTML = originalButton;
+                btnText.textContent = "Send";
+                btnIcon.className = "mdi mdi-send float-end";
 
             }
 
         });
 
+        function scrollKeBawah() {
+            const chatBody = document.getElementById('chatBody');
+
+            const scrollElement = chatBody.querySelector(
+                '.simplebar-content-wrapper'
+            );
+
+            if (scrollElement) {
+                scrollElement.scrollTop = scrollElement.scrollHeight;
+            }
+        }
+
         // Fungsi untuk menarik chat terbaru
+
         async function tarikChatTerbaru() {
-            const idLawan = document.querySelector('input[name="id_lawan"]').value;
 
             try {
-                // Arahkan kembali ke proses_chat.php (kali ini Javascript akan mengirim GET request secara default)
-                const response = await fetch('actions/proses_chat.php?id_lawan=' + idLawan);
-                const html = await response.text();
+
+                const idLawan = document.querySelector(
+                    'input[name="id_lawan"]'
+                ).value;
+
+                const response = await fetch(
+                    '../actions/proses_chat.php?id_lawan=' +
+                    idLawan +
+                    '&last_id=' + lastId
+                )
+
+                const result = await response.json();
+
 
                 const chatBody = document.getElementById('chatBody');
-                let isScrolledToBottom = chatBody.scrollHeight - chatBody.clientHeight <= chatBody.scrollTop + 50;
 
-                chatBody.innerHTML = html;
+                const scrollElement = chatBody.querySelector(
+                    '.simplebar-content-wrapper'
+                );
 
-                if (isScrolledToBottom) {
-                    chatBody.scrollTop = chatBody.scrollHeight;
+                const isNearBottom =
+                    scrollElement.scrollHeight -
+                    scrollElement.scrollTop -
+                    scrollElement.clientHeight < 50;
+
+                if (lastId === 0) {
+
+                    renderChat(result.data);
+
+                    scrollKeBawah();
+
+                } else {
+
+                    const adaPesanBaru = result.data.length > 0;
+
+                    result.data.forEach(chat => {
+                        appendChat(chat);
+                    });
+
+                    if (adaPesanBaru && isNearBottom) {
+                        scrollKeBawah();
+                    }
+
                 }
+
             } catch (error) {
-                console.error("Gagal menarik pesan terbaru", error);
+
+                console.error(error);
+
             }
+
         }
 
         // Tarik data pertama kali saat halaman dibuka

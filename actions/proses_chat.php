@@ -26,6 +26,7 @@ $idLogin = (int) $_SESSION['id'];
 $role = $_SESSION['role'];
 $chat = new Chat();
 
+
 // ==========================================
 // KAMAR 1: PROSES KIRIM PESAN (Method POST)
 // ==========================================
@@ -67,6 +68,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     // Tangkap id_lawan dari parameter URL Javascript
     $idLawan = isset($_GET['id_lawan']) ? (int)$_GET['id_lawan'] : 0;
+
+    $lastId = isset($_GET['last_id'])
+        ? (int)$_GET['last_id']
+        : 0;
+
+
     if ($idLawan === 0) exit;
 
     if ($role == 'user') {
@@ -77,36 +84,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $idKonselorDb = $idLogin;
     }
 
-    $dataChat = $chat->getAllMessage($idUserDb, $idKonselorDb);
+    $dataChat = $chat->getAllMessage(
+        $idUserDb,
+        $idKonselorDb,
+        $lastId
+    );
+
+    echo json_encode([
+        'status' => 'success',
+        'data' => $dataChat
+    ]);
 
     // Render menjadi HTML
-    foreach ($dataChat as $pesan) {
-        $waktu = date('H:i', strtotime($pesan['time_stamp']));
-        $isiChatRender = htmlspecialchars($pesan['chat']);
+    // foreach ($dataChat as $pesan) {
+    //     $waktu = date('H:i', strtotime($pesan['time_stamp']));
+    //     $isiChatRender = htmlspecialchars($pesan['chat']);
 
-        if ($pesan['pengirim'] == $role) {
-            // TAMPILAN PESAN SAYA (Kanan)
-            echo '
-            <div class="message-row user">
-                <div class="message-bubble">
-                    <span class="message-text">' . $isiChatRender . '</span>
-                    <span class="message-time">
-                        ' . $waktu . ' <i class="bi bi-check2-all ms-1"></i>
-                    </span>
-                </div>
-            </div>';
-        } else {
-            // TAMPILAN PESAN LAWAN (Kiri)
-            echo '
-            <div class="message-row consultant">
-                <div class="message-bubble">
-                    <span class="message-text">' . $isiChatRender . '</span>
-                    <span class="message-time">
-                        ' . $waktu . '
-                    </span>
-                </div>
-            </div>';
-        }
-    }
+    //     if ($pesan['pengirim'] == $role) {
+
+    //         echo '
+    // <li class="right">
+    //     <div class="conversation-list">
+    //         <div class="ctext-wrap">
+    //             <div class="ctext-wrap-content">
+    //                 <h5 class="conversation-name">
+    //                     <a class="user-name" href="#">Jennie Sherlock</a>
+    //                     <span class="time">' . $waktu . '</span>
+    //                 </h5>
+    //                 <p class="mb-0">' . $isiChatRender . '</p>
+    //             </div>
+    //         </div>
+    //     </div>
+    // </li>';
+    //     } else {
+
+    //         echo '
+    // <li>
+    //     <div class="conversation-list">
+    //         <div class="ctext-wrap">
+    //             <div class="ctext-wrap-content">
+    //                 <h5 class="conversation-name">
+    //                     <a class="user-name" href="#">Shawn</a>
+    //                     <span class="time">' . $waktu . '</span>
+    //                 </h5>
+    //                 <p class="mb-0">' . $isiChatRender . '</p>
+    //             </div>
+    //         </div>
+    //     </div>
+    // </li>';
+    //     }
+    // }
     exit;
 }

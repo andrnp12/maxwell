@@ -53,15 +53,6 @@ global $sudahPreTest, $sudahPostTest;
                   </span>
                </a>
             </li>
-            <li>
-               <a href="chat.php">
-                  <i data-feather="message-square">
-                  </i>
-                  <span data-key="t-akun">
-                     chat
-                  </span>
-               </a>
-            </li>
          </ul>
       </div>
       <!-- Sidebar -->
