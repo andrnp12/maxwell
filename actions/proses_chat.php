@@ -2,9 +2,6 @@
 session_start();
 require_once '../classes/chat.php';
 
-// ==========================================
-// CEK LOGIN & ROLE (Berlaku untuk GET & POST)
-// ==========================================
 if (!isset($_SESSION['is_logged_in'])) {
     // Jika request berupa POST (dari fetch form), kembalikan JSON
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -94,45 +91,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         'status' => 'success',
         'data' => $dataChat
     ]);
-
-    // Render menjadi HTML
-    // foreach ($dataChat as $pesan) {
-    //     $waktu = date('H:i', strtotime($pesan['time_stamp']));
-    //     $isiChatRender = htmlspecialchars($pesan['chat']);
-
-    //     if ($pesan['pengirim'] == $role) {
-
-    //         echo '
-    // <li class="right">
-    //     <div class="conversation-list">
-    //         <div class="ctext-wrap">
-    //             <div class="ctext-wrap-content">
-    //                 <h5 class="conversation-name">
-    //                     <a class="user-name" href="#">Jennie Sherlock</a>
-    //                     <span class="time">' . $waktu . '</span>
-    //                 </h5>
-    //                 <p class="mb-0">' . $isiChatRender . '</p>
-    //             </div>
-    //         </div>
-    //     </div>
-    // </li>';
-    //     } else {
-
-    //         echo '
-    // <li>
-    //     <div class="conversation-list">
-    //         <div class="ctext-wrap">
-    //             <div class="ctext-wrap-content">
-    //                 <h5 class="conversation-name">
-    //                     <a class="user-name" href="#">Shawn</a>
-    //                     <span class="time">' . $waktu . '</span>
-    //                 </h5>
-    //                 <p class="mb-0">' . $isiChatRender . '</p>
-    //             </div>
-    //         </div>
-    //     </div>
-    // </li>';
-    //     }
-    // }
     exit;
 }

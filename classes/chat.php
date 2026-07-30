@@ -92,36 +92,6 @@ class chat
         return $messages;
     }
 
-
-    // public function getUserMessage(int $idUser)
-    // {
-    //     $sql = "SELECT * FROM chat_konsultan WHERE id_user = ?";
-    //     $stmt = $this->conn->prepare($sql);
-    //     $stmt->bind_param("i", $idUser);
-    //     $stmt->execute();
-    //     $result = $stmt->get_result();
-    //     $messages = [];
-    //     while ($row = $result->fetch_assoc()) {
-    //         $messages[] = $row;
-    //     }
-    //     return $messages;
-    // }
-
-    // public function getKonsultanMessage(int $idKonsultan): array
-    // {
-    //     $sql = "SELECT * FROM chat_konsultan WHERE id_konselor = ?";
-    //     $stmt = $this->conn->prepare($sql); 
-    //     $stmt->bind_param("i", $idKonsultan);
-    //     $stmt->execute();
-    //     $result = $stmt->get_result();
-    //     $messages = [];
-    //     while ($row = $result->fetch_assoc()) {
-    //         $messages[] = $row;
-    //     }
-    //     return $messages;
-    // }
-
-    // Tambahkan string $pengirim di parameter
     public function sendUserMessage(int $idUser, int $idKonsultan, string $pengirim, string $isiChat): array
     {
         try {

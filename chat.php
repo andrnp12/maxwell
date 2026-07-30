@@ -8,34 +8,76 @@ if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
     exit;
 }
 
-$role = $_SESSION['role'];
-$id_login = $_SESSION['id'];
-$id_lawan = isset($_GET['id_lawan']) ? (int)$_GET['id_lawan'] : 0;
+$role      = $_SESSION['role'];
+$id_login  = $_SESSION['id'];
 
-if ($role == 'user') {
-    $id_user = $id_login;
-    $id_konsultan = $id_lawan;
-} else {
-    $id_user = $id_lawan;
-    $id_konsultan = $id_login;
-}
+$chatType  = $_GET['chat_type'] ?? 'personal';
+$id_lawan  = isset($_GET['id_lawan'])
+    ? (int) $_GET['id_lawan']
+    : 0;
 
-require_once 'classes/chat.php';
+require_once 'classes/ChatV2.php';
 
-$objChat = new chat();
-$listChat = $objChat->getListChat($id_login, $role);
+$objChat = new ChatV2();
 
+$personal = $objChat->getConversationList(
+    'personal',
+    $id_login,
+    $role
+);
+
+// personal
+$listChat = $personal['status'] === 'success'
+    ? $personal['data']
+    : [];
+
+$group = $objChat->getConversationList(
+    'group',
+    $id_login,
+    $role
+);
+
+// group
+$listGroup = $group['status'] === 'success'
+    ? $group['data']
+    : [];
+
+// room chat
 $dataChat = [];
-if ($id_lawan !== 0) {
-    if ($role == 'user') {
-        $id_user = $id_login;
-        $id_konsultan = $id_lawan;
-    } else {
-        $id_user = $id_lawan;
-        $id_konsultan = $id_login;
+$roomInfo = [];
+
+if ($id_lawan > 0) {
+
+    $target = $objChat->resolveChatTarget(
+        $chatType,
+        $id_login,
+        $id_lawan,
+        $role
+    );
+
+    if ($target['status'] === 'success') {
+
+        $room = $objChat->getRoomInfo(
+            $chatType,
+            $id_lawan
+        );
+
+        if ($room['status'] === 'success') {
+            $roomInfo = $room['data'];
+        }
+
+        $messages = $objChat->getMessages(
+            $chatType,
+            $target['data']['id_user'],
+            $target['data']['target']
+        );
+
+        if ($messages['status'] === 'success') {
+            $dataChat = $messages['data'];
+        }
     }
-    $dataChat = $objChat->getAllMessage($id_user, $id_konsultan);
 }
+
 ?>
 
 <!--header start-->
@@ -153,7 +195,7 @@ if ($id_lawan !== 0) {
                                     </li>
                                 </ul>
                                 <div class="tab-content">
-                                    <!-- tab Chat -->
+                                    <!-- tab Chat personel -->
                                     <div class="tab-pane show active" id="chat">
                                         <div class="chat-message-list" data-simplebar="">
                                             <div class="pt-3">
@@ -167,7 +209,7 @@ if ($id_lawan !== 0) {
                                                 <ul class="list-unstyled chat-list">
                                                     <?php foreach ($listChat as $list) : ?>
                                                         <li class="<?= $id_lawan == $list['id_lawan'] ? 'active' : '' ?>">
-                                                            <a href="chat.php?id_lawan=<?= $list['id_lawan'] ?>">
+                                                            <a href="chat.php?chat_type=personal&id_lawan=<?= $list['id_lawan'] ?>">
                                                                 <div class="d-flex align-items-start">
                                                                     <div class="flex-shrink-0 user-img online align-self-center me-3">
                                                                         <img alt="" class="rounded-circle avatar-sm" src="assets/images/users/avatar-2.jpg" />
@@ -206,38 +248,28 @@ if ($id_lawan !== 0) {
                                                     </h5>
                                                 </div>
                                                 <ul class="list-unstyled chat-list">
-                                                    <li>
-                                                        <a href="#">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="flex-shrink-0 avatar-sm me-3">
-                                                                    <span class="avatar-title rounded-circle bg-primary-subtle text-primary">
-                                                                        G
-                                                                    </span>
+                                                    <?php foreach ($listGroup as $group) : ?>
+                                                        <li>
+                                                            <a href="chat.php?chat_type=group&id_lawan=<?= $group['id_lawan'] ?>">
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="flex-shrink-0 avatar-sm me-3">
+                                                                        <?php if ($group['foto']) : ?>
+                                                                            <img alt="" class="avatar-sm rounded-circle" src="assets/images/groups/<?= $group['foto'] ?>" />
+                                                                        <?php else : ?>
+                                                                            <span class="avatar-title rounded-circle bg-primary-subtle text-primary">
+                                                                                P
+                                                                            </span>
+                                                                        <?php endif; ?>
+                                                                    </div>
+                                                                    <div class="flex-grow-1">
+                                                                        <h5 class="font-size-14 mb-0">
+                                                                            <?= htmlspecialchars($group['nama']) ?>
+                                                                        </h5>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="flex-grow-1">
-                                                                    <h5 class="font-size-14 mb-0">
-                                                                        General
-                                                                    </h5>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="flex-shrink-0 avatar-sm me-3">
-                                                                    <span class="avatar-title rounded-circle bg-primary-subtle text-primary">
-                                                                        R
-                                                                    </span>
-                                                                </div>
-                                                                <div class="flex-grow-1">
-                                                                    <h5 class="font-size-14 mb-0">
-                                                                        Reporting
-                                                                    </h5>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </li>
+                                                            </a>
+                                                        </li>
+                                                    <?php endforeach; ?>
                                                 </ul>
                                             </div>
                                         </div>
@@ -285,67 +317,33 @@ if ($id_lawan !== 0) {
                             <div class="card h-100">
                                 <?php if ($id_lawan > 0) : ?>
                                     <!-- header profil chat -->
-                                    <div class="p-3 px-lg-4 border-bottom">
-                                        <div class="row">
-                                            <div class="col-xl-4 col-7">
+                                    <div class="p-3 border-bottom">
+                                        <div class="row align-items-center">
+
+                                            <div class="col">
+
                                                 <div class="d-flex align-items-center">
-                                                    <button type="button" id="btnBackChat" class="btn btn-light btn-sm d-lg-none me-2"><i class="bx bx-arrow-back"></i></button>
-                                                    <div class="flex-shrink-0 avatar-sm me-3 d-sm-block d-none">
-                                                        <img alt="" class="img-fluid d-block rounded-circle" src="assets/images/users/avatar-2.jpg" />
-                                                    </div>
-                                                    <div class="flex-grow-1">
-                                                        <h5 class="font-size-14 mb-1 text-truncate">
-                                                            <a class="text-dark" href="#">
-                                                                Jennie Sherlock
-                                                            </a>
+
+                                                    <img
+                                                        src="assets/images/groups/<?= htmlspecialchars($roomInfo['foto']) ?>"
+                                                        class="rounded-circle avatar-sm me-3">
+
+                                                    <div>
+
+                                                        <h5 class="mb-1">
+                                                            <?= htmlspecialchars($roomInfo['nama']) ?>
                                                         </h5>
-                                                        <p class="text-muted text-truncate mb-0">
-                                                            Online
-                                                        </p>
+
+                                                        <small class="text-muted">
+                                                            <?= htmlspecialchars($roomInfo['subtitle']) ?>
+                                                        </small>
+
                                                     </div>
+
                                                 </div>
+
                                             </div>
-                                            <div class="col-xl-8 col-5">
-                                                <ul class="list-inline user-chat-nav text-end mb-0">
-                                                    <li class="list-inline-item">
-                                                        <div class="dropdown">
-                                                            <button aria-expanded="false" aria-haspopup="true" class="btn nav-btn dropdown-toggle" data-bs-toggle="dropdown" type="button">
-                                                                <i class="bx bx-search">
-                                                                </i>
-                                                            </button>
-                                                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-md p-2">
-                                                                <form class="px-2">
-                                                                    <div>
-                                                                        <input class="form-control border bg-light-subtle" placeholder="Search..." type="text" />
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <div class="dropdown">
-                                                            <button aria-expanded="false" aria-haspopup="true" class="btn nav-btn dropdown-toggle" data-bs-toggle="dropdown" type="button">
-                                                                <i class="bx bx-dots-horizontal-rounded">
-                                                                </i>
-                                                            </button>
-                                                            <div class="dropdown-menu dropdown-menu-end">
-                                                                <a class="dropdown-item" href="#">
-                                                                    Profile
-                                                                </a>
-                                                                <a class="dropdown-item" href="#">
-                                                                    Archive
-                                                                </a>
-                                                                <a class="dropdown-item" href="#">
-                                                                    Muted
-                                                                </a>
-                                                                <a class="dropdown-item" href="#">
-                                                                    Delete
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
+
                                         </div>
                                     </div>
 
@@ -360,14 +358,30 @@ if ($id_lawan !== 0) {
                                     <div class="p-3 border-top">
                                         <div class="row">
                                             <form id="formChat">
+                                                <input type="hidden" name="action" value="send_message">
+
                                                 <input
                                                     type="hidden"
-                                                    name="id_lawan"
-                                                    id="idKonsultan"
+                                                    name="chat_type"
+                                                    value="<?= htmlspecialchars($chatType) ?>">
+
+                                                <input
+                                                    type="hidden"
+                                                    name="target_id"
                                                     value="<?= $id_lawan ?>">
+
+                                                <input
+                                                    type="hidden"
+                                                    name="login_id"
+                                                    value="<?= $id_login ?>">
                                                 <div class="col">
                                                     <div class="position-relative">
-                                                        <input class="form-control border bg-light-subtle" name="isi_chat" id="messageInput" placeholder="Enter Message..." type="text" />
+                                                        <input
+                                                            class="form-control border bg-light-subtle"
+                                                            name="message"
+                                                            id="messageInput"
+                                                            placeholder="Enter Message..."
+                                                            type="text">
                                                     </div>
                                                 </div>
                                                 <div class="col-auto">
@@ -422,72 +436,147 @@ if ($id_lawan !== 0) {
     <?php include("src/include/script.php"); ?>
     <!-- end javascript -->
 
-
+    <!-- script chat -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const sidebar = document.getElementById("chatSidebar");
-            const chat = document.getElementById("userChat");
-            const back = document.getElementById("btnBackChat");
+        const Chat = {
 
-            function mobile() {
-                return window.innerWidth < 992;
-            }
+            lastId: 0,
+            isLoading: false,
 
-            function init() {
-                const params = new URLSearchParams(window.location.search);
-                const hasChat = params.has("id_lawan");
+            form: null,
+            btn: null,
+            btnText: null,
+            btnIcon: null,
+            input: null,
 
-                if (mobile()) {
-                    if (hasChat) {
-                        sidebar.classList.add("mobile-hide");
-                        chat.classList.remove("mobile-hide");
-                    } else {
-                        sidebar.classList.remove("mobile-hide");
-                        chat.classList.add("mobile-hide");
+            chatList: null,
+            chatBody: null,
+
+            info: {},
+            polling: null,
+
+            init() {
+
+                this.form = document.getElementById("formChat");
+                this.btn = document.getElementById("btnKirim");
+                this.btnText = document.getElementById("btnText");
+                this.btnIcon = document.getElementById("btnIcon");
+                this.input = document.getElementById("messageInput");
+
+                this.chatList = document.getElementById("chatMessages");
+                this.chatBody = document.getElementById("chatBody");
+
+                this.info = this.getInfo();
+
+                this.bindEvents();
+
+                this.loadMessages();
+
+                this.polling = setInterval(() => {
+
+                    this.loadMessages();
+
+                }, 2000);
+
+            },
+
+            getInfo() {
+
+                const login = document.querySelector('[name="login_id"]');
+                const chatType = document.querySelector('[name="chat_type"]');
+                const target = document.querySelector('[name="target_id"]');
+
+                return {
+
+                    loginId: Number(login.value),
+                    chatType: chatType.value,
+                    targetId: Number(target.value)
+
+                };
+
+            },
+
+            async loadMessages() {
+                const formData = new FormData();
+
+                const before = this.lastId;
+
+                formData.append("action", "get_messages");
+                formData.append("chat_type", this.info.chatType);
+                formData.append("target_id", this.info.targetId);
+                // formData.append("id_user", this.info.idUser);
+                formData.append("last_id", this.lastId);
+
+                if (this.isLoading) return;
+
+                this.isLoading = true;
+
+                try {
+
+                    const response = await fetch("../actions/proses_chatV2.php", {
+                        method: "POST",
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (result.status === "success") {
+
+                        if (this.lastId === 0) {
+
+                            this.renderMessages(result.data);
+
+                        } else {
+
+                            result.data.forEach(chat => {
+                                this.appendMessage(chat);
+                            });
+
+                        }
+
+                        if (result.data.length > 0) {
+                            this.scrollBottom();
+                        }
+
                     }
-                } else {
-                    sidebar.classList.remove("mobile-hide");
-                    chat.classList.remove("mobile-hide");
+
+                } catch (err) {
+
+                    console.error(err);
+
+                } finally {
+
+                    this.isLoading = false;
+
                 }
-            }
+            },
 
-            init();
-            document.querySelectorAll(".chat-list li").forEach(function(li) {
-                li.addEventListener("click", function() {
-                    if (!mobile()) return;
-                    sidebar.classList.add("mobile-hide");
-                    chat.classList.remove("mobile-hide");
-                });
-            });
-            if (back) {
-                back.addEventListener("click", function() {
-                    sidebar.classList.remove("mobile-hide");
-                    chat.classList.add("mobile-hide");
-                });
-            }
-            window.addEventListener("resize", init);
-        });
+            scrollBottom() {
 
-        let lastId = 0
+                const scrollEl = this.chatBody.querySelector('.simplebar-content-wrapper');
 
-        function appendChat(chat) {
-            console.log(chat);
-            const chatList = document.getElementById("chatMessages");
+                if (scrollEl) {
+                    scrollEl.scrollTop = scrollEl.scrollHeight;
+                }
 
-            const li = document.createElement("li");
+            },
 
-            if (chat.pengirim === "<?= $role ?>") {
-                li.className = "right";
-            }
+            appendMessage(chat) {
 
-            const waktu = chat.time_stamp.substring(11, 16);
+                const li = document.createElement("li");
 
-            li.innerHTML = `
+                if (chat.sender_id == this.info.loginId) {
+
+                    li.className = "right";
+
+                }
+
+                const waktu = chat.time_stamp.substring(11, 16);
+
+                li.innerHTML = `
         <div class="conversation-list">
             <div class="ctext-wrap">
-
                 <div class="ctext-wrap-content">
-
                     <h5 class="conversation-name">
                         <span class="time">${waktu}</span>
                     </h5>
@@ -495,172 +584,105 @@ if ($id_lawan !== 0) {
                     <p class="mb-0"></p>
 
                 </div>
-
             </div>
         </div>
     `;
 
-            li.querySelector("p").textContent = chat.chat;
+                li.querySelector("p").textContent = chat.chat;
 
-            chatList.appendChild(li);
+                this.chatList.appendChild(li);
 
-            lastId = chat.id;
+                this.lastId = chat.id;
 
-        }
+            },
 
-        function renderChat(data) {
+            renderMessages(data) {
 
-            const chatList = document.getElementById("chatMessages");
+                this.chatList.innerHTML = "";
 
-            chatList.innerHTML = "";
+                data.forEach(chat => {
+                    this.appendMessage(chat);
+                });
 
-            data.forEach(chat => {
+                // Setelah semua bubble selesai dibuat
+                this.scrollBottom();
 
-                appendChat(chat);
+            },
 
-            });
+            bindEvents() {
 
-        }
-
-        const formChat = document.getElementById('formChat');
-        const btnKirim = document.getElementById('btnKirim');
-        const btnText = document.getElementById('btnText');
-        const btnIcon = document.getElementById('btnIcon');
-        const messageInput = document.getElementById('messageInput');
-
-        formChat.addEventListener('submit', async function(e) {
-
-            e.preventDefault();
-
-            // Jangan kirim jika pesan hanya berisi spasi
-            if (messageInput.value.trim() === '') {
-                return;
-            }
-
-            // Disable tombol sementara
-            btnKirim.disabled = true;
-
-            btnText.textContent = "Mengirim...";
-            btnIcon.className = "spinner-border spinner-border-sm";
-
-            // Ambil semua data dari form
-            const formData = new FormData(formChat);
-
-            try {
-
-                const response = await fetch(
-                    '../actions/proses_chat.php', {
-                        method: 'POST',
-                        body: formData
-                    }
+                this.form.addEventListener(
+                    "submit",
+                    (e) => this.sendMessage(e)
                 );
 
-                const result = await response.json();
+            },
 
-                if (result.status === 'success') {
+            async sendMessage(e) {
 
-                    messageInput.value = '';
-                    messageInput.focus();
+                e.preventDefault();
 
-                    await tarikChatTerbaru();
-                    scrollKeBawah();
-                } else {
+                // Jangan kirim jika pesan hanya berisi spasi
+                if (this.input.value.trim() === '') {
+                    return;
+                }
 
-                    alert('Error: ' + result.message);
+                // Disable tombol sementara
+                this.btn.disabled = true;
+
+                this.btnText.textContent = "Mengirim...";
+                this.btnIcon.className = "spinner-border spinner-border-sm";
+
+                // Ambil semua data dari form
+                const formData = new FormData(this.form);
+
+                try {
+
+                    const response = await fetch(
+                        '../actions/proses_chatV2.php', {
+                            method: 'POST',
+                            body: formData
+                        }
+                    );
+
+                    const result = await response.json();
+
+                    if (result.status === 'success') {
+
+                        this.input.value = '';
+                        this.input.focus();
+
+                        await this.loadMessages();
+                        this.scrollBottom();
+                    } else {
+
+                        alert('Error: ' + result.message);
+
+                    }
+
+                } catch (error) {
+
+                    alert('Terjadi kesalahan koneksi jaringan.');
+
+                    console.error(error);
+
+                } finally {
+
+                    this.btn.disabled = false;
+                    this.btnText.textContent = "Send";
+                    this.btnIcon.className = "mdi mdi-send float-end";
 
                 }
 
-            } catch (error) {
+            },
 
-                alert('Terjadi kesalahan koneksi jaringan.');
+        };
 
-                console.error(error);
+        document.addEventListener("DOMContentLoaded", () => {
 
-            } finally {
-
-                btnKirim.disabled = false;
-                btnText.textContent = "Send";
-                btnIcon.className = "mdi mdi-send float-end";
-
-            }
+            Chat.init();
 
         });
-
-        function scrollKeBawah() {
-            const chatBody = document.getElementById('chatBody');
-
-            const scrollElement = chatBody.querySelector(
-                '.simplebar-content-wrapper'
-            );
-
-            if (scrollElement) {
-                scrollElement.scrollTop = scrollElement.scrollHeight;
-            }
-        }
-
-        // Fungsi untuk menarik chat terbaru
-
-        async function tarikChatTerbaru() {
-
-            try {
-
-                const idLawan = document.querySelector(
-                    'input[name="id_lawan"]'
-                ).value;
-
-                const response = await fetch(
-                    '../actions/proses_chat.php?id_lawan=' +
-                    idLawan +
-                    '&last_id=' + lastId
-                )
-
-                const result = await response.json();
-
-
-                const chatBody = document.getElementById('chatBody');
-
-                const scrollElement = chatBody.querySelector(
-                    '.simplebar-content-wrapper'
-                );
-
-                const isNearBottom =
-                    scrollElement.scrollHeight -
-                    scrollElement.scrollTop -
-                    scrollElement.clientHeight < 50;
-
-                if (lastId === 0) {
-
-                    renderChat(result.data);
-
-                    scrollKeBawah();
-
-                } else {
-
-                    const adaPesanBaru = result.data.length > 0;
-
-                    result.data.forEach(chat => {
-                        appendChat(chat);
-                    });
-
-                    if (adaPesanBaru && isNearBottom) {
-                        scrollKeBawah();
-                    }
-
-                }
-
-            } catch (error) {
-
-                console.error(error);
-
-            }
-
-        }
-
-        // Tarik data pertama kali saat halaman dibuka
-        tarikChatTerbaru();
-
-        // Jalankan penarikan data secara otomatis setiap 2 detik (2000 ms)
-        setInterval(tarikChatTerbaru, 2000);
     </script>
 </body>
 
