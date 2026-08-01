@@ -1466,6 +1466,9 @@ $auth->authOrNot();
                 <!-- end row -->
             </div>
             <!-- container-fluid -->
+            <!-- Footer Start -->
+            <?php include("../include/footer.php"); ?>
+            <!-- end Footer -->
         </div>
         <!-- end main content-->
     </div>

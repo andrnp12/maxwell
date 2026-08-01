@@ -299,7 +299,9 @@
             event.preventDefault();
 
             const formData = new FormData(registerForm);
-            fetch('actions/proses_register.php', {
+            formData.append('action', 'register');
+
+            fetch('/../src/actions/proses_auth.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -308,7 +310,7 @@
                     if (result.status === 'success') {
                         window.location.href = result.redirect;
                     } else {
-                        alert("registration failed");
+                        alert("Error: " + result.message);
                     }
                 })
                 .catch(error => {

@@ -215,7 +215,7 @@ $name = $_SESSION['username'];
                </a>
                <div class="dropdown-divider">
                </div>
-               <button class="dropdown-item" onclick="window.location.href='../../src/actions/proses_logout.php'">
+               <button class="dropdown-item" onclick="window.location.href='../../src/actions/proses_auth.php?action=logout'">
                   <i class="mdi mdi-logout font-size-16 align-middle me-1">
                   </i>
                   Logout

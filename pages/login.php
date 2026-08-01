@@ -167,8 +167,10 @@
             e.preventDefault();
 
             const formData = new FormData(form);
+            formData.append('action', 'login');
+
             try {
-                const response = await fetch("../src/actions/proses_login.php", {
+                const response = await fetch("../src/actions/proses_auth.php", {
                     method: "POST",
                     body: formData
                 });
@@ -178,7 +180,7 @@
                 if (result.status == 'success') {
                     window.location.href = result.redirect;
                 } else {
-                    alert("username atau password salah");
+                    alert("Error: " + result.message);
                 }
             } catch (error) {
                 console.error("Error:", error);

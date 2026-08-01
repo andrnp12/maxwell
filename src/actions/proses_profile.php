@@ -15,6 +15,12 @@ if (!isset($_SESSION['is_logged_in'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    // Inisialisasi nilai default agar tidak undefined
+    $result = [
+        'status' => 'error',
+        'message' => 'Aksi tidak dikenal atau tidak valid.'
+    ];
+
     $action = $_POST['action'] ?? '';
     $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
 

@@ -147,7 +147,7 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
                                         </a>
                                     </li>
                                     <li class="list-group-item">
-                                        <a class="pb-2 d-block text-muted" href="../../src/actions/proses_logout.php">
+                                        <a class="pb-2 d-block text-muted" href="../../src/actions/proses_auth.php?action=logout">
                                             <i class="mdi mdi-note-text-outline text-primary me-1">
                                             </i>
                                             Logout
