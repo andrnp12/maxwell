@@ -35,23 +35,24 @@ try {
         throw new Exception("Chat type tidak valid.");
     }
 
-    $conversation = $chat->resolveChatTarget(
-        $chatType,
-        $loginId,
-        $targetId,
-        $role
-    );
-
-    if ($conversation['status'] !== 'success') {
-        throw new Exception($conversation['message']);
-    }
-
-    $idUser = $conversation['data']['id_user'];
-    $target = $conversation['data']['target'];
 
     switch ($action) {
 
         case 'send_message':
+
+            $conversation = $chat->resolveChatTarget(
+                $chatType,
+                $loginId,
+                $targetId,
+                $role
+            );
+
+            if ($conversation['status'] !== 'success') {
+                throw new Exception($conversation['message']);
+            }
+
+            $idUser = $conversation['data']['id_user'];
+            $target = $conversation['data']['target'];
 
             if ($targetId <= 0) {
                 throw new Exception("Target tidak valid.");
@@ -73,6 +74,21 @@ try {
 
         case 'get_messages':
 
+
+            $conversation = $chat->resolveChatTarget(
+                $chatType,
+                $loginId,
+                $targetId,
+                $role
+            );
+
+            if ($conversation['status'] !== 'success') {
+                throw new Exception($conversation['message']);
+            }
+
+            $idUser = $conversation['data']['id_user'];
+            $target = $conversation['data']['target'];
+
             if ($targetId <= 0) {
                 throw new Exception("Target tidak valid.");
             }
@@ -92,6 +108,19 @@ try {
                 $chatType,
                 $loginId,
                 $role
+            );
+
+            break;
+
+        case 'open_room':
+
+            if ($targetId <= 0) {
+                throw new Exception("Target tidak valid.");
+            }
+
+            $result = $chat->getRoomInfo(
+                $chatType,
+                $targetId
             );
 
             break;

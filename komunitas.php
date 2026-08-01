@@ -1,4 +1,21 @@
-<?php include 'src/include/header.php'; ?>
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+
+require_once 'classes/konselor.php';
+
+$data = new Konsultan();
+
+$konsultan = $data->getAllKonsultan();
+
+include 'src/include/header.php';
+?>
 
 <body>
     <!-- <body data-layout="horizontal"> -->
@@ -123,6 +140,7 @@
                                 <h5 class="mb-sm-0">
                                     Hubungi Konseling
                                 </h5>
+                                <?= print_r($konsultan) ?>
                                 <div class="page-title-right">
                                     <a class="btn btn-primary btn-rounded btn-sm waves-effect waves-light" href="daftar-konseling.php">
                                         Lihat Semua
@@ -133,98 +151,40 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-sm-6">
-                            <div class="card text-center">
-                                <div class="card-body">
-                                    <div class="mx-auto mb-4">
-                                        <img alt="" class="avatar-xl rounded-circle img-thumbnail" src="assets/images/users/avatar-2.jpg">
+                        <?php foreach ($konsultan as $konsul) : ?>
+                            <div class="col-xl-3 col-sm-6">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <div class="mx-auto mb-4">
+                                            <img alt="" class="avatar-xl rounded-circle img-thumbnail" src="assets/images/users/avatar-2.jpg">
+                                        </div>
+                                        <h5 class="font-size-16 mb-1">
+                                            <a class="text-body" href="#">
+                                                <?= $konsul['name'] ?>
+                                            </a>
+                                        </h5>
+                                        <p class="text-muted mb-2">
+                                            <?= $konsul['deskripsi'] ?>
+                                        </p>
                                     </div>
-                                    <h5 class="font-size-16 mb-1">
-                                        <a class="text-body" href="#">
-                                            Phyllis Gatlin
-                                        </a>
-                                    </h5>
-                                    <p class="text-muted mb-2">
-                                        Full Stack Developer
-                                    </p>
-                                </div>
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-outline-light text-truncate" type="button">
-                                        <i class="uil uil-user me-1">
-                                        </i>
-                                        Profile
-                                    </button>
-                                    <button class="btn btn-outline-light text-truncate" type="button">
-                                        <i class="uil uil-envelope-alt me-1">
-                                        </i>
-                                        Message
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- end card -->
-                        </div>
-                        <!-- end col -->
-                        <div class="col-xl-3 col-sm-6">
-                            <div class="card text-center">
-                                <div class="card-body">
-                                    <div class="mx-auto mb-4">
-                                        <img alt="" class="avatar-xl rounded-circle img-thumbnail" src="assets/images/users/avatar-1.jpg">
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-outline-light text-truncate" type="button">
+                                            <i class="uil uil-user me-1">
+                                            </i>
+                                            Profile
+                                        </button>
+                                        <button class="btn btn-outline-light text-truncate" type="button">
+                                            <a href="chat.php?chat_type=personal&id_lawan=<?= $konsul['id'] ?>">
+                                                <i class="uil uil-envelope-alt me-1">
+                                                </i>
+                                                Message
+                                            </a>
+                                        </button>
                                     </div>
-                                    <h5 class="font-size-16 mb-1">
-                                        <a class="text-body" href="#">
-                                            James Nix
-                                        </a>
-                                    </h5>
-                                    <p class="text-muted mb-2">
-                                        Full Stack Developer
-                                    </p>
                                 </div>
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-outline-light text-truncate" type="button">
-                                        <i class="uil uil-user me-1">
-                                        </i>
-                                        Profile
-                                    </button>
-                                    <button class="btn btn-outline-light text-truncate" type="button">
-                                        <i class="uil uil-envelope-alt me-1">
-                                        </i>
-                                        Message
-                                    </button>
-                                </div>
+                                <!-- end card -->
                             </div>
-                            <!-- end card -->
-                        </div>
-                        <!-- end col -->
-                        <div class="col-xl-3 col-sm-6">
-                            <div class="card text-center">
-                                <div class="card-body">
-                                    <div class="mx-auto mb-4">
-                                        <img alt="" class="avatar-xl rounded-circle img-thumbnail" src="assets/images/users/avatar-3.jpg">
-                                    </div>
-                                    <h5 class="font-size-16 mb-1">
-                                        <a class="text-body" href="#">
-                                            Darlene Smith
-                                        </a>
-                                    </h5>
-                                    <p class="text-muted mb-2">
-                                        UI/UX Designer
-                                    </p>
-                                </div>
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-outline-light text-truncate" type="button">
-                                        <i class="uil uil-user me-1">
-                                        </i>
-                                        Profile
-                                    </button>
-                                    <button class="btn btn-outline-light text-truncate" type="button">
-                                        <i class="uil uil-envelope-alt me-1">
-                                        </i>
-                                        Message
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- end card -->
-                        </div>
+                        <?php endforeach; ?>
                         <!-- end col -->
                     </div>
                     <!-- end row -->

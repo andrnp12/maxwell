@@ -187,7 +187,7 @@ class Konsultan
 
     public function getAllKonsultan(): array
     {
-        $result = $this->conn->query("SELECT * FROM konsultan ORDER BY id ASC");
+        $result = $this->conn->query("SELECT * FROM users WHERE role = 'konsultan'");
         $konsultanList = [];
 
         while ($row = $result->fetch_assoc()) {

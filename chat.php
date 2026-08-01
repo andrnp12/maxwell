@@ -209,7 +209,11 @@ if ($id_lawan > 0) {
                                                 <ul class="list-unstyled chat-list">
                                                     <?php foreach ($listChat as $list) : ?>
                                                         <li class="<?= $id_lawan == $list['id_lawan'] ? 'active' : '' ?>">
-                                                            <a href="chat.php?chat_type=personal&id_lawan=<?= $list['id_lawan'] ?>">
+                                                            <!-- <a href="chat.php?chat_type=personal&id_lawan=<?= $list['id_lawan'] ?>"> -->
+                                                            <a href="#"
+                                                                class="chat-user"
+                                                                data-id="<?= $list['id_lawan'] ?>"
+                                                                data-type="personal">
                                                                 <div class="d-flex align-items-start">
                                                                     <div class="flex-shrink-0 user-img online align-self-center me-3">
                                                                         <img alt="" class="rounded-circle avatar-sm" src="assets/images/users/avatar-2.jpg" />
@@ -218,7 +222,7 @@ if ($id_lawan > 0) {
                                                                     </div>
                                                                     <div class="flex-grow-1 overflow-hidden">
                                                                         <h5 class="text-truncate font-size-14 mb-1">
-                                                                            <?= htmlspecialchars($list['nama']) ?>
+                                                                            <?= htmlspecialchars($list['name']) ?>
                                                                         </h5>
                                                                         <p class="text-truncate mb-0">
                                                                             <?= htmlspecialchars(mb_strimwidth($list['pesan_terakhir'], 0, 40, '...')) ?>
@@ -250,7 +254,11 @@ if ($id_lawan > 0) {
                                                 <ul class="list-unstyled chat-list">
                                                     <?php foreach ($listGroup as $group) : ?>
                                                         <li>
-                                                            <a href="chat.php?chat_type=group&id_lawan=<?= $group['id_lawan'] ?>">
+                                                            <!-- <a href="chat.php?chat_type=group&id_lawan=<?= $group['id_lawan'] ?>"> -->
+                                                            <a href="#"
+                                                                class="chat-user"
+                                                                data-id="<?= $group['id_lawan'] ?>"
+                                                                data-type="group">
                                                                 <div class="d-flex align-items-center">
                                                                     <div class="flex-shrink-0 avatar-sm me-3">
                                                                         <?php if ($group['foto']) : ?>
@@ -263,7 +271,7 @@ if ($id_lawan > 0) {
                                                                     </div>
                                                                     <div class="flex-grow-1">
                                                                         <h5 class="font-size-14 mb-0">
-                                                                            <?= htmlspecialchars($group['nama']) ?>
+                                                                            <?= htmlspecialchars($group['name']) ?>
                                                                         </h5>
                                                                     </div>
                                                                 </div>
@@ -314,119 +322,48 @@ if ($id_lawan > 0) {
                         </div>
                         <!-- end chat-leftsidebar -->
                         <div id="userChat" class="w-100 user-chat mt-sm-0 ms-lg-1">
+
                             <div class="card h-100">
-                                <?php if ($id_lawan > 0) : ?>
-                                    <!-- header profil chat -->
-                                    <div class="p-3 border-bottom">
-                                        <div class="row align-items-center">
 
-                                            <div class="col">
+                                <div id="chatHeader">
 
-                                                <div class="d-flex align-items-center">
+                                    <div class="text-center p-4 text-muted">
 
-                                                    <img
-                                                        src="assets/images/groups/<?= htmlspecialchars($roomInfo['foto']) ?>"
-                                                        class="rounded-circle avatar-sm me-3">
-
-                                                    <div>
-
-                                                        <h5 class="mb-1">
-                                                            <?= htmlspecialchars($roomInfo['nama']) ?>
-                                                        </h5>
-
-                                                        <small class="text-muted">
-                                                            <?= htmlspecialchars($roomInfo['subtitle']) ?>
-                                                        </small>
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <!-- isi chat -->
-                                    <div class="chat-conversation p-3 px-2" id="chatBody" data-simplebar="">
-                                        <ul class="list-unstyled mb-0" id="chatMessages">
-
-                                        </ul>
-                                    </div>
-
-                                    <!-- form input chat -->
-                                    <div class="p-3 border-top">
-                                        <div class="row">
-                                            <form id="formChat">
-                                                <input type="hidden" name="action" value="send_message">
-
-                                                <input
-                                                    type="hidden"
-                                                    name="chat_type"
-                                                    value="<?= htmlspecialchars($chatType) ?>">
-
-                                                <input
-                                                    type="hidden"
-                                                    name="target_id"
-                                                    value="<?= $id_lawan ?>">
-
-                                                <input
-                                                    type="hidden"
-                                                    name="login_id"
-                                                    value="<?= $id_login ?>">
-                                                <div class="col">
-                                                    <div class="position-relative">
-                                                        <input
-                                                            class="form-control border bg-light-subtle"
-                                                            name="message"
-                                                            id="messageInput"
-                                                            placeholder="Enter Message..."
-                                                            type="text">
-                                                    </div>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <button class="btn btn-primary chat-send w-md waves-effect waves-light" id="btnKirim" type="submit">
-                                                        <span class="d-none d-sm-inline-block me-2" id="btnText">
-                                                            Send
-                                                        </span>
-                                                        <i class="mdi mdi-send float-end" id="btnIcon">
-                                                        </i>
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                <?php else : ?>
-                                    <div class="d-flex h-100 align-items-center justify-content-center text-center">
-
-                                        <div>
-                                            <i class="bx bx-message-rounded-dots display-3 text-muted"></i>
-
-                                            <h5 class="mt-3">
-                                                Belum ada percakapan yang dipilih
-                                            </h5>
-
-                                            <p class="text-muted mb-0">
-                                                Pilih salah satu kontak di sebelah kiri untuk mulai mengobrol.
-                                            </p>
-                                        </div>
+                                        Pilih percakapan
 
                                     </div>
 
-                                <?php endif; ?>
+                                </div>
+
+                                <div
+                                    id="chatBody"
+                                    class="chat-conversation p-3 px-2"
+                                    data-simplebar>
+
+                                    <ul
+                                        id="chatMessages"
+                                        class="list-unstyled mb-0">
+                                    </ul>
+
+                                </div>
+
+                                <div id="chatFooter"></div>
+
                             </div>
-                            <!-- <div class="card"></div> -->
+
                         </div>
-                        <!-- end user chat -->
+                        <!-- <div class="card"></div> -->
                     </div>
-                    <!-- End d-lg-flex  -->
+                    <!-- end user chat -->
                 </div>
-                <!-- container-fluid -->
+                <!-- End d-lg-flex  -->
             </div>
-            <!-- End Page-content -->
-            <?php include("src/include/footer.php"); ?>
+            <!-- container-fluid -->
         </div>
-        <!-- end main content-->
+        <!-- End Page-content -->
+        <?php include("src/include/footer.php"); ?>
+    </div>
+    <!-- end main content-->
     </div>
     <!-- END layout-wrapper -->
     <!-- Right Sidebar -->
@@ -438,6 +375,59 @@ if ($id_lawan > 0) {
 
     <!-- script chat -->
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const sidebar = document.getElementById("chatSidebar");
+            const chat = document.getElementById("userChat");
+            const back = document.getElementById("btnBackChat");
+
+            function mobile() {
+                return window.innerWidth < 992;
+            }
+
+            function init() {
+                if (mobile()) {
+                    chat.classList.add("mobile-hide");
+                    sidebar.classList.remove("mobile-hide");
+                } else {
+                    chat.classList.remove("mobile-hide");
+                    sidebar.classList.remove("mobile-hide");
+                }
+            }
+            init();
+            document.querySelectorAll(".chat-user").forEach(a => {
+
+                a.addEventListener("click", async function(e) {
+
+                    e.preventDefault();
+
+                    await Chat.openRoom(
+                        this.dataset.id,
+                        this.dataset.type
+                    );
+
+                    if (mobile()) {
+
+                        sidebar.classList.add("mobile-hide");
+                        chat.classList.remove("mobile-hide");
+
+                    }
+
+                });
+
+            });
+            if (back) {
+                back.addEventListener("click", function() {
+                    sidebar.classList.remove("mobile-hide");
+                    chat.classList.add("mobile-hide");
+                });
+            }
+            window.addEventListener("resize", init);
+        });
+    </script>
+
+    <script>
+        const LOGIN_ID = <?= (int)$id_login ?>;
+
         const Chat = {
 
             lastId: 0,
@@ -466,11 +456,16 @@ if ($id_lawan > 0) {
                 this.chatList = document.getElementById("chatMessages");
                 this.chatBody = document.getElementById("chatBody");
 
-                this.info = this.getInfo();
+                this.info = {
 
-                this.bindEvents();
+                    loginId: LOGIN_ID,
 
-                this.loadMessages();
+                    chatType: null,
+
+                    targetId: null
+
+                };
+
 
                 this.polling = setInterval(() => {
 
@@ -482,15 +477,15 @@ if ($id_lawan > 0) {
 
             getInfo() {
 
-                const login = document.querySelector('[name="login_id"]');
-                const chatType = document.querySelector('[name="chat_type"]');
-                const target = document.querySelector('[name="target_id"]');
-
                 return {
 
-                    loginId: Number(login.value),
-                    chatType: chatType.value,
-                    targetId: Number(target.value)
+                    loginId: Number(
+                        document.querySelector('[name="login_id"]').value
+                    ),
+
+                    chatType: null,
+
+                    targetId: null
 
                 };
 
@@ -519,6 +514,8 @@ if ($id_lawan > 0) {
                     });
 
                     const result = await response.json();
+
+                    // console.log(result);
 
                     if (result.status === "success") {
 
@@ -550,8 +547,74 @@ if ($id_lawan > 0) {
 
                 }
             },
+            async loadRoom() {
+
+                if (!this.info.targetId) {
+
+                    return;
+
+                }
+
+                const formData = new FormData();
+
+                formData.append("action", "open_room");
+                formData.append("chat_type", this.info.chatType);
+                formData.append("target_id", this.info.targetId);
+
+                const response = await fetch(
+                    "../actions/proses_chatV2.php", {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+                const result = await response.json();
+
+                if (result.status != "success") {
+
+                    throw new Error(result.message);
+
+                }
+
+                return result.data;
+
+            },
+
+            async openRoom(id, type) {
+
+                this.lastId = 0;
+
+                this.info.targetId = id;
+
+                this.info.chatType = type;
+
+                const room = await this.loadRoom();
+
+                this.renderHeader(room);
+
+                this.renderFooter();
+
+                this.chatList = document.getElementById("chatMessages");
+
+                await this.loadMessages();
+
+                if (this.polling) {
+
+                    clearInterval(this.polling);
+
+                }
+
+                this.polling = setInterval(() => {
+
+                    this.loadMessages();
+
+                }, 2000);
+
+            },
 
             scrollBottom() {
+
+                if (!this.chatBody) return;
 
                 const scrollEl = this.chatBody.querySelector('.simplebar-content-wrapper');
 
@@ -562,6 +625,12 @@ if ($id_lawan > 0) {
             },
 
             appendMessage(chat) {
+
+                console.log({
+                    sender: chat.sender_id,
+                    login: this.info.loginId,
+                    sama: Number(chat.sender_id) === Number(this.info.loginId)
+                });
 
                 const li = document.createElement("li");
 
@@ -596,6 +665,116 @@ if ($id_lawan > 0) {
 
             },
 
+            renderHeader(room) {
+
+                document.getElementById("chatHeader").innerHTML = `
+
+        <div class="p-3 px-lg-4 border-bottom">
+
+            <div class="d-flex align-items-center">
+
+                <div class="flex-shrink-0 avatar-sm me-3">
+
+                    <img
+                        src="assets/images/groups/${room.foto}"
+                        class="rounded-circle avatar-sm">
+
+                </div>
+
+                <div>
+
+                    <h5>${room.name}</h5>
+
+                    <p class="text-muted mb-0">
+
+                        ${room.subtitle}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+            },
+
+            renderFooter() {
+
+                document.getElementById("chatFooter").innerHTML = `
+
+<div class="p-3 border-top">
+
+<form id="formChat">
+
+<input
+type="hidden"
+name="action"
+value="send_message">
+
+<input
+type="hidden"
+name="chat_type"
+value="${this.info.chatType}">
+
+<input
+type="hidden"
+name="target_id"
+value="${this.info.targetId}">
+
+<input
+type="hidden"
+name="login_id"
+value="${this.info.loginId}">
+
+<div class="row">
+
+<div class="col">
+
+<input
+
+id="messageInput"
+
+name="message"
+
+class="form-control"
+
+placeholder="Tulis pesan">
+
+</div>
+
+<div class="col-auto">
+
+<button
+
+id="btnKirim"
+
+class="btn btn-primary">
+
+Send
+
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+`;
+
+                this.form = document.getElementById("formChat");
+                this.input = document.getElementById("messageInput");
+                this.btn = document.getElementById("btnKirim");
+
+                this.bindEvents();
+
+            },
+
             renderMessages(data) {
 
                 this.chatList.innerHTML = "";
@@ -604,8 +783,11 @@ if ($id_lawan > 0) {
                     this.appendMessage(chat);
                 });
 
-                // Setelah semua bubble selesai dibuat
-                this.scrollBottom();
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        this.scrollBottom();
+                    });
+                });
 
             },
 
@@ -630,8 +812,10 @@ if ($id_lawan > 0) {
                 // Disable tombol sementara
                 this.btn.disabled = true;
 
-                this.btnText.textContent = "Mengirim...";
-                this.btnIcon.className = "spinner-border spinner-border-sm";
+                this.btn.innerHTML = `
+    <span class="spinner-border spinner-border-sm me-2"></span>
+    Mengirim...
+`;
 
                 // Ambil semua data dari form
                 const formData = new FormData(this.form);
@@ -652,7 +836,7 @@ if ($id_lawan > 0) {
                         this.input.value = '';
                         this.input.focus();
 
-                        await this.loadMessages();
+                        // await this.loadMessages();
                         this.scrollBottom();
                     } else {
 
@@ -669,8 +853,7 @@ if ($id_lawan > 0) {
                 } finally {
 
                     this.btn.disabled = false;
-                    this.btnText.textContent = "Send";
-                    this.btnIcon.className = "mdi mdi-send float-end";
+                    this.btn.innerHTML = "Send";
 
                 }
 

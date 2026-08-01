@@ -203,7 +203,8 @@ class ChatV2
             $sql = "
             SELECT
                 u.id AS id_lawan,
-                u.username AS nama,
+                u.username AS username,
+                u.name AS name,
                 c.chat AS pesan_terakhir,
                 c.time_stamp
             FROM users u
@@ -227,7 +228,8 @@ class ChatV2
             $sql = "
             SELECT
                 u.id AS id_lawan,
-                u.username AS nama,
+                u.username AS username,
+                u.name AS name,
                 c.chat AS pesan_terakhir,
                 c.time_stamp
             FROM users u
@@ -272,7 +274,7 @@ class ChatV2
         $sql = "
         SELECT
             k.id AS id_lawan,
-            k.nama_komunitas AS nama,
+            k.nama_komunitas AS name,
             k.foto,
 
             ck.chat AS pesan_terakhir,
@@ -360,7 +362,8 @@ class ChatV2
         $sql = "
         SELECT
             id,
-            username AS nama,
+            username,
+            name,
             role,
             foto
         FROM users
@@ -402,7 +405,9 @@ class ChatV2
 
                 'id' => $row['id'],
 
-                'nama' => $row['nama'],
+                'username' => $row['username'],
+
+                'name' => $row['name'],
 
                 'foto' => $row['foto'],
 
@@ -468,7 +473,7 @@ class ChatV2
 
                 'id' => $row['id'],
 
-                'nama' => $row['nama_komunitas'],
+                'name' => $row['nama_komunitas'],
 
                 'foto' => $row['foto'],
 
