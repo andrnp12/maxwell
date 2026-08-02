@@ -12,6 +12,11 @@ class Materi
         $this->conn = $this->db->conn;
     }
 
+    public function getLastInsertId(): int
+    {
+        return $this->conn->insert_id;
+    }
+
     private function getNextNoUrut(): int
     {
         $result = $this->conn->query("SELECT MAX(no_urut) AS max_urut FROM materials");
@@ -24,7 +29,6 @@ class Materi
     {
         if (empty($noUrut) || $noUrut <= 0) {
             $noUrut = $this->getNextNoUrut();
-        } else {
         }
 
         $namaFileTersimpan = null;
@@ -217,11 +221,11 @@ class Materi
         if ($current_material_id) {
             // Jika sedang edit, ambil materi yang kosong ATAU materi yang sedang dipakai kuis ini
             $stmt = $this->conn->prepare("
-            SELECT m.* 
-            FROM materials m
-            LEFT JOIN quizzes k ON m.id = k.material_id
-            WHERE k.material_id IS NULL OR m.id = ?
-        ");
+                SELECT m.*
+                FROM materials m
+                LEFT JOIN quizzes k ON m.id = k.material_id
+                WHERE k.material_id IS NULL OR m.id = ?
+            ");
             $stmt->bind_param("i", $current_material_id);
             $stmt->execute();
             $result = $stmt->get_result();

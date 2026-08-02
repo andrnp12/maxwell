@@ -1,3 +1,23 @@
+<?php
+// Redirect jika sudah login
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
+    $role = $_SESSION['role'] ?? '';
+    $allowedRoles = ['admin', 'user', 'konsultan', 'ortu'];
+
+    if (in_array($role, $allowedRoles, true)) {
+        header("Location: {$role}/index.php");
+        exit;
+    }
+
+    header('Location: ../index.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,8 +53,8 @@
                         <div class="w-100">
                             <div class="d-flex flex-column h-100">
                                 <div class="mb-4 mb-md-5 text-center">
-                                    <a class="d-block auth-logo" href="index.html">
-                                        <img alt="" height="28" src="assets/images/logo-sm.svg" />
+                                    <a class="d-block auth-logo" href="#">
+                                        <img alt="" height="28" src="/assets/images/logo-sm.svg" />
                                         <span class="logo-txt">
                                             StarCode Kh
                                         </span>
@@ -43,91 +63,62 @@
                                 <div class="auth-content my-auto">
                                     <div class="text-center">
                                         <h5 class="mb-0">
-                                            Register Account
+                                            Pendaftaran Akun
                                         </h5>
                                         <p class="text-muted mt-2">
-                                            Get your free StarCode Kh account now.
+                                            Daftar akun anda untuk melanjutkan
                                         </p>
                                     </div>
-                                    <form id="registerForm" class="needs-validation mt-4 pt-2" novalidate="">
+                                    <form id="registerForm" class="mt-4 pt-2">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="name">
+                                                Masukkan Nama Anda
+                                            </label>
+                                            <input class="form-control" id="name" name="name" placeholder="Masukkan nama anda" type="text" required />
+                                        </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="username">
-                                                Username
+                                                Masukkan Username Anda
                                             </label>
-                                            <input class="form-control" id="username" name="username" placeholder="Enter username" required="" type="text" />
-                                            <div class="invalid-feedback">
-                                                Please Enter Username
-                                            </div>
+                                            <input class="form-control" id="username" name="username" placeholder="Masukkan username anda" type="text" required />
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="role">
-                                                Pilih Role
+                                                Pilih Kriteria Anda
                                             </label>
-                                            <select class="form-control" id="role" name="role" required="">
-                                                <option value="" selected disabled>-- Pilih Role --</option>
+                                            <select class="form-select" id="role" name="role" required>
+                                                <option value="" selected disabled>-- Pilih Kriteria --</option>
                                                 <option value="ortu">Orang Tua</option>
-                                                <option value="konselor">Konselor</option>
+                                                <option value="konsultan">Konsultan</option>
                                                 <option value="user">Siswa</option>
                                             </select>
-                                            <div class="invalid-feedback">
-                                                Tolong Pilih Role
-                                            </div>
+                                            <small class="form-text text-muted">Pilih kriteria yang sesuai dengan anda</small>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="userpassword">
-                                                Password
+                                                Password Anda
                                             </label>
-                                            <input class="form-control" id="userpassword" name="password" placeholder="Enter password" required="" type="password" />
-                                            <div class="invalid-feedback">
-                                                Please Enter Password
-                                            </div>
+                                            <input class="form-control" id="userpassword" name="password" placeholder="Masukkan password anda" type="password" required />
                                         </div>
                                         <div class="mb-4">
                                             <p class="mb-0">
-                                                By registering you agree to the StarCode Kh
+                                                Dengan mendaftar, anda menyetujui
                                                 <a class="text-primary" href="#">
-                                                    Terms of Use
+                                                    Syarat dan Ketentuan
                                                 </a>
                                             </p>
                                         </div>
                                         <div class="mb-3">
                                             <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">
-                                                Register
+                                                Daftar Akun
                                             </button>
                                         </div>
                                     </form>
-                                    <div class="mt-4 pt-2 text-center">
-                                        <div class="signin-other-title">
-                                            <h5 class="font-size-14 mb-3 text-muted fw-medium">
-                                                - Sign up using -
-                                            </h5>
-                                        </div>
-                                        <ul class="list-inline mb-0">
-                                            <li class="list-inline-item">
-                                                <a class="social-list-item bg-primary text-white border-primary" href="javascript:void()">
-                                                    <i class="mdi mdi-facebook">
-                                                    </i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a class="social-list-item bg-info text-white border-info" href="javascript:void()">
-                                                    <i class="mdi mdi-twitter">
-                                                    </i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-                                                <a class="social-list-item bg-danger text-white border-danger" href="javascript:void()">
-                                                    <i class="mdi mdi-google">
-                                                    </i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
                                     <div class="mt-5 text-center">
                                         <p class="text-muted mb-0">
-                                            Already have an account ?
-                                            <a class="text-primary fw-semibold" href="auth-login.html">
-                                                Login
+                                            Sudah punya akun ?
+                                            <a class="text-primary fw-semibold" href="login.php">
+                                                Masuk
                                             </a>
                                         </p>
                                     </div>
@@ -141,7 +132,7 @@
                                         StarCode Kh . Crafted with
                                         <i class="mdi mdi-heart text-danger">
                                         </i>
-                                        by admintem.com
+                                        by davied&njah
                                     </p>
                                 </div>
                             </div>
@@ -177,112 +168,6 @@
                             </li>
                         </ul>
                         <!-- end bubble effect -->
-                        <div class="row justify-content-center align-items-center">
-                            <div class="col-xl-7">
-                                <div class="p-0 p-sm-4 px-xl-0">
-                                    <div class="carousel slide" data-bs-ride="carousel" id="reviewcarouselIndicators">
-                                        <div class="carousel-indicators carousel-indicators-rounded justify-content-start ms-0 mb-0">
-                                            <button aria-current="true" aria-label="Slide 1" class="active" data-bs-slide-to="0" data-bs-target="#reviewcarouselIndicators" type="button">
-                                            </button>
-                                            <button aria-label="Slide 2" data-bs-slide-to="1" data-bs-target="#reviewcarouselIndicators" type="button">
-                                            </button>
-                                            <button aria-label="Slide 3" data-bs-slide-to="2" data-bs-target="#reviewcarouselIndicators" type="button">
-                                            </button>
-                                        </div>
-                                        <!-- end carouselIndicators -->
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <div class="testi-contain text-white">
-                                                    <i class="bx bxs-quote-alt-left text-success display-6">
-                                                    </i>
-                                                    <h4 class="mt-4 fw-medium lh-base text-white">
-                                                        âI feel confident
-                                                        imposing change
-                                                        on myself. It's a lot more progressing fun than looking back.
-                                                        That's why
-                                                        I ultricies enim
-                                                        at malesuada nibh diam on tortor neaded to throw curve balls.â
-                                                    </h4>
-                                                    <div class="mt-4 pt-3 pb-5">
-                                                        <div class="d-flex align-items-start">
-                                                            <div class="flex-shrink-0">
-                                                                <img alt="..." class="avatar-md img-fluid rounded-circle" src="assets/images/users/avatar-1.jpg" />
-                                                            </div>
-                                                            <div class="flex-grow-1 ms-3 mb-4">
-                                                                <h5 class="font-size-18 text-white">
-                                                                    Richard Drews
-                                                                </h5>
-                                                                <p class="mb-0 text-white-50">
-                                                                    Web Designer
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="carousel-item">
-                                                <div class="testi-contain text-white">
-                                                    <i class="bx bxs-quote-alt-left text-success display-6">
-                                                    </i>
-                                                    <h4 class="mt-4 fw-medium lh-base text-white">
-                                                        âOur task must be to
-                                                        free ourselves by widening our circle of compassion to embrace
-                                                        all living
-                                                        creatures and
-                                                        the whole of quis consectetur nunc sit amet semper justo. nature
-                                                        and its beauty.â
-                                                    </h4>
-                                                    <div class="mt-4 pt-3 pb-5">
-                                                        <div class="d-flex align-items-start">
-                                                            <div class="flex-shrink-0">
-                                                                <img alt="..." class="avatar-md img-fluid rounded-circle" src="assets/images/users/avatar-2.jpg" />
-                                                            </div>
-                                                            <div class="flex-grow-1 ms-3 mb-4">
-                                                                <h5 class="font-size-18 text-white">
-                                                                    Rosanna French
-                                                                </h5>
-                                                                <p class="mb-0 text-white-50">
-                                                                    Web Developer
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="carousel-item">
-                                                <div class="testi-contain text-white">
-                                                    <i class="bx bxs-quote-alt-left text-success display-6">
-                                                    </i>
-                                                    <h4 class="mt-4 fw-medium lh-base text-white">
-                                                        âI've learned that
-                                                        people will forget what you said, people will forget what you
-                                                        did,
-                                                        but people will never forget
-                                                        how donec in efficitur lectus, nec lobortis metus you made them
-                                                        feel.â
-                                                    </h4>
-                                                    <div class="mt-4 pt-3 pb-5">
-                                                        <div class="d-flex align-items-start">
-                                                            <img alt="..." class="avatar-md img-fluid rounded-circle" src="assets/images/users/avatar-3.jpg" />
-                                                            <div class="flex-1 ms-3 mb-4">
-                                                                <h5 class="font-size-18 text-white">
-                                                                    Ilse R. Eaton
-                                                                </h5>
-                                                                <p class="mb-0 text-white-50">
-                                                                    Manager
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- end carousel-inner -->
-                                    </div>
-                                    <!-- end review carousel -->
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <!-- end col -->
@@ -308,6 +193,7 @@
                 .then(response => response.json())
                 .then(result => {
                     if (result.status === 'success') {
+                        alert("Sukses: " + result.message);
                         window.location.href = result.redirect;
                     } else {
                         alert("Error: " + result.message);

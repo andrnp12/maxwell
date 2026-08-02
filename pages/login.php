@@ -1,3 +1,23 @@
+<?php
+// Redirect jika sudah login
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
+    $role = $_SESSION['role'] ?? '';
+    $allowedRoles = ['admin', 'user', 'konsultan', 'ortu'];
+
+    if (in_array($role, $allowedRoles, true)) {
+        header("Location: {$role}/index.php");
+        exit;
+    }
+
+    header('Location: ../index.php');
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,10 +93,6 @@
                                             </div>
                                             <div class="input-group auth-pass-inputgroup">
                                                 <input aria-describedby="password-addon" aria-label="Password" class="form-control" placeholder="Enter password" name="password" type="password" required />
-                                                <button class="btn btn-light shadow-none ms-0" id="password-addon" type="button">
-                                                    <i class="mdi mdi-eye-outline">
-                                                    </i>
-                                                </button>
                                             </div>
                                         </div>
                                         <div class="row mb-4">

@@ -1,12 +1,9 @@
 <?php
-// 1. Proteksi Halaman
-session_start();
-if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
-    header("Location: login.php");
-    exit;
-}
+require_once '../../src/classes/auth.php';
+$auth = new auth();
+$auth->authOrNot();
 
-require_once __DIR__ . '/classes/tests.php'; // Sesuaikan path
+require_once '../../src/classes/tests.php';
 
 $testManager = new tests();
 

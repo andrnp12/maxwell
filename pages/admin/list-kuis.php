@@ -3,12 +3,14 @@ require_once '../../src/classes/auth.php';
 $auth = new auth();
 $auth->authOrNot();
 
+require_once '../../src/classes/kuis.php';
 require_once '../../src/classes/pertanyaan_kuis.php';
 
+$kuis = new Kuis();
 $pertanyaanKuis = new PertanyaanKuis();
 
 $kuisId = $_GET['id'] ?? 0;
-
+$kuisData = $kuis->getKuisById((int)$kuisId);
 $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
 
 ?>
@@ -36,13 +38,21 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
                     <!-- start page title -->
                     <div class="row">
                         <div class="col-12 d-sm-flex align-items-center justify-content-between mb-2">
-                            <div class="row">
-                                <h4 class="mb-sm-0 font-weight-bold mb-1">
-                                    Lihat Semua Kuis
-                                </h4>
-                                <p class="text-muted">
-                                    Kustomisasi kuis edukasi sesuai kebutuhan Anda!
-                                </p>
+                            <div class="mb-4">
+                                <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="kuis.php">
+                                    <span>
+                                        <i class="fas fa-angle-left"></i>
+                                    </span>
+                                    Kembali
+                                </a>
+                                <div class="row align-items-center mb-2">
+                                    <h4 class="mb-0 font-weight-bold">
+                                        Daftar Pertanyaan
+                                    </h4>
+                                    <p class="text-muted mb-0">
+                                        Lihat daftar pertanyaan dari kuis.
+                                    </p>
+                                </div>
                             </div>
                             <div>
                                 <a class="btn btn-primary btn-rounded waves-effect mb-2" href="#" data-bs-toggle="modal" data-bs-target="#modalTambahKuis">
@@ -94,10 +104,11 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($dataPertanyaanKuis as $row) : ?>
-                                                <tr>
+                                            <?php $i = 1;
+                                            foreach ($dataPertanyaanKuis as $row) : ?>
+                                                <tr id="row-<?= $row['id'] ?>">
                                                     <td>
-
+                                                        <?= $i++ ?>
                                                     </td>
                                                     <td>
                                                         <?= htmlspecialchars($row['pertanyaan']) ?>
@@ -265,6 +276,7 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
                     </div>
                 </div>
             </div>
+            <?php include("../include/toast.php"); ?>
             <!-- Footer Start -->
             <?php include("../include/footer.php"); ?>
             <!-- end Footer -->
@@ -284,18 +296,137 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
         const btnSubmit = document.getElementById('btnSubmit');
 
         const modalElement = document.getElementById('modalTambahKuis');
+        const modalEditKuis = document.getElementById('modalEditKuis');
+        const elemenModalNotif = document.getElementById('modalNotifikasi');
+        const elemenToastNotif = elemenModalNotif ? elemenModalNotif.querySelector('.toast') : null;
 
+        let modalNotifInstance = null;
 
-        formPertanyaanKuis.addEventListener('submit', async function(e) {
-            e.preventDefault();
+        // --- Helper ---
+        function escapeHtml(text, attr = false) {
+            if (text === null || text === undefined) return '';
+            let escaped = String(text)
+                .replace(/&/g, '&')
+                .replace(/</g, '<')
+                .replace(/>/g, '>')
+                .replace(/"/g, '"')
+                .replace(/'/g, '&#039;');
+            return attr ? escaped.replace(/`/g, '&#096;') : escaped;
+        }
 
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = 'Memproses...';
+        // --- Notifikasi Toast ---
+        function tampilkanNotif(judul, pesan, status = 'success') {
+            if (!elemenToastNotif) return;
 
-            const formData = new FormData(formPertanyaanKuis);
+            const toastEl = elemenToastNotif;
+            const header = toastEl.querySelector('.toast-header');
+            const body = toastEl.querySelector('.toast-body');
+
+            ['bg-success', 'bg-danger'].forEach(c => {
+                toastEl.classList.remove(c);
+                if (header) header.classList.remove(c);
+                if (body) body.classList.remove(c);
+            });
+
+            if (status === 'success') {
+                toastEl.classList.add('bg-success');
+                if (header) header.classList.add('bg-success');
+                if (body) body.classList.add('bg-success');
+            } else {
+                toastEl.classList.add('bg-danger');
+                if (header) header.classList.add('bg-danger');
+                if (body) body.classList.add('bg-danger');
+            }
+
+            if (header) header.classList.add('text-white');
+            if (body) body.classList.add('text-white');
+
+            document.getElementById('judulNotifikasi').textContent = judul;
+            document.getElementById('pesanNotifikasi').textContent = pesan;
+
+            if (!modalNotifInstance) {
+                modalNotifInstance = bootstrap.Toast.getOrCreateInstance(toastEl, {
+                    autohide: true,
+                    delay: 3000
+                });
+            }
+
+            modalNotifInstance.show();
+        }
+
+        // --- Render Row ke Tabel ---
+        function buildActions(id, pertanyaan, opsi_a, opsi_b, opsi_c, opsi_d, jawaban) {
+            return `
+                <a href="#" data-id="${id}" data-bs-toggle="modal" data-bs-target="#modalEditKuis" class="btn btn-sm btn-warning">Edit</a>
+                <button type="button" data-id="${id}" class="btn btn-delete btn-sm btn-danger">Hapus</button>
+            `;
+        }
+
+        function getRowNumber() {
+            const tbody = document.querySelector('#datatable tbody');
+            if (tbody) {
+                return tbody.querySelectorAll('tr').length + 1;
+            }
+            return 1;
+        }
+
+        function tambahRow(data) {
+            const tbody = document.querySelector('#datatable tbody');
+            if (!tbody) return;
+
+            const tr = document.createElement('tr');
+            tr.id = 'row-' + data.id;
+            tr.innerHTML = `
+                <td>${getRowNumber()}</td>
+                <td>${escapeHtml(data.pertanyaan)}</td>
+                <td>${escapeHtml(data.opsi_a)}</td>
+                <td>${escapeHtml(data.opsi_b)}</td>
+                <td>${escapeHtml(data.opsi_c)}</td>
+                <td>${escapeHtml(data.opsi_d)}</td>
+                <td>${escapeHtml(data.jawaban)}</td>
+                <td>${buildActions(data.id, data.pertanyaan, data.opsi_a, data.opsi_b, data.opsi_c, data.opsi_d, data.jawaban)}</td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        function updateRow(data) {
+            const row = document.getElementById('row-' + data.id);
+            if (!row) {
+                console.warn('Row tidak ditemukan: row-' + data.id);
+                return;
+            }
+
+            const cells = row.querySelectorAll('td');
+            if (cells.length >= 7) {
+                cells[1].textContent = data.pertanyaan;
+                cells[2].textContent = data.opsi_a;
+                cells[3].textContent = data.opsi_b;
+                cells[4].textContent = data.opsi_c;
+                cells[5].textContent = data.opsi_d;
+                cells[6].textContent = data.jawaban;
+                cells[7].innerHTML = buildActions(data.id, data.pertanyaan, data.opsi_a, data.opsi_b, data.opsi_c, data.opsi_d, data.jawaban);
+            }
+        }
+
+        function deleteRow(id) {
+            const row = document.getElementById('row-' + id);
+            if (row) {
+                row.remove();
+            }
+        }
+
+        // --- Kirim Form (Tambah) ---
+        async function kirimForm(formElement, submitButton) {
+            if (!formElement || !submitButton) return;
+
+            submitButton.disabled = true;
+            submitButton.innerText = 'Memproses...';
+
+            const formData = new FormData(formElement);
+            formData.append('action', 'save');
 
             try {
-                const response = await fetch('/../src/actions/proses_kuis_pertanyaan.php', {
+                const response = await fetch('../../src/actions/proses_pertanyaan_kuis.php', {
                     method: 'POST',
                     body: formData
                 });
@@ -303,56 +434,67 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    alert('Sukses: ' + result.message);
-                    formPertanyaanKuis.reset();
-                    // window.location.href = 'kuis.php';
+                    tampilkanNotif('Berhasil', result.message, 'success');
+                    formElement.reset();
                     const modalInstance = bootstrap.Modal.getInstance(modalElement);
-
                     if (modalInstance) {
                         modalInstance.hide();
                     }
+                    tambahRow({
+                        id: result.id,
+                        pertanyaan: result.pertanyaan,
+                        opsi_a: result.opsi_a,
+                        opsi_b: result.opsi_b,
+                        opsi_c: result.opsi_c,
+                        opsi_d: result.opsi_d,
+                        jawaban: result.jawaban
+                    });
                 } else {
-                    alert('Error: ' + result.message);
+                    tampilkanNotif('Gagal', result.message, 'error');
                 }
-
             } catch (error) {
-                alert('Terjadi kesalahan koneksi jaringan.');
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = 'simpan';
+                tampilkanNotif('Koneksi Gagal', 'Terjadi kesalahan koneksi jaringan.', 'error');
+                console.error(error);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerText = 'Simpan Pertanyaan';
             }
-        });
+        }
 
+        // --- Event Listener: Tambah Data ---
+        if (formPertanyaanKuis) {
+            formPertanyaanKuis.addEventListener('submit', function(e) {
+                e.preventDefault();
+                kirimForm(formPertanyaanKuis, btnSubmit);
+            });
+        }
 
-        // mengambil data yang akan di edit
-        document.addEventListener('DOMContentLoaded', function() {
-            const modalEditKuis = document.getElementById('modalEditKuis');
-
-            modalEditKuis.addEventListener('show.bs.modal', function(event) {
+        // --- Event Listener: Buka Modal Edit ---
+        if (modalEditKuis) {
+            modalEditKuis.addEventListener('show.bs.modal', async function(event) {
                 const button = event.relatedTarget;
                 const id = button.getAttribute('data-id');
+                try {
+                    const response = await fetch(`../../src/actions/proses_pertanyaan_kuis.php?id=${id}`);
+                    const res = await response.json();
+                    if (res.status === "success") {
+                        document.getElementById('edit_id').value = res.data.id;
+                        document.getElementById('edit_pertanyaan').value = res.data.pertanyaan;
+                        document.getElementById('edit_opsi_a').value = res.data.opsi_a;
+                        document.getElementById('edit_opsi_b').value = res.data.opsi_b;
+                        document.getElementById('edit_opsi_c').value = res.data.opsi_c;
+                        document.getElementById('edit_opsi_d').value = res.data.opsi_d;
+                        document.getElementById('edit_jawaban').value = res.data.jawaban;
+                    } else {
+                        tampilkanNotif('Gagal', 'Error: ' + res.message, 'error');
+                    }
+                } catch (error) {
+                    tampilkanNotif('Gagal', 'Error: ' + error, 'error');
+                }
+            });
+        }
 
-                fetch(`/../src/actions/proses_edit_pertanyaan_kuis.php?id=${id}`)
-                    .then(response => response.json())
-                    .then(res => {
-                        if (res.status === "success") {
-                            document.getElementById('edit_id').value = res.data.id;
-                            document.getElementById('edit_pertanyaan').value = res.data.pertanyaan;
-                            document.getElementById('edit_opsi_a').value = res.data.opsi_a;
-                            document.getElementById('edit_opsi_b').value = res.data.opsi_b;
-                            document.getElementById('edit_opsi_c').value = res.data.opsi_c;
-                            document.getElementById('edit_opsi_d').value = res.data.opsi_d;
-                            document.getElementById('edit_jawaban').value = res.data.jawaban;
-                        } else {
-                            alert('Error: ' + res.message);
-                        }
-                    })
-                    .catch(error => {
-                        alert('Error: ' + error);
-                    })
-            })
-        })
-
-        // menyimpan data yang sudah di edit
+        // --- Event Listener: Edit Data ---
         document.addEventListener('DOMContentLoaded', function() {
             const formEdit = document.getElementById('formEditPertanyaanKuis');
 
@@ -362,7 +504,7 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
                 const formData = new FormData(formEdit);
 
                 try {
-                    const response = await fetch('/../src/actions/proses_edit_pertanyaan_kuis.php', {
+                    const response = await fetch('../../src/actions/proses_pertanyaan_kuis.php', {
                         method: 'POST',
                         body: formData
                     });
@@ -370,48 +512,86 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
                     const result = await response.json();
 
                     if (result.status === 'success') {
-                        alert('Sukses: ' + result.message);
-                        formPertanyaanKuis.reset();
-                        // window.location.href = 'kuis.php';
+                        tampilkanNotif('Berhasil', result.message, 'success');
+                        formEdit.reset();
+                        updateRow({
+                            id: result.id,
+                            pertanyaan: result.pertanyaan,
+                            opsi_a: result.opsi_a,
+                            opsi_b: result.opsi_b,
+                            opsi_c: result.opsi_c,
+                            opsi_d: result.opsi_d,
+                            jawaban: result.jawaban
+                        });
+                        const modalInstance = bootstrap.Modal.getInstance(modalEditKuis);
+                        if (modalInstance) {
+                            modalInstance.hide();
+                        }
                     } else {
-                        alert('Error: ' + result.message);
+                        tampilkanNotif('Gagal', result.message, 'error');
                     }
-
                 } catch (error) {
-                    alert('Terjadi kesalahan koneksi jaringan.');
-                }
-            })
-        })
-
-        // menghapus data
-        document.addEventListener('DOMContentLoaded', function() {
-            document.body.addEventListener('click', function(event) {
-                if (event.target.classList.contains('btn-delete')) {
-                    const button = event.target;
-                    const id = button.getAttribute('data-id');
-
-                    const konfirmasi = confirm("Apakah Anda yakin ingin menghapus pertanyaan ini?");
-
-                    if (konfirmasi) {
-                        // PERHATIKAN: Method diubah jadi 'DELETE' dan ID ditaruh di URL
-                        fetch(`/../src/actions/proses_edit_pertanyaan_kuis.php?id=${id}`, {
-                                method: 'DELETE'
-                            })
-                            .then(response => response.json())
-                            .then(res => {
-                                if (res.status === 'success') {
-                                    alert('Data berhasil dihapus!');
-                                    location.reload();
-                                } else {
-                                    alert('Gagal menghapus: ' + res.message);
-                                }
-                            })
-                            .catch(error => {
-                                alert('Terjadi kesalahan: ' + error);
-                            });
-                    }
+                    tampilkanNotif('Gagal', 'Terjadi kesalahan koneksi jaringan.', 'error');
                 }
             });
+        });
+
+        // --- Variabel untuk menyimpan data hapus ---
+        let deleteId = null;
+        let deleteRowElement = null;
+
+        // --- Event Listener: Buka Modal Konfirmasi Hapus ---
+        document.body.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-delete')) {
+                e.preventDefault();
+                deleteId = e.target.getAttribute('data-id');
+                // Simpan referensi ke baris yang akan dihapus
+                deleteRowElement = document.getElementById('row-' + deleteId);
+
+                // Tampilkan modal konfirmasi
+                const modalKonfirmasi = new bootstrap.Modal(document.getElementById('modalKonfirmasiHapus2'));
+                modalKonfirmasi.show();
+            }
+        });
+
+        // --- Event Listener: Konfirmasi Hapus dari Modal ---
+        document.getElementById('btnEksekusiHapus').addEventListener('click', async function() {
+            if (!deleteId) {
+                tampilkanNotif('Error', 'Tidak dapat mengidentifikasi item yang akan dihapus', 'error');
+                return;
+            }
+
+            const btnHapus = this;
+            const modalKonfirmasi = bootstrap.Modal.getInstance(document.getElementById('modalKonfirmasiHapus2'));
+
+            btnHapus.disabled = true;
+            btnHapus.innerText = 'Menghapus...';
+
+            try {
+                const response = await fetch(`../../src/actions/proses_pertanyaan_kuis.php?id=${deleteId}`, {
+                    method: 'DELETE'
+                });
+                const res = await response.json();
+
+                modalKonfirmasi.hide();
+
+                if (res.status === 'success') {
+                    tampilkanNotif('Berhasil', 'Data berhasil dihapus!', 'success');
+                    if (deleteRowElement) {
+                        deleteRowElement.remove();
+                    }
+                } else {
+                    tampilkanNotif('Gagal', 'Gagal menghapus: ' + res.message, 'error');
+                }
+            } catch (error) {
+                tampilkanNotif('Gagal', 'Terjadi kesalahan: ' + error, 'error');
+            } finally {
+                btnHapus.disabled = false;
+                btnHapus.innerText = 'Hapus';
+                // Reset variabel
+                deleteId = null;
+                deleteRowElement = null;
+            }
         });
     </script>
 

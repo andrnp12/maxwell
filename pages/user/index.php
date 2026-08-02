@@ -95,7 +95,7 @@ global $sudahPreTest, $sudahPostTest;
                </div>
                <!-- end row-->
                <div class="row">
-                  <div class="d-flex flex-wrap align-items-center mb-4">
+                  <div class="d-flex flex-wrap align-items-center mb-2">
                      <h5 class="font-weight-bold me-2">
                         Daftar Menu
                      </h5>
