@@ -35,6 +35,8 @@
          /* Menghapus tombol toggle menu di navbar */
          .vertical-menu-btn,
          .navbar-toggler,
+         .chat-leftsidebar.mobile-hide,
+         .user-chat.mobile-hide,
          #vertical-menu-btn {
             display: none !important;
          }

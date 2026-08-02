@@ -2,9 +2,6 @@
 session_start();
 require_once '../classes/chat.php';
 
-// ==========================================
-// CEK LOGIN & ROLE (Berlaku untuk GET & POST)
-// ==========================================
 if (!isset($_SESSION['is_logged_in'])) {
     // Jika request berupa POST (dari fetch form), kembalikan JSON
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -25,6 +22,7 @@ if ($_SESSION['role'] !== 'user' && $_SESSION['role'] !== 'konsultan') {
 $idLogin = (int) $_SESSION['id'];
 $role = $_SESSION['role'];
 $chat = new Chat();
+
 
 // ==========================================
 // KAMAR 1: PROSES KIRIM PESAN (Method POST)
@@ -67,6 +65,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     // Tangkap id_lawan dari parameter URL Javascript
     $idLawan = isset($_GET['id_lawan']) ? (int)$_GET['id_lawan'] : 0;
+
+    $lastId = isset($_GET['last_id'])
+        ? (int)$_GET['last_id']
+        : 0;
+
+
     if ($idLawan === 0) exit;
 
     if ($role == 'user') {
@@ -77,36 +81,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $idKonselorDb = $idLogin;
     }
 
-    $dataChat = $chat->getAllMessage($idUserDb, $idKonselorDb);
+    $dataChat = $chat->getAllMessage(
+        $idUserDb,
+        $idKonselorDb,
+        $lastId
+    );
 
-    // Render menjadi HTML
-    foreach ($dataChat as $pesan) {
-        $waktu = date('H:i', strtotime($pesan['time_stamp']));
-        $isiChatRender = htmlspecialchars($pesan['chat']);
-
-        if ($pesan['pengirim'] == $role) {
-            // TAMPILAN PESAN SAYA (Kanan)
-            echo '
-            <div class="message-row user">
-                <div class="message-bubble">
-                    <span class="message-text">' . $isiChatRender . '</span>
-                    <span class="message-time">
-                        ' . $waktu . ' <i class="bi bi-check2-all ms-1"></i>
-                    </span>
-                </div>
-            </div>';
-        } else {
-            // TAMPILAN PESAN LAWAN (Kiri)
-            echo '
-            <div class="message-row consultant">
-                <div class="message-bubble">
-                    <span class="message-text">' . $isiChatRender . '</span>
-                    <span class="message-time">
-                        ' . $waktu . '
-                    </span>
-                </div>
-            </div>';
-        }
-    }
+    echo json_encode([
+        'status' => 'success',
+        'data' => $dataChat
+    ]);
     exit;
 }

@@ -13,12 +13,50 @@ class chat
         $this->conn = $this->db->conn;
     }
 
-    public function getAllMessage(int $id_user, int $id_konsultan): array
-    {
-        $sql = "SELECT * FROM chat_konsultan WHERE id_user = '$id_user' AND id_konselor = '$id_konsultan' ORDER BY time_stamp ASC";
-        $result = $this->conn->query($sql);
+    public function getAllMessage(
+        int $id_user,
+        int $id_konsultan,
+        int $lastId = 0
+    ): array {
+
+        if ($lastId > 0) {
+
+            $sql = "SELECT *
+                FROM chat_konsultan
+                WHERE id_user = ?
+                AND id_konselor = ?
+                AND id > ?
+                ORDER BY id ASC";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param(
+                "iii",
+                $id_user,
+                $id_konsultan,
+                $lastId
+            );
+        } else {
+
+            $sql = "SELECT *
+                FROM chat_konsultan
+                WHERE id_user = ?
+                AND id_konselor = ?
+                ORDER BY id ASC";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param(
+                "ii",
+                $id_user,
+                $id_konsultan
+            );
+        }
+
+        $stmt->execute();
+
+        $result = $stmt->get_result();
 
         $messages = [];
+
         while ($row = $result->fetch_assoc()) {
             $messages[] = $row;
         }
@@ -28,8 +66,6 @@ class chat
 
     public function getListChat(int $id_login, string $role): array
     {
-        // Logika Query: Mengambil pesan terakhir dari setiap lawan bicara
-        // Asumsi nama tabel user gabungan adalah 'users' dan kolom namanya 'nama_lengkap'
         if ($role == 'user') {
             $sql = "SELECT u.id AS id_lawan, u.username AS nama, c.chat AS pesan_terakhir, c.time_stamp 
                 FROM chat_konsultan c
@@ -56,36 +92,6 @@ class chat
         return $messages;
     }
 
-
-    // public function getUserMessage(int $idUser)
-    // {
-    //     $sql = "SELECT * FROM chat_konsultan WHERE id_user = ?";
-    //     $stmt = $this->conn->prepare($sql);
-    //     $stmt->bind_param("i", $idUser);
-    //     $stmt->execute();
-    //     $result = $stmt->get_result();
-    //     $messages = [];
-    //     while ($row = $result->fetch_assoc()) {
-    //         $messages[] = $row;
-    //     }
-    //     return $messages;
-    // }
-
-    // public function getKonsultanMessage(int $idKonsultan): array
-    // {
-    //     $sql = "SELECT * FROM chat_konsultan WHERE id_konselor = ?";
-    //     $stmt = $this->conn->prepare($sql); 
-    //     $stmt->bind_param("i", $idKonsultan);
-    //     $stmt->execute();
-    //     $result = $stmt->get_result();
-    //     $messages = [];
-    //     while ($row = $result->fetch_assoc()) {
-    //         $messages[] = $row;
-    //     }
-    //     return $messages;
-    // }
-
-    // Tambahkan string $pengirim di parameter
     public function sendUserMessage(int $idUser, int $idKonsultan, string $pengirim, string $isiChat): array
     {
         try {
