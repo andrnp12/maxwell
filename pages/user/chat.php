@@ -11,7 +11,7 @@ $id_lawan  = isset($_GET['id_lawan'])
     ? (int) $_GET['id_lawan']
     : 0;
 
-require_once 'classes/ChatV2.php';
+require_once '../../src/classes/ChatV2.php';
 
 $objChat = new ChatV2();
 
@@ -257,7 +257,7 @@ if ($id_lawan > 0) {
                                                                 <div class="d-flex align-items-center">
                                                                     <div class="flex-shrink-0 avatar-sm me-3">
                                                                         <?php if ($group['foto']) : ?>
-                                                                            <img alt="" class="avatar-sm rounded-circle" src="assets/images/groups/<?= $group['foto'] ?>" />
+                                                                            <img alt="" class="avatar-sm rounded-circle" src="../../uploads/groups/<?= $group['foto'] ?>" />
                                                                         <?php else : ?>
                                                                             <span class="avatar-title rounded-circle bg-primary-subtle text-primary">
                                                                                 P
@@ -356,7 +356,7 @@ if ($id_lawan > 0) {
             <!-- container-fluid -->
         </div>
         <!-- End Page-content -->
-        <?php include("src/include/footer.php"); ?>
+        <?php include("../include/footer.php"); ?>
     </div>
     <!-- end main content-->
     </div>
@@ -369,57 +369,6 @@ if ($id_lawan > 0) {
     <!-- end javascript -->
 
     <!-- script chat -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const sidebar = document.getElementById("chatSidebar");
-            const chat = document.getElementById("userChat");
-            const back = document.getElementById("btnBackChat");
-
-            function mobile() {
-                return window.innerWidth < 992;
-            }
-
-            function init() {
-                if (mobile()) {
-                    chat.classList.add("mobile-hide");
-                    sidebar.classList.remove("mobile-hide");
-                } else {
-                    chat.classList.remove("mobile-hide");
-                    sidebar.classList.remove("mobile-hide");
-                }
-            }
-            init();
-            document.querySelectorAll(".chat-user").forEach(a => {
-
-                a.addEventListener("click", async function(e) {
-
-                    e.preventDefault();
-
-                    await Chat.openRoom(
-                        this.dataset.id,
-                        this.dataset.type
-                    );
-
-                    if (mobile()) {
-
-                        sidebar.classList.add("mobile-hide");
-                        chat.classList.remove("mobile-hide");
-
-                    }
-
-                });
-
-            });
-            if (back) {
-                back.addEventListener("click", function() {
-                    sidebar.classList.remove("mobile-hide");
-                    chat.classList.add("mobile-hide");
-                });
-            }
-            window.addEventListener("resize", init);
-        });
-    </script>
-
     <script>
         const LOGIN_ID = <?= (int)$id_login ?>;
 
@@ -451,22 +400,20 @@ if ($id_lawan > 0) {
                 this.chatList = document.getElementById("chatMessages");
                 this.chatBody = document.getElementById("chatBody");
 
+
                 this.info = {
 
                     loginId: LOGIN_ID,
-
                     chatType: null,
-
                     targetId: null
 
                 };
 
+                this.polling = null;
 
-                this.polling = setInterval(() => {
-
-                    this.loadMessages();
-
-                }, 2000);
+                // this.polling = setInterval(() => {
+                //     this.loadMessages();
+                // }, 2000);
 
             },
 
@@ -479,7 +426,6 @@ if ($id_lawan > 0) {
                     ),
 
                     chatType: null,
-
                     targetId: null
 
                 };
@@ -503,14 +449,12 @@ if ($id_lawan > 0) {
 
                 try {
 
-                    const response = await fetch("../actions/proses_chatV2.php", {
+                    const response = await fetch("/src/actions/proses_chatV2.php", {
                         method: "POST",
                         body: formData
                     });
 
                     const result = await response.json();
-
-                    // console.log(result);
 
                     if (result.status === "success") {
 
@@ -557,7 +501,7 @@ if ($id_lawan > 0) {
                 formData.append("target_id", this.info.targetId);
 
                 const response = await fetch(
-                    "../actions/proses_chatV2.php", {
+                    "/src/actions/proses_chatV2.php", {
                         method: "POST",
                         body: formData
                     }
@@ -580,13 +524,13 @@ if ($id_lawan > 0) {
                 this.lastId = 0;
 
                 this.info.targetId = id;
-
                 this.info.chatType = type;
 
                 const room = await this.loadRoom();
 
-                this.renderHeader(room);
+                console.log(room);
 
+                this.renderHeader(room);
                 this.renderFooter();
 
                 this.chatList = document.getElementById("chatMessages");
@@ -594,17 +538,12 @@ if ($id_lawan > 0) {
                 await this.loadMessages();
 
                 if (this.polling) {
-
                     clearInterval(this.polling);
-
                 }
 
                 this.polling = setInterval(() => {
-
                     this.loadMessages();
-
                 }, 2000);
-
             },
 
             scrollBottom() {
@@ -620,12 +559,6 @@ if ($id_lawan > 0) {
             },
 
             appendMessage(chat) {
-
-                console.log({
-                    sender: chat.sender_id,
-                    login: this.info.loginId,
-                    sama: Number(chat.sender_id) === Number(this.info.loginId)
-                });
 
                 const li = document.createElement("li");
 
@@ -818,7 +751,7 @@ Send
                 try {
 
                     const response = await fetch(
-                        '../actions/proses_chatV2.php', {
+                        '/src/actions/proses_chatV2.php', {
                             method: 'POST',
                             body: formData
                         }
@@ -856,9 +789,87 @@ Send
 
         };
 
-        document.addEventListener("DOMContentLoaded", () => {
+        // document.addEventListener("DOMContentLoaded", () => {
 
+        //     Chat.init();
+
+        // });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+
+            const sidebar = document.getElementById("chatSidebar");
+            const chat = document.getElementById("userChat");
+            const back = document.getElementById("btnBackChat");
+
+            const isMobile = () => window.innerWidth < 992;
+
+            function toggleLayout() {
+                if (isMobile()) {
+                    chat.classList.add("mobile-hide");
+                    sidebar.classList.remove("mobile-hide");
+                } else {
+                    chat.classList.remove("mobile-hide");
+                    sidebar.classList.remove("mobile-hide");
+                }
+            }
+
+            async function openChat(id, type) {
+
+                await Chat.openRoom(id, type);
+
+                if (isMobile()) {
+                    sidebar.classList.add("mobile-hide");
+                    chat.classList.remove("mobile-hide");
+                }
+            }
+
+            // Inisialisasi tampilan
+            toggleLayout();
+
+            // Inisialisasi Chat
             Chat.init();
+
+            // Auto open room jika berasal dari halaman lain
+            const params = new URLSearchParams(window.location.search);
+
+            const id = params.get("id");
+            const type = params.get("type");
+
+            if (id && type) {
+                await openChat(id, type);
+
+                // Bersihkan parameter URL
+                history.replaceState({}, "", "chat.php");
+            }
+
+            // Klik room dari sidebar
+            document.querySelectorAll(".chat-user").forEach(item => {
+
+                item.addEventListener("click", async (e) => {
+
+                    e.preventDefault();
+
+                    await openChat(
+                        item.dataset.id,
+                        item.dataset.type
+                    );
+
+                });
+
+            });
+
+            // Tombol kembali (mobile)
+            if (back) {
+                back.addEventListener("click", () => {
+                    sidebar.classList.remove("mobile-hide");
+                    chat.classList.add("mobile-hide");
+                });
+            }
+
+            // Responsive
+            window.addEventListener("resize", toggleLayout);
 
         });
     </script>

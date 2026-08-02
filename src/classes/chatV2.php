@@ -73,27 +73,63 @@ class ChatV2
 
             $config = $this->getConfig($type);
 
-            $sql = "
-            SELECT *
-            FROM {$config['table']}
-            WHERE id_user = ?
-            AND {$config['target_column']} = ?
-            AND id > ?
-            ORDER BY id ASC
-        ";
+            // =====================
+            // CHAT GROUP
+            // =====================
+            if ($type === 'group') {
 
-            $stmt = $this->conn->prepare($sql);
+                $sql = "
+                SELECT
+                    c.*,
+                    u.name,
+                    u.foto
+                FROM {$config['table']} c
+                INNER JOIN users u
+                    ON u.id = c.sender_id
+                WHERE c.{$config['target_column']} = ?
+                AND c.id > ?
+                ORDER BY c.id ASC
+            ";
 
-            if (!$stmt) {
-                throw new Exception($this->conn->error);
+                $stmt = $this->conn->prepare($sql);
+
+                if (!$stmt) {
+                    throw new Exception($this->conn->error);
+                }
+
+                $stmt->bind_param(
+                    "ii",
+                    $targetId,
+                    $lastId
+                );
             }
+            // =====================
+            // CHAT PERSONAL
+            // =====================
+            else {
 
-            $stmt->bind_param(
-                "iii",
-                $idUser,
-                $targetId,
-                $lastId
-            );
+                $sql = "
+                SELECT *
+                FROM {$config['table']}
+                WHERE id_user = ?
+                AND {$config['target_column']} = ?
+                AND id > ?
+                ORDER BY id ASC
+            ";
+
+                $stmt = $this->conn->prepare($sql);
+
+                if (!$stmt) {
+                    throw new Exception($this->conn->error);
+                }
+
+                $stmt->bind_param(
+                    "iii",
+                    $idUser,
+                    $targetId,
+                    $lastId
+                );
+            }
 
             $stmt->execute();
 

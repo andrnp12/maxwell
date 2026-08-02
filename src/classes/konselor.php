@@ -187,7 +187,7 @@ class Konsultan
 
     public function getAllKonsultan(): array
     {
-        $result = $this->conn->query("SELECT * FROM users WHERE role = 'konsultan'");
+        $result = $this->conn->query("SELECT id, `name`, foto, nomor, email, deskripsi FROM users WHERE role = 'konsultan'");
         $konsultanList = [];
 
         while ($row = $result->fetch_assoc()) {

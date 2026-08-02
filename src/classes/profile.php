@@ -38,7 +38,7 @@ class Profile
         $namaFileTersimpan = $userLama['foto'];
 
         if ($file && $file['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../uploads/profile/';
+            $uploadDir = __DIR__ . '/../../uploads/profile/';
 
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
