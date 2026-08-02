@@ -118,7 +118,7 @@ body[data-bs-theme="dark"] .layout-mode-light {
   }
 }
 .page-content {
-  padding: calc(70px + 1.5rem) calc(1.5rem * 0.75) 0 calc(1.5rem * 0.75);
+  padding: calc(70px + 1.5rem) calc(1.5rem * 0.75) 60px calc(1.5rem * 0.75);
 }
 .header-item {
   height: 70px;
@@ -3907,7 +3907,7 @@ div.dataTables_wrapper div.dataTables_info {
   z-index: 1;
 }
 .auth-bg {
-  background-image: url(../images/auth-bg.jpg);
+  background-image: url(../images/auth-bg.webp);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
