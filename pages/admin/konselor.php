@@ -60,7 +60,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                                     </h4>
                                 </div>
                                 <div class="card-body">
-                                    <table class="table table-bordered dt-responsive nowrap w-100 align-middle" id="datatable">
+                                    <table class="table table-bordered dt-responsive w-100 align-middle" id="datatable">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -78,14 +78,17 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                                                 <tr id="row-<?= $konsultan['id'] ?>">
                                                     <td><?= $no++ ?></td>
                                                     <td><img src="../../uploads/profile/<?= htmlspecialchars($konsultan['foto']) ?>" alt="icon" class="avatar-sm rounded-circle" /></td>
-                                                    <td><?= htmlspecialchars($konsultan['nama']) ?></td>
+                                                    <td><?= htmlspecialchars($konsultan['name']) ?></td>
                                                     <td><?= htmlspecialchars($konsultan['nomor']) ?></td>
                                                     <td><?= htmlspecialchars($konsultan['email']) ?></td>
-                                                    <td><?= htmlspecialchars($konsultan['deskripsi']) ?></td>
+                                                    <td>
+                                                        <?= htmlspecialchars($konsultan['deskripsi']) ?>
+                                                    </td>
                                                     <td>
                                                         <a href="#"
                                                             data-id="<?= $konsultan['id'] ?>"
-                                                            data-nama="<?= htmlspecialchars($konsultan['nama'], ENT_QUOTES) ?>"
+                                                            data-username="<?= htmlspecialchars($konsultan['username'], ENT_QUOTES) ?>"
+                                                            data-nama="<?= htmlspecialchars($konsultan['name'], ENT_QUOTES) ?>"
                                                             data-nomor="<?= htmlspecialchars($konsultan['nomor'], ENT_QUOTES) ?>"
                                                             data-email="<?= htmlspecialchars($konsultan['email'], ENT_QUOTES) ?>"
                                                             data-deskripsi="<?= htmlspecialchars($konsultan['deskripsi'], ENT_QUOTES) ?>"
@@ -93,7 +96,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#modalEditKonselor"
                                                             class="btn btn-sm btn-warning btn-edit">Edit</a>
-                                                        <button type="button" data-id="<?= $konsultan['id'] ?>" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus">Hapus</button>
+                                                        <button type="button" data-id="<?= $konsultan['id'] ?>" class="btn btn-delete btn-sm btn-danger">Hapus</button>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -133,6 +136,18 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                                         Foto Konselor
                                     </label>
                                     <input class="form-control" id="foto" name="foto" placeholder="Ganti Foto Profil" type="file" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="username">
+                                        Username
+                                    </label>
+                                    <input class="form-control" id="username" name="username" placeholder="Masukkan username" type="text" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="password">
+                                        Password
+                                    </label>
+                                    <input class="form-control" id="password" name="password" placeholder="Masukkan password" type="password" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="nama">
@@ -199,28 +214,41 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                                     <small class="form-text text-muted">Biarkan kosong jika tidak ingin mengganti foto.</small>
                                 </div>
                                 <div class="mb-3">
+                                    <label class="form-label" for="edit_username">
+                                        Username
+                                    </label>
+                                    <input class="form-control" id="edit_username" name="username" type="text" value="" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="edit_password">
+                                        Password (kosongkan jika tidak ingin mengubah)
+                                    </label>
+                                    <input class="form-control" id="edit_password" name="password" type="password" placeholder="Masukkan password baru">
+                                    <small class="form-text text-muted">Biarkan kosong jika tidak ingin mengubah password.</small>
+                                </div>
+                                <div class="mb-3">
                                     <label class="form-label" for="edit_nama">
                                         Nama Konselor
                                     </label>
-                                    <input class="form-control" id="edit_nama" name="nama" type="text" value="">
+                                    <input class="form-control" id="edit_nama" name="nama" type="text" value="" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="edit_nomor">
                                         Nomor Whatsapp Konselor
                                     </label>
-                                    <input class="form-control" id="edit_nomor" name="nomor" type="text" value="">
+                                    <input class="form-control" id="edit_nomor" name="nomor" type="text" value="" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="edit_email">
                                         Email Konselor
                                     </label>
-                                    <input class="form-control" id="edit_email" name="email" type="text" value="">
+                                    <input class="form-control" id="edit_email" name="email" type="text" value="" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="edit_ringkasan">
                                         Ringkasan Singkat Konselor
                                     </label>
-                                    <textarea class="form-control" id="edit_ringkasan" name="ringkasan" rows="3"></textarea>
+                                    <textarea class="form-control" id="edit_ringkasan" name="ringkasan" rows="3" required></textarea>
                                 </div>
                             </div>
                             <!-- Footer Modal (Tombol Aksi) -->
@@ -331,6 +359,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                     if (formElement === formKonselor) {
                         const id = result.id;
                         const foto = result.foto ? result.foto : '';
+                        const username = formElement.querySelector('[name=username]').value;
                         const nomor = formElement.querySelector('[name=nomor]').value;
                         const nama = formElement.querySelector('[name=nama]').value;
                         const email = formElement.querySelector('[name=email]').value;
@@ -343,6 +372,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                         tambahRow({
                             id,
                             foto,
+                            username,
                             nama,
                             nomor,
                             email,
@@ -356,6 +386,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
 
                         const id = document.getElementById('edit_id').value;
                         const foto = result.foto ? result.foto : document.getElementById('edit_existing_foto').value;
+                        const username = formElement.querySelector('[name=username]').value;
                         const nomor = formElement.querySelector('[name=nomor]').value;
                         const nama = formElement.querySelector('[name=nama]').value;
                         const email = formElement.querySelector('[name=email]').value;
@@ -364,6 +395,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                         updateRow({
                             id,
                             foto,
+                            username,
                             nama,
                             nomor,
                             email,
@@ -383,25 +415,58 @@ $dataKonsultan = $konsultan->getAllKonsultan();
             }
         }
 
+
+        // Helper function to get sequential row number
+        function getRowNumber() {
+            if (dataTable) {
+                return dataTable.rows().count() + 1;
+            } else {
+                const tbody = document.querySelector('#datatable tbody');
+                return tbody ? tbody.querySelectorAll('tr').length + 1 : 1;
+            }
+        }
+
+        // Renumber all rows in first column
+        function renumberRows() {
+            if (dataTable) {
+                dataTable.rows().every(function(rowIdx, tableLoop, rowLoop) {
+                    this.node().querySelector('td:first-child').textContent = rowIdx + 1;
+                });
+            } else {
+                const tbody = document.querySelector('#datatable tbody');
+                if (tbody) {
+                    const rows = tbody.querySelectorAll('tr');
+                    rows.forEach((row, index) => {
+                        const firstCell = row.querySelector('td');
+                        if (firstCell) firstCell.textContent = index + 1;
+                    });
+                }
+            }
+        }
+
         function tambahRow(data) {
+            const desc = data.deskripsi || '';
+            const rowNumber = getRowNumber();
+            
             const rowData = [
-                data.id,
+                rowNumber,
                 `<img src="../../uploads/profile/${data.foto}" alt="icon" class="avatar-sm rounded-circle" />`,
                 escapeHtml(data.nama),
                 escapeHtml(data.nomor),
                 escapeHtml(data.email),
-                escapeHtml(data.deskripsi),
+                `<div>${escapeHtml(desc)}</div>`,
                 `<a href="#" \
-                       data-id="${data.id}" \
-                       data-nama="${escapeHtml(data.nama, true)}" \
-                       data-nomor="${escapeHtml(data.nomor, true)}" \
-                       data-email="${escapeHtml(data.email, true)}" \
-                       data-deskripsi="${escapeHtml(data.deskripsi, true)}" \
-                       data-foto="${escapeHtml(data.foto, true)}" \
-                       data-bs-toggle="modal" \
-                       data-bs-target="#modalEditKonselor" \
-                       class="btn btn-sm btn-warning btn-edit">Edit</a>\
-                    <button type="button" data-id="${data.id}" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus">Hapus</button>`
+                   data-id="${data.id}" \
+                   data-username="${escapeHtml(data.username || '', true)}" \
+                   data-nama="${escapeHtml(data.nama, true)}" \
+                   data-nomor="${escapeHtml(data.nomor, true)}" \
+                   data-email="${escapeHtml(data.email, true)}" \
+                   data-deskripsi="${escapeHtml(data.deskripsi, true)}" \
+                   data-foto="${escapeHtml(data.foto, true)}" \
+                   data-bs-toggle="modal" \
+                   data-bs-target="#modalEditKonselor" \
+                   class="btn btn-sm btn-warning btn-edit">Edit</a>\
+                <button type="button" data-id="${data.id}" class="btn btn-delete btn-sm btn-danger">Hapus</button>`
             ];
 
             if (dataTable) {
@@ -418,15 +483,16 @@ $dataKonsultan = $konsultan->getAllKonsultan();
             const tr = document.createElement('tr');
             tr.id = 'row-' + data.id;
             tr.innerHTML = `
-                <td>${data.id}</td>
+                <td>${rowNumber}</td>
                 <td><img src="../../uploads/profile/${data.foto}" alt="icon" class="avatar-sm rounded-circle" /></td>
                 <td>${escapeHtml(data.nama)}</td>
                 <td>${escapeHtml(data.nomor)}</td>
                 <td>${escapeHtml(data.email)}</td>
-                <td>${escapeHtml(data.deskripsi)}</td>
+                <td>${escapeHtml(desc)}</td>
                 <td>
-                    <a href="#" 
+                    <a href="#"
                        data-id="${data.id}"
+                       data-username="${escapeHtml(data.username || '', true)}"
                        data-nama="${escapeHtml(data.nama, true)}"
                        data-nomor="${escapeHtml(data.nomor, true)}"
                        data-email="${escapeHtml(data.email, true)}"
@@ -435,21 +501,25 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                        data-bs-toggle="modal"
                        data-bs-target="#modalEditKonselor"
                        class="btn btn-sm btn-warning btn-edit">Edit</a>
-                    <button type="button" data-id="${data.id}" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus">Hapus</button>
+                    <button type="button" data-id="${data.id}" class="btn btn-delete btn-sm btn-danger">Hapus</button>
                 </td>`;
             tbody.appendChild(tr);
         }
 
         function updateRow(data) {
+            const desc = data.deskripsi || '';
+            
+            // For update, we don't change the row number (first column) - keep existing
             const rowData = [
-                data.id,
+                null, // Will keep existing row number
                 `<img src="../../uploads/profile/${data.foto}" alt="icon" class="avatar-sm rounded-circle" />`,
                 escapeHtml(data.nama),
                 escapeHtml(data.nomor),
                 escapeHtml(data.email),
-                escapeHtml(data.deskripsi),
+                `<div>${escapeHtml(desc)}</div>`,
                 `<a href="#" \
                        data-id="${data.id}" \
+                       data-username="${escapeHtml(data.username || '', true)}" \
                        data-nama="${escapeHtml(data.nama, true)}" \
                        data-nomor="${escapeHtml(data.nomor, true)}" \
                        data-email="${escapeHtml(data.email, true)}" \
@@ -458,12 +528,15 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                        data-bs-toggle="modal" \
                        data-bs-target="#modalEditKonselor" \
                        class="btn btn-sm btn-warning btn-edit">Edit</a>\
-                    <button type="button" data-id="${data.id}" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus">Hapus</button>`
+                <button type="button" data-id="${data.id}" class="btn btn-delete btn-sm btn-danger">Hapus</button>`
             ];
 
             if (dataTable) {
                 const row = dataTable.row('#row-' + data.id);
                 if (row.length) {
+                    // Get current row number (first column value)
+                    const currentRowNumber = row.node().querySelector('td:first-child')?.textContent || '';
+                    rowData[0] = currentRowNumber;
                     row.data(rowData).draw(false);
                     const node = row.node();
                     if (node) node.id = 'row-' + data.id;
@@ -473,16 +546,19 @@ $dataKonsultan = $konsultan->getAllKonsultan();
 
             const row = document.getElementById('row-' + data.id);
             if (!row) return;
+            // Keep existing row number
+            const currentRowNumber = row.querySelector('td:first-child')?.textContent || '';
             row.innerHTML = `
-                <td>${data.id}</td>
+                <td>${currentRowNumber}</td>
                 <td><img src="../../uploads/profile/${data.foto}" alt="icon" class="avatar-sm rounded-circle" /></td>
                 <td>${escapeHtml(data.nama)}</td>
                 <td>${escapeHtml(data.nomor)}</td>
                 <td>${escapeHtml(data.email)}</td>
-                <td>${escapeHtml(data.deskripsi)}</td>
+                <td>${escapeHtml(desc)}</td>
                 <td>
-                    <a href="#" 
+                    <a href="#"
                        data-id="${data.id}"
+                       data-username="${escapeHtml(data.username || '', true)}"
                        data-nama="${escapeHtml(data.nama, true)}"
                        data-nomor="${escapeHtml(data.nomor, true)}"
                        data-email="${escapeHtml(data.email, true)}"
@@ -491,7 +567,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                        data-bs-toggle="modal"
                        data-bs-target="#modalEditKonselor"
                        class="btn btn-sm btn-warning btn-edit">Edit</a>
-                    <button type="button" data-id="${data.id}" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus">Hapus</button>
+                    <button type="button" data-id="${data.id}" class="btn btn-delete btn-sm btn-danger">Hapus</button>
                 </td>`;
         }
 
@@ -524,6 +600,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                 if (!button) return;
 
                 const id = button.getAttribute('data-id');
+                const username = button.getAttribute('data-username') || '';
                 const nama = button.getAttribute('data-nama') || '';
                 const nomor = button.getAttribute('data-nomor') || '';
                 const email = button.getAttribute('data-email') || '';
@@ -532,10 +609,12 @@ $dataKonsultan = $konsultan->getAllKonsultan();
 
                 document.getElementById('edit_id').value = id;
                 document.getElementById('edit_existing_foto').value = foto;
+                document.getElementById('edit_username').value = username;
                 document.getElementById('edit_nama').value = nama;
                 document.getElementById('edit_nomor').value = nomor;
                 document.getElementById('edit_email').value = email;
                 document.getElementById('edit_ringkasan').value = deskripsi;
+                document.getElementById('edit_password').value = '';
             });
         }
 
@@ -552,6 +631,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                     const id = editButton.getAttribute('data-id');
                     if (!id) return;
 
+                    const username = editButton.getAttribute('data-username') || '';
                     const nama = editButton.getAttribute('data-nama') || '';
                     const nomor = editButton.getAttribute('data-nomor') || '';
                     const email = editButton.getAttribute('data-email') || '';
@@ -560,10 +640,12 @@ $dataKonsultan = $konsultan->getAllKonsultan();
 
                     document.getElementById('edit_id').value = id;
                     document.getElementById('edit_existing_foto').value = foto;
+                    document.getElementById('edit_username').value = username;
                     document.getElementById('edit_nama').value = nama;
                     document.getElementById('edit_nomor').value = nomor;
                     document.getElementById('edit_email').value = email;
                     document.getElementById('edit_ringkasan').value = deskripsi;
+                    document.getElementById('edit_password').value = '';
 
                     const editModal = bootstrap.Modal.getOrCreateInstance(modalEditKonselor);
                     editModal.show();
@@ -579,11 +661,27 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                 konselorIdToDelete = id;
                 konselorRowToDelete = document.getElementById('row-' + id);
 
-                const modalDelete = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus'));
-                modalDelete.show();
+                // Show first confirmation modal (Tahap 1)
+                const modalDelete1 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus1'));
+                modalDelete1.show();
             });
         }
 
+        // --- Event Listener: Lanjutkan Hapus (Tahap 1 ke Tahap 2) ---
+        const btnLanjutkanHapus = document.getElementById('btnLanjutkanHapus');
+        if (btnLanjutkanHapus) {
+            btnLanjutkanHapus.addEventListener('click', function() {
+                // Hide first confirmation modal
+                const modalDelete1 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus1'));
+                modalDelete1.hide();
+
+                // Show second confirmation modal
+                const modalDelete2 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus2'));
+                modalDelete2.show();
+            });
+        }
+
+        // --- Eksekusi Hapus (Tahap 2) ---
         document.getElementById('btnEksekusiHapus').addEventListener('click', async function() {
             if (!konselorIdToDelete) return;
 
@@ -603,8 +701,11 @@ $dataKonsultan = $konsultan->getAllKonsultan();
 
                 const result = await response.json();
 
-                const modalDelete = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus'));
-                modalDelete.hide();
+                // Hide both modals
+                const modalDelete1 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus1'));
+                const modalDelete2 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus2'));
+                modalDelete1.hide();
+                modalDelete2.hide();
 
                 if (result.status === 'success') {
                     if (konselorRowToDelete) {
@@ -614,6 +715,8 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                             konselorRowToDelete.remove();
                         }
                     }
+                    // Renumber rows after deletion
+                    renumberRows();
                     tampilkanNotif('Berhasil', result.message, 'success');
                 } else {
                     tampilkanNotif('Gagal', result.message, 'error');

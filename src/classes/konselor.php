@@ -12,13 +12,12 @@ class Konsultan
         $this->conn = $this->db->conn;
     }
 
-    public function addKonsultan(?array $file, string $nama, string $nomor, string $email, string $ringkasan): array
+    public function addKonsultan(?array $file, string $username, string $nama, string $nomor, string $email, string $ringkasan, string $password): array
     {
-
         $namaFileTersimpan = null;
 
         if ($file && $file['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../uploads/profile/';
+            $uploadDir = __DIR__ . '/../../uploads/profile/';
 
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
@@ -37,7 +36,7 @@ class Konsultan
             $judulFile = preg_replace('/[^a-z0-9]/', '_', $judulFile);
             $judulFile = trim($judulFile, '_');
 
-            $namaFileTersimpan = 'foto_' . $judulFile . '_' . '.' . $ekstensi;
+            $namaFileTersimpan = 'foto_' . $judulFile . '_' . time() . '.' . $ekstensi;
             $tujuanUpload = $uploadDir . $namaFileTersimpan;
 
             if (!move_uploaded_file($file['tmp_name'], $tujuanUpload)) {
@@ -48,11 +47,13 @@ class Konsultan
             }
         }
 
-        $stmt = $this->conn->prepare("INSERT INTO konsultan (`foto`, nama, nomor, email, deskripsi) VALUES (?, ?, ?, ?, ?)");
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        
+        $stmt = $this->conn->prepare("INSERT INTO users (`foto`, `username`, `name`, `nomor`, `email`, `deskripsi`, `password`, `role`) VALUES (?, ?, ?, ?, ?, ?, ?, 'konsultan')");
         if (!$stmt) {
             die("Error query insert konsultan: " . $this->conn->error);
         }
-        $stmt->bind_param("sssss", $namaFileTersimpan, $nama, $nomor, $email, $ringkasan);
+        $stmt->bind_param("sssssss", $namaFileTersimpan, $username, $nama, $nomor, $email, $ringkasan, $hashedPassword);
 
         if ($stmt->execute()) {
             return [
@@ -71,7 +72,7 @@ class Konsultan
 
     public function getKonsultanById(int $id): array|null
     {
-        $stmt = $this->conn->prepare("SELECT * FROM konsultan WHERE id = ?");
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE id = ? AND role = 'konsultan'");
         if (!$stmt) {
             die("Error query get konsultan by ID: " . $this->conn->error);
         }
@@ -82,7 +83,7 @@ class Konsultan
         return $result->num_rows > 0 ? $result->fetch_assoc() : null;
     }
 
-    public function updateKonsultan(int $id, ?array $file, string $nama, string $nomor, string $email, string $ringkasan): array
+    public function updateKonsultan(int $id, ?array $file, string $username, string $nama, string $nomor, string $email, string $ringkasan, string $password = ''): array
     {
         $konsultanLama = $this->getKonsultanById($id);
         if (!$konsultanLama) {
@@ -129,11 +130,20 @@ class Konsultan
             }
         }
 
-        $stmt = $this->conn->prepare("UPDATE konsultan SET foto = ?, nama = ?, nomor = ?, email = ?, deskripsi = ? WHERE id = ?");
-        if (!$stmt) {
-            die("Error query update konsultan: " . $this->conn->error);
+        if (!empty($password)) {
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $this->conn->prepare("UPDATE users SET foto = ?, username = ?, `name` = ?, nomor = ?, email = ?, deskripsi = ?, password = ? WHERE id = ? AND role = 'konsultan'");
+            if (!$stmt) {
+                die("Error query update konsultan: " . $this->conn->error);
+            }
+            $stmt->bind_param("sssssssi", $namaFileTersimpan, $username, $nama, $nomor, $email, $ringkasan, $hashedPassword, $id);
+        } else {
+            $stmt = $this->conn->prepare("UPDATE users SET foto = ?, username = ?, `name` = ?, nomor = ?, email = ?, deskripsi = ? WHERE id = ? AND role = 'konsultan'");
+            if (!$stmt) {
+                die("Error query update konsultan: " . $this->conn->error);
+            }
+            $stmt->bind_param("ssssssi", $namaFileTersimpan, $username, $nama, $nomor, $email, $ringkasan, $id);
         }
-        $stmt->bind_param("ssissi", $namaFileTersimpan, $nama, $nomor, $email, $ringkasan, $id);
 
         if ($stmt->execute()) {
             return [
@@ -159,10 +169,10 @@ class Konsultan
             ];
         }
 
-        $uploadDir = __DIR__ . '/../uploads/profile/';
+        $uploadDir = __DIR__ . '/../../uploads/profile/';
         $namaFileTersimpan = $konsultanLama['foto'];
 
-        $stmt = $this->conn->prepare("DELETE FROM konsultan WHERE id = ?");
+        $stmt = $this->conn->prepare("DELETE FROM users WHERE id = ? AND role = 'konsultan'");
         if (!$stmt) {
             die("Error query delete konsultan: " . $this->conn->error);
         }
@@ -187,7 +197,7 @@ class Konsultan
 
     public function getAllKonsultan(): array
     {
-        $result = $this->conn->query("SELECT id, `name`, foto, nomor, email, deskripsi FROM users WHERE role = 'konsultan'");
+        $result = $this->conn->query("SELECT id, `username`, `name`, foto, nomor, email, deskripsi FROM users WHERE role = 'konsultan'");
         $konsultanList = [];
 
         while ($row = $result->fetch_assoc()) {

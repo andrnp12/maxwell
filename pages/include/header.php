@@ -18,6 +18,8 @@
    <link href="../../assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
    <!-- Responsive datatable examples -->
    <link href="../../assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+   <!-- DataTables Child Row Stacked Mobile -->
+   <link href="../../assets/css/datatables-child-row-stacked.css" rel="stylesheet" type="text/css" />
    <!-- preloader css -->
    <link href="../../assets/css/preloader.min.css" rel="stylesheet" type="text/css" />
    <!-- Bootstrap Css -->

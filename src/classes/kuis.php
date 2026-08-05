@@ -12,14 +12,22 @@ class Kuis
         $this->conn = $this->db->conn;
     }
 
-    public function addKuis(int $id_materi, string $judul, int $passingGrade): array
+    public function addKuis(?int $id_materi, string $judul, int $passingGrade, string $jenis_kuis = 'kuis'): array
     {
-        $stmt = $this->conn->prepare("INSERT INTO quizzes (material_id, judul, passing_grade) VALUES (?, ?, ?)");
-        if (!$stmt) {
-            die("Error pada query: " . $this->conn->error);
+        // For pretest/posttest, materi is optional
+        if (in_array($jenis_kuis, ['pretest', 'posttest']) && ($id_materi === null || $id_materi === 0)) {
+            $stmt = $this->conn->prepare("INSERT INTO quizzes (material_id, judul, passing_grade, jenis) VALUES (NULL, ?, ?, ?)");
+            if (!$stmt) {
+                return ['status' => 'error', 'message' => 'Error prepare: ' . $this->conn->error];
+            }
+            $stmt->bind_param("sis", $judul, $passingGrade, $jenis_kuis);
+        } else {
+            $stmt = $this->conn->prepare("INSERT INTO quizzes (material_id, judul, passing_grade, jenis) VALUES (?, ?, ?, ?)");
+            if (!$stmt) {
+                return ['status' => 'error', 'message' => 'Error prepare: ' . $this->conn->error];
+            }
+            $stmt->bind_param("isis", $id_materi, $judul, $passingGrade, $jenis_kuis);
         }
-
-        $stmt->bind_param("isi", $id_materi, $judul, $passingGrade);
 
         if ($stmt->execute()) {
             return [
@@ -29,19 +37,27 @@ class Kuis
         } else {
             return [
                 'status' => 'error',
-                'message' => 'Kuis gagal ditambahkan.'
+                'message' => 'Kuis gagal ditambahkan: ' . $stmt->error
             ];
         };
     }
 
-    public function updateKuis(int $id, int $id_materi, string $judul, int $passingGrade): array
+    public function updateKuis(int $id, ?int $id_materi, string $judul, int $passingGrade, string $jenis_kuis = 'kuis'): array
     {
-        $stmt = $this->conn->prepare("UPDATE quizzes SET material_id = ?, judul = ?, passing_grade = ? WHERE id = ?");
-        if (!$stmt) {
-            die("Error pada query: " . $this->conn->error);
+        // For pretest/posttest, materi is optional
+        if (in_array($jenis_kuis, ['pretest', 'posttest']) && ($id_materi === null || $id_materi === 0)) {
+            $stmt = $this->conn->prepare("UPDATE quizzes SET material_id = NULL, judul = ?, passing_grade = ?, jenis = ? WHERE id = ?");
+            if (!$stmt) {
+                return ['status' => 'error', 'message' => 'Error prepare: ' . $this->conn->error];
+            }
+            $stmt->bind_param("sisi", $judul, $passingGrade, $jenis_kuis, $id);
+        } else {
+            $stmt = $this->conn->prepare("UPDATE quizzes SET material_id = ?, judul = ?, passing_grade = ?, jenis = ? WHERE id = ?");
+            if (!$stmt) {
+                return ['status' => 'error', 'message' => 'Error prepare: ' . $this->conn->error];
+            }
+            $stmt->bind_param("isisi", $id_materi, $judul, $passingGrade, $jenis_kuis, $id);
         }
-
-        $stmt->bind_param("isii", $id_materi, $judul, $passingGrade, $id);
 
         if ($stmt->execute()) {
             return [
@@ -51,7 +67,7 @@ class Kuis
         } else {
             return [
                 'status' => 'error',
-                'message' => 'Kuis gagal diperbarui.'
+                'message' => 'Kuis gagal diperbarui: ' . $stmt->error
             ];
         };
     }
@@ -85,9 +101,10 @@ class Kuis
         quizzes.material_id, 
         quizzes.judul AS judul_kuis,
         materials.judul AS judul_materi,
-        quizzes.passing_grade
+        quizzes.passing_grade,
+        quizzes.jenis
     FROM quizzes
-    INNER JOIN materials 
+    LEFT JOIN materials 
         ON quizzes.material_id = materials.id;");
 
         $kuisList = [];

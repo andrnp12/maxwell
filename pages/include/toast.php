@@ -1,28 +1,55 @@
 <!-- Toast sukses dan gagal -->
 
-<!-- Modal Konfirmasi Hapus -->
-<div class="modal fade" id="modalKonfirmasiHapus" tabindex="-1" aria-labelledby="modalKonfirmasiLabel" aria-hidden="true">
+<!-- Modal Konfirmasi Hapus Tahap 1 -->
+<div class="modal fade" id="modalKonfirmasiHapus1" tabindex="-1" aria-labelledby="modalKonfirmasiLabel1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title" id="modalKonfirmasiLabel">Konfirmasi Hapus</h5>
+        <h5 class="modal-title" id="modalKonfirmasiLabel1">Konfirmasi Hapus</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
       <div class="modal-body">
-        Apakah Anda yakin ingin menghapus? Data yang dihapus tidak dapat dikembalikan.
+        Apakah Anda yakin ingin menghapus data ini? Data yang dihapus tidak dapat dikembalikan.
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
         <!-- Tombol aksi hapus di dalam modal -->
-        <button type="button" class="btn btn-danger" id="btnEksekusiHapus">Ya, Hapus</button>
+        <button type="button" class="btn btn-primary" id="btnLanjutkanHapus">Lanjutkan</button>
       </div>
 
     </div>
   </div>
 </div>
+
+<!-- Modal Konfirmasi Hapus Tahap 2 -->
+<div class="modal fade" id="modalKonfirmasiHapus2" tabindex="-1" aria-labelledby="modalKonfirmasiLabel2" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalKonfirmasiLabel2">Konfirmasi Hapus Permanen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <strong>PERINGATAN:</strong> Tindakan ini tidak dapat dibatalkan. Pastikan Anda telah meng Backup data yang diperlukan.
+        <br><br>
+        Klik "Ya, Hapus Sekarang" untuk menghapus data permanen.
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <!-- Tombol aksi hapus di dalam modal -->
+        <button type="button" class="btn btn-danger" id="btnEksekusiHapus">Ya, Hapus Sekarang</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <div
   class="position-fixed p-3 top-0 end-0"
   id="modalNotifikasi"

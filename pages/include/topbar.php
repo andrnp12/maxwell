@@ -1,5 +1,14 @@
 <?php
 $name = $_SESSION['username'];
+require_once __DIR__ . '/../../src/classes/notifikasi.php';
+
+$notifikasiData = ['count' => 0, 'items' => []];
+if (isset($_SESSION['role']) && isset($_SESSION['id'])) {
+   $notiClass = new Notifikasi();
+   $notifikasiData = $notiClass->getNotifikasiRole($_SESSION['role'], $_SESSION['id']);
+}
+$notiCount = $notifikasiData['count'];
+$notiItems = $notifikasiData['items'];
 ?>
 
 <header id="page-topbar">
@@ -34,16 +43,6 @@ $name = $_SESSION['username'];
             <i class="fa fa-fw fa-bars">
             </i>
          </button>
-         <!-- App Search-->
-         <form class="app-search d-none d-lg-block">
-            <div class="position-relative">
-               <input class="form-control" placeholder="Search..." type="text" />
-               <button class="btn btn-primary" type="button">
-                  <i class="bx bx-search-alt align-middle">
-                  </i>
-               </button>
-            </div>
-         </form>
       </div>
       <div class="d-flex">
          <div class="d-sm-inline-block ms-2">
@@ -51,20 +50,12 @@ $name = $_SESSION['username'];
                <i class="icon-lg" data-feather="message-square"></i>
             </a>
          </div>
-         <div class="dropdown d-sm-inline-block">
-            <button class="btn header-item" id="mode-setting-btn" type="button">
-               <i class="icon-lg layout-mode-dark" data-feather="moon">
-               </i>
-               <i class="icon-lg layout-mode-light" data-feather="sun">
-               </i>
-            </button>
-         </div>
          <div class="dropdown d-inline-block me-2">
             <button aria-expanded="false" aria-haspopup="true" class="btn header-item noti-icon position-relative" data-bs-toggle="dropdown" id="page-header-notifications-dropdown" type="button">
                <i class="icon-lg" data-feather="bell">
                </i>
                <span class="badge bg-danger rounded-pill">
-                  5
+                  <?php echo $notiCount; ?>
                </span>
             </button>
             <div aria-labelledby="page-header-notifications-dropdown" class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
@@ -75,129 +66,36 @@ $name = $_SESSION['username'];
                            Notifications
                         </h6>
                      </div>
-                     <div class="col-auto">
-                        <a class="small text-reset text-decoration-underline" href="#!">
-                           Unread (3)
-                        </a>
-                     </div>
                   </div>
                </div>
                <div data-simplebar="" style="max-height: 230px;">
-                  <a class="text-reset notification-item" href="#!">
-                     <div class="d-flex">
-                        <div class="flex-shrink-0 me-3">
-                           <img alt="user-pic" class="rounded-circle avatar-sm" src="/assets/images/users/avatar-3.jpg" />
-                        </div>
-                        <div class="flex-grow-1">
-                           <h6 class="mb-1">
-                              James Lemire
-                           </h6>
-                           <div class="font-size-13 text-muted">
-                              <p class="mb-1">
-                                 It will seem like simplified English.
-                              </p>
-                              <p class="mb-0">
-                                 <i class="mdi mdi-clock-outline">
-                                 </i>
-                                 <span>
-                                    1 hour ago
-                                 </span>
-                              </p>
-                           </div>
-                        </div>
+                  <?php if (empty($notiItems)): ?>
+                     <div class="text-center p-3 text-muted">
+                        Tidak ada notifikasi
                      </div>
-                  </a>
-                  <a class="text-reset notification-item" href="#!">
-                     <div class="d-flex">
-                        <div class="flex-shrink-0 avatar-sm me-3">
-                           <span class="avatar-title bg-primary rounded-circle font-size-16">
-                              <i class="bx bx-cart">
-                              </i>
-                           </span>
-                        </div>
-                        <div class="flex-grow-1">
-                           <h6 class="mb-1">
-                              Your order is placed
-                           </h6>
-                           <div class="font-size-13 text-muted">
-                              <p class="mb-1">
-                                 If several languages coalesce the grammar
-                              </p>
-                              <p class="mb-0">
-                                 <i class="mdi mdi-clock-outline">
-                                 </i>
-                                 <span>
-                                    3 min ago
-                                 </span>
-                              </p>
+                  <?php else: ?>
+                     <?php foreach ($notiItems as $item): ?>
+                        <a class="text-reset notification-item" href="#!">
+                           <div class="d-flex">
+                              <div class="flex-shrink-0 me-3">
+                                 <i class="icon-lg text-primary" data-feather="<?= htmlspecialchars($item['icon'] ?? 'message-square') ?>"></i>
+                              </div>
+                              <div class="flex-grow-1">
+                                 <h6 class="mb-1">
+                                    <?php echo htmlspecialchars($item['message']); ?>
+                                 </h6>
+                                 <p class="mb-0 font-size-13 text-muted">
+                                    <?php echo htmlspecialchars($item['text']); ?>
+                                 </p>
+                              </div>
                            </div>
-                        </div>
-                     </div>
-                  </a>
-                  <a class="text-reset notification-item" href="#!">
-                     <div class="d-flex">
-                        <div class="flex-shrink-0 avatar-sm me-3">
-                           <span class="avatar-title bg-success rounded-circle font-size-16">
-                              <i class="bx bx-badge-check">
-                              </i>
-                           </span>
-                        </div>
-                        <div class="flex-grow-1">
-                           <h6 class="mb-1">
-                              Your item is shipped
-                           </h6>
-                           <div class="font-size-13 text-muted">
-                              <p class="mb-1">
-                                 If several languages coalesce the grammar
-                              </p>
-                              <p class="mb-0">
-                                 <i class="mdi mdi-clock-outline">
-                                 </i>
-                                 <span>
-                                    3 min ago
-                                 </span>
-                              </p>
-                           </div>
-                        </div>
-                     </div>
-                  </a>
-                  <a class="text-reset notification-item" href="#!">
-                     <div class="d-flex">
-                        <div class="flex-shrink-0 me-3">
-                           <img alt="user-pic" class="rounded-circle avatar-sm" src="../../ssets/images/users/avatar-6.jpg" />
-                        </div>
-                        <div class="flex-grow-1">
-                           <h6 class="mb-1">
-                              Salena Layfield
-                           </h6>
-                           <div class="font-size-13 text-muted">
-                              <p class="mb-1">
-                                 As a skeptical Cambridge friend of mine occidental.
-                              </p>
-                              <p class="mb-0">
-                                 <i class="mdi mdi-clock-outline">
-                                 </i>
-                                 <span>
-                                    1 hour ago
-                                 </span>
-                              </p>
-                           </div>
-                        </div>
-                     </div>
-                  </a>
-               </div>
-               <div class="p-2 border-top d-grid">
-                  <a class="btn btn-sm btn-link font-size-14 text-center" href="javascript:void(0)">
-                     <i class="mdi mdi-arrow-right-circle me-1">
-                     </i>
-                     <span>
-                        View More..
-                     </span>
-                  </a>
+                        </a>
+                     <?php endforeach; ?>
+                  <?php endif; ?>
                </div>
             </div>
          </div>
-         <div class="dropdown d-none d-lg-block">
+         <div class="dropdown">
             <button aria-expanded="false" aria-haspopup="true" class="btn header-item bg-light-subtle border-start border-end page-header-user-dropdown" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
                <img alt="Header Avatar" class="rounded-circle header-profile-user" src="/assets/images/users/avatar-1.jpg" />
                <span class="d-none d-xl-inline-block ms-1 fw-medium">

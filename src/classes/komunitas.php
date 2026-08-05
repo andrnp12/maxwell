@@ -46,6 +46,33 @@ class Komunitas
         return $data;
     }
 
+    /**
+     * Get all communities for admin (without membership check)
+     */
+    public function getAllKomunitasAdmin(): array
+    {
+        $sql = "
+        SELECT
+            k.*
+        FROM komunitas k
+        ORDER BY k.nama_komunitas
+    ";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        $data = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        return $data;
+    }
+
     public function joinGroup(
         int $idKomunitas,
         int $idUser
@@ -124,6 +151,108 @@ class Komunitas
             ];
         } catch (Throwable $e) {
 
+            return [
+                "status" => "error",
+                "message" => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Create a new community
+     */
+    public function createKomunitas(string $namaKomunitas, string $deskripsi, string $foto): array
+    {
+        try {
+            $stmt = $this->conn->prepare("
+                INSERT INTO komunitas (nama_komunitas, deskripsi, foto)
+                VALUES (?, ?, ?)
+            ");
+            $stmt->bind_param("sss", $namaKomunitas, $deskripsi, $foto);
+            $stmt->execute();
+
+            return [
+                "status" => "success",
+                "message" => "Komunitas berhasil ditambahkan.",
+                "id" => $this->conn->insert_id,
+                "foto" => $foto
+            ];
+        } catch (Throwable $e) {
+            return [
+                "status" => "error",
+                "message" => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Update community
+     */
+    public function updateKomunitas(int $id, string $namaKomunitas, string $deskripsi, ?string $foto = null): array
+    {
+        try {
+            if ($foto) {
+                $stmt = $this->conn->prepare("
+                    UPDATE komunitas 
+                    SET nama_komunitas = ?, deskripsi = ?, foto = ?
+                    WHERE id = ?
+                ");
+                $stmt->bind_param("sssi", $namaKomunitas, $deskripsi, $foto, $id);
+            } else {
+                $stmt = $this->conn->prepare("
+                    UPDATE komunitas 
+                    SET nama_komunitas = ?, deskripsi = ?
+                    WHERE id = ?
+                ");
+                $stmt->bind_param("ssi", $namaKomunitas, $deskripsi, $id);
+            }
+            $stmt->execute();
+
+            return [
+                "status" => "success",
+                "message" => "Komunitas berhasil diperbarui.",
+                "foto" => $foto
+            ];
+        } catch (Throwable $e) {
+            return [
+                "status" => "error",
+                "message" => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Delete community
+     */
+    public function deleteKomunitas(int $id): array
+    {
+        try {
+            // First check if community exists
+            $stmt = $this->conn->prepare("SELECT id, foto FROM komunitas WHERE id = ?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows === 0) {
+                return [
+                    "status" => "error",
+                    "message" => "Komunitas tidak ditemukan."
+                ];
+            }
+            
+            $komunitas = $result->fetch_assoc();
+            
+            // Delete community (cascade will handle anggota_komunitas if FK is set)
+            $stmt = $this->conn->prepare("DELETE FROM komunitas WHERE id = ?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+
+            return [
+                "status" => "success",
+                "message" => "Komunitas berhasil dihapus.",
+                "foto" => $komunitas['foto']
+            ];
+        } catch (Throwable $e) {
             return [
                 "status" => "error",
                 "message" => $e->getMessage()

@@ -31,6 +31,7 @@ if ($action === 'login') {
             'admin' => 'admin/index.php',
             'ortu'  => 'ortu/index.php',
             'user'  => 'user/index.php',
+            'konsultan' => 'konsultan/index.php'
         ];
 
         $userRole = $_SESSION['role'] ?? '';
@@ -73,7 +74,7 @@ if ($action === 'login') {
     if (empty($username) || empty($password)) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Username, password, dan role harus diisi.'
+            'message' => 'name, username, password, dan role harus diisi.'
         ]);
         exit;
     }

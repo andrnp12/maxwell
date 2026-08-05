@@ -44,6 +44,7 @@ class auth
                 }
 
                 $_SESSION['id'] = $user['id'];
+                $_SESSION['name'] = $user['name'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
                 $_SESSION['is_logged_in'] = true;

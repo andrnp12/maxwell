@@ -4,20 +4,6 @@ require_once '../../src/classes/auth.php';
 $auth = new auth();
 $auth->authOrNot();
 
-require_once '../../src/classes/tests.php';
-
-$testManager = new tests();
-$userId = $_SESSION['id'];
-
-$idAktif = $_SESSION['id'];
-$sudahPreTest = $testManager->hasUserTakenTest($userId, $idAktif, 'pre');
-$sudahPostTest = $testManager->hasUserTakenTest($userId, $idAktif, 'post');
-
-// if (!$sudahPreTest) {
-//    header('Location: preposttest.php?type=pre');
-//    exit;
-// }
-
 global $sudahPreTest, $sudahPostTest;
 ?>
 
@@ -95,7 +81,7 @@ global $sudahPreTest, $sudahPostTest;
                </div>
                <!-- end row-->
                <div class="row">
-                  <div class="d-flex flex-wrap align-items-center mb-4">
+                  <div class="d-flex flex-wrap align-items-center mb-2">
                      <h5 class="font-weight-bold me-2">
                         Daftar Menu
                      </h5>
