@@ -74,7 +74,7 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
                                     </h4>
                                 </div>
                                 <div class="card-body">
-                                    <table class="table table-bordered dt-responsive nowrap w-100" id="datatable">
+                                    <table class="table table-bordered dt-responsive w-100" id="datatable">
                                         <thead>
                                             <tr>
                                                 <th>
@@ -130,7 +130,7 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
                                                     </td>
                                                     <td>
                                                         <a href="#" data-id="<?= $row['id'] ?>" data-bs-toggle="modal" data-bs-target="#modalEditKuis" class="btn btn-sm btn-warning">Edit</a>
-                                                        <button type="button" data-id="<?= $row['id'] ?>" class=" btn btn-delete btn-sm btn-danger">Hapus</button>
+                                                        <button type="button" data-id="<?= $row['id'] ?>" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus1">Hapus</button>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -299,6 +299,11 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
         const modalEditKuis = document.getElementById('modalEditKuis');
         const elemenModalNotif = document.getElementById('modalNotifikasi');
         const elemenToastNotif = elemenModalNotif ? elemenModalNotif.querySelector('.toast') : null;
+        const datatableElement = document.getElementById('datatable');
+
+        const dataTable = window.jQuery && window.jQuery.fn && window.jQuery.fn.dataTable && window.jQuery.fn.dataTable.isDataTable('#datatable') ?
+            window.jQuery('#datatable').DataTable() :
+            null;
 
         let modalNotifInstance = null;
 
@@ -540,59 +545,85 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
         let deleteId = null;
         let deleteRowElement = null;
 
-        // --- Event Listener: Buka Modal Konfirmasi Hapus ---
-        document.body.addEventListener('click', function(e) {
-            if (e.target.classList.contains('btn-delete')) {
-                e.preventDefault();
-                deleteId = e.target.getAttribute('data-id');
-                // Simpan referensi ke baris yang akan dihapus
-                deleteRowElement = document.getElementById('row-' + deleteId);
+        // --- Event Listener: Delegasi Hapus dari Tabel (Tahap 1: Buka Modal Konfirmasi Pertama) ---
+        if (datatableElement) {
+            datatableElement.addEventListener('click', function(event) {
+                // Tangani tombol Hapus - Tampilkan konfirmasi tahap 1
+                const deleteButton = event.target.closest('.btn-delete');
+                if (!deleteButton) return;
 
-                // Tampilkan modal konfirmasi
-                const modalKonfirmasi = new bootstrap.Modal(document.getElementById('modalKonfirmasiHapus2'));
-                modalKonfirmasi.show();
-            }
-        });
+                const id = deleteButton.getAttribute('data-id');
+                if (!id) return;
 
-        // --- Event Listener: Konfirmasi Hapus dari Modal ---
-        document.getElementById('btnEksekusiHapus').addEventListener('click', async function() {
-            if (!deleteId) {
-                tampilkanNotif('Error', 'Tidak dapat mengidentifikasi item yang akan dihapus', 'error');
-                return;
-            }
+                deleteId = id;
+                deleteRowElement = document.getElementById('row-' + id);
 
-            const btnHapus = this;
-            const modalKonfirmasi = bootstrap.Modal.getInstance(document.getElementById('modalKonfirmasiHapus2'));
+                const modalDelete1 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus1'));
+                modalDelete1.show();
+            });
+        }
 
-            btnHapus.disabled = true;
-            btnHapus.innerText = 'Menghapus...';
+        // --- Event Listener: Lanjutkan Hapus (Tahap 1 ke Tahap 2) ---
+        const btnLanjutkanHapus = document.getElementById('btnLanjutkanHapus');
+        if (btnLanjutkanHapus) {
+            btnLanjutkanHapus.addEventListener('click', function() {
+                // Hide first confirmation modal
+                const modalDelete1 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus1'));
+                modalDelete1.hide();
 
-            try {
-                const response = await fetch(`../../src/actions/proses_pertanyaan_kuis.php?id=${deleteId}`, {
-                    method: 'DELETE'
-                });
-                const res = await response.json();
+                // Show second confirmation modal
+                const modalDelete2 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus2'));
+                modalDelete2.show();
+            });
+        }
 
-                modalKonfirmasi.hide();
-
-                if (res.status === 'success') {
-                    tampilkanNotif('Berhasil', 'Data berhasil dihapus!', 'success');
-                    if (deleteRowElement) {
-                        deleteRowElement.remove();
-                    }
-                } else {
-                    tampilkanNotif('Gagal', 'Gagal menghapus: ' + res.message, 'error');
+        // --- Eksekusi Hapus (Tahap 2) ---
+        const btnEksekusiHapus = document.getElementById('btnEksekusiHapus');
+        if (btnEksekusiHapus) {
+            btnEksekusiHapus.addEventListener('click', async function() {
+                if (!deleteId) {
+                    tampilkanNotif('Error', 'Tidak dapat mengidentifikasi item yang akan dihapus', 'error');
+                    return;
                 }
-            } catch (error) {
-                tampilkanNotif('Gagal', 'Terjadi kesalahan: ' + error, 'error');
-            } finally {
-                btnHapus.disabled = false;
-                btnHapus.innerText = 'Hapus';
-                // Reset variabel
-                deleteId = null;
-                deleteRowElement = null;
-            }
-        });
+
+                const button = this;
+                const originalText = button.innerHTML;
+                button.disabled = true;
+                button.innerHTML = 'Menghapus...';
+
+                try {
+                    const response = await fetch(`../../src/actions/proses_pertanyaan_kuis.php?id=${deleteId}`, {
+                        method: 'DELETE'
+                    });
+                    const res = await response.json();
+
+                    // Hide both modals
+                    const modalDelete1 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus1'));
+                    const modalDelete2 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus2'));
+                    modalDelete1.hide();
+                    modalDelete2.hide();
+
+                    if (res.status === 'success') {
+                        if (deleteRowElement) {
+                            if (dataTable) {
+                                dataTable.row(deleteRowElement).remove().draw(false);
+                            } else {
+                                deleteRowElement.remove();
+                            }
+                        }
+                        tampilkanNotif('Berhasil', 'Data berhasil dihapus!', 'success');
+                    } else {
+                        tampilkanNotif('Gagal', 'Gagal menghapus: ' + res.message, 'error');
+                    }
+                } catch (error) {
+                    tampilkanNotif('Gagal', 'Terjadi kesalahan koneksi jaringan.', 'error');
+                    console.error(error);
+                } finally {
+                    button.disabled = false;
+                    button.innerHTML = originalText;
+                }
+            });
+        }
     </script>
 
     <!-- end javascript -->

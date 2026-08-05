@@ -55,15 +55,18 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && $action === 'get_materi') {
 if ($_SERVER['REQUEST_METHOD'] === "POST" && $action === 'save') {
     // Penyesuaian nama field agar cocok dengan kiriman JS baru
     $id         = !empty($_POST['id']) ? (int)$_POST['id'] : null;
-    $id_materi  = isset($_POST['id_materi']) ? (int)$_POST['id_materi'] : 0;
+    // Handle empty string for id_materi (when pretest/posttest without materi)
+    $id_materi_raw = $_POST['id_materi'] ?? '';
+    $id_materi = ($id_materi_raw !== '' && $id_materi_raw !== '0') ? (int)$id_materi_raw : null;
     $judul      = $_POST['judul_kuis'] ?? '';
     $passingGrade = isset($_POST['passing_grade']) ? (int)$_POST['passing_grade'] : 0;
+    $jenis_kuis = $_POST['jenis_kuis'] ?? 'kuis';
 
     if (!empty($id)) {
-        $result = $kuis->updateKuis($id, $id_materi, $judul, $passingGrade);
+        $result = $kuis->updateKuis($id, $id_materi, $judul, $passingGrade, $jenis_kuis);
         $result['id'] = $id; // kembalikan ID untuk referensi JS
     } else {
-        $result = $kuis->addKuis($id_materi, $judul, $passingGrade);
+        $result = $kuis->addKuis($id_materi, $judul, $passingGrade, $jenis_kuis);
         // Asumsi $result mengandung insert_id atau ambil dari method addKuis
         if ($result['status'] === 'success' && !empty($result['id'])) {
             $result['id'] = $result['id'];
@@ -71,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && $action === 'save') {
     }
 
     // Ambil judul materi untuk rendering tabel di JS
-    if ($result['status'] === 'success' && $id_materi > 0) {
+    if ($result['status'] === 'success' && $id_materi !== null) {
         require_once '../classes/materi.php';
         $materi = new Materi();
         $materiData = $materi->getMateriById($id_materi);

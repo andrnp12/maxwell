@@ -60,7 +60,7 @@ $dataMateri = $materi->getAllMateri();
                                     </h4>
                                 </div>
                                 <div class="card-body">
-                                    <table class="table table-bordered dt-responsive nowrap w-100" id="datatable">
+                                    <table class="table table-bordered dt-responsive w-100" id="datatable">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -80,7 +80,7 @@ $dataMateri = $materi->getAllMateri();
                                                     <td><?= $i++ ?></td>
                                                     <td><?= htmlspecialchars($materi['judul']) ?></td>
                                                     <td><?= htmlspecialchars($materi['deskripsi']) ?></td>
-                                                    <td><?= htmlspecialchars($materi['file']) ?></td>
+                                                    <td><a href="../../uploads/<?= htmlspecialchars($materi['file']) ?>" target="_blank"><?= htmlspecialchars($materi['file']) ?></a></td>
                                                     <td><a href="<?= htmlspecialchars($materi['video_url']) ?>" target="_blank"><?= htmlspecialchars($materi['video_url']) ?></a></td>
                                                     <td><?= htmlspecialchars($materi['no_urut']) ?></td>
                                                     <td>
@@ -344,14 +344,6 @@ $dataMateri = $materi->getAllMateri();
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    // Ambil nilai dari respons server
-                    const id = result.id;
-                    const judul = result.judul;
-                    const deskripsi = result.deskripsi;
-                    const videoUrl = result.video_url;
-                    const noUrut = result.no_urut;
-                    const fileNama = result.file || ''; // Ambil file dari respons server
-
                     // Tutup Modal
                     if (formElement === formMateri) {
                         bootstrap.Modal.getOrCreateInstance(document.getElementById('modalTambahMateri')).hide();
@@ -362,29 +354,8 @@ $dataMateri = $materi->getAllMateri();
                     // Reset Form
                     formElement.reset();
 
-                    // Update atau Tambah row tabel
-                    if (formElement === formMateri) {
-                        tambahRow({
-                            id,
-                            judul,
-                            deskripsi,
-                            videoUrl,
-                            noUrut,
-                            file: fileNama
-                        });
-                    } else {
-                        updateRow({
-                            id,
-                            judul,
-                            deskripsi,
-                            videoUrl,
-                            noUrut,
-                            file: fileNama
-                        });
-                    }
-
-                    // Renumber all rows after operation
-                    renumberRows();
+                    // Refresh entire table from server to get updated no_urut for all rows
+                    await refreshTable();
 
                     tampilkanNotif('Berhasil', result.message, 'success');
                 } else {
@@ -396,6 +367,63 @@ $dataMateri = $materi->getAllMateri();
             } finally {
                 submitButton.disabled = false;
                 submitButton.innerText = formElement === formMateri ? 'Simpan' : 'Simpan Perubahan';
+            }
+        }
+
+        // --- Refresh entire table from server ---
+        async function refreshTable() {
+            try {
+                const formData = new FormData();
+                formData.append('action', 'get_materi');
+
+                const response = await fetch('../../src/actions/proses_materi.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success' && result.data) {
+                    // Clear and rebuild table
+                    if (dataTable) {
+                        dataTable.clear().draw();
+                        result.data.forEach((materi, index) => {
+                            const rowData = [
+                                index + 1,
+                                escapeHtml(materi.judul),
+                                escapeHtml(materi.deskripsi),
+                                escapeHtml(materi.file || ''),
+                                escapeHtml(materi.video_url || ''),
+                                escapeHtml(materi.no_urut),
+                                buildActions(materi.id, materi.judul, materi.deskripsi, materi.video_url, materi.no_urut, materi.file || '')
+                            ];
+                            const row = dataTable.row.add(rowData).draw(false).node();
+                            if (row) row.id = 'baris-' + materi.id;
+                        });
+                    } else {
+                        // For regular table
+                        const tbody = datatableElement?.querySelector('tbody');
+                        if (tbody) {
+                            tbody.innerHTML = '';
+                            result.data.forEach((materi, index) => {
+                                const tr = document.createElement('tr');
+                                tr.id = 'baris-' + materi.id;
+                                tr.innerHTML = `
+                                    <td>${index + 1}</td>
+                                    <td>${escapeHtml(materi.judul)}</td>
+                                    <td>${escapeHtml(materi.deskripsi)}</td>
+                                    <td>${escapeHtml(materi.file || '')}</td>
+                                    <td>${escapeHtml(materi.video_url || '')}</td>
+                                    <td>${escapeHtml(materi.no_urut)}</td>
+                                    <td>${buildActions(materi.id, materi.judul, materi.deskripsi, materi.video_url, materi.no_urut, materi.file || '')}</td>
+                                `;
+                                tbody.appendChild(tr);
+                            });
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error refreshing table:', error);
             }
         }
 
@@ -616,15 +644,9 @@ $dataMateri = $materi->getAllMateri();
                     modalDelete1.hide();
 
                     if (result.status === 'success') {
-                        if (materiRowToDelete) {
-                            if (dataTable) {
-                                dataTable.row(materiRowToDelete).remove().draw(false);
-                            } else {
-                                materiRowToDelete.remove();
-                            }
-                            // Renumber all rows after deletion
-                            renumberRows();
-                        }
+                        // Refresh entire table from server to get updated no_urut for all rows
+                        await refreshTable();
+
                         tampilkanNotif('Berhasil', result.message, 'success');
                     } else {
                         tampilkanNotif('Gagal', result.message, 'error');

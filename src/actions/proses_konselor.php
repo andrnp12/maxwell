@@ -23,19 +23,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         if ($action === 'save') {
+            $username = $_POST['username'] ?? '';
             $nama = $_POST['nama'] ?? '';
             $nomor = $_POST['nomor'] ?? '';
             $email = $_POST['email'] ?? '';
             $ringkasan = $_POST['ringkasan'] ?? '';
+            $password = $_POST['password'] ?? '';
 
             $file = isset($_FILES['foto']) && $_FILES['foto']['error'] !== UPLOAD_ERR_NO_FILE
                 ? $_FILES['foto']
                 : null;
 
             if ($id > 0) {
-                $result = $konselor->updateKonsultan($id, $file, $nama, $nomor, $email, $ringkasan);
+                $result = $konselor->updateKonsultan($id, $file, $username, $nama, $nomor, $email, $ringkasan, $password);
             } else {
-                $result = $konselor->addKonsultan($file, $nama, $nomor, $email, $ringkasan);
+                $result = $konselor->addKonsultan($file, $username, $nama, $nomor, $email, $ringkasan, $password);
             }
         }
         elseif ($action === 'delete') {

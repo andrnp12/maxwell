@@ -6,7 +6,7 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title" id="modalKonfirmasiLabel1">Konfirmasi btnEksekusiHapus</h5>
+        <h5 class="modal-title" id="modalKonfirmasiLabel1">Konfirmasi Hapus</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 

@@ -25,16 +25,40 @@ class Materi
         return ($row['max_urut'] !== null) ? (int)$row['max_urut'] + 1 : 1;
     }
 
+    private function shiftNoUrut(int $noUrut, ?int $excludeId = null): void
+    {
+        // Shift all materials with no_urut >= $noUrut up by 1
+        // Exclude the current material being edited (if any)
+        $sql = "UPDATE materials SET no_urut = no_urut + 1 WHERE no_urut >= ?";
+        $params = [$noUrut];
+        $types = "i";
+        
+        if ($excludeId !== null) {
+            $sql .= " AND id != ?";
+            $params[] = $excludeId;
+            $types .= "i";
+        }
+        
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt) {
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
+        }
+    }
+
     public function addMateri(string $judul, string $deskripsi, string $videoUrl, ?int $noUrut, ?array $file): array
     {
         if (empty($noUrut) || $noUrut <= 0) {
             $noUrut = $this->getNextNoUrut();
+        } else {
+            // If no_urut is specified, shift existing materials to make room
+            $this->shiftNoUrut($noUrut);
         }
 
         $namaFileTersimpan = null;
 
         if ($file && $file['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../uploads/';
+            $uploadDir = __DIR__ . '/../../uploads/';
 
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
@@ -85,9 +109,10 @@ class Materi
 
     public function deleteMateri(int $id): array
     {
-        // 1. Ambil nama file terlebih dahulu dan simpan di variabel
+        // 1. Ambil nama file dan no_urut terlebih dahulu
         $fileName = null;
-        $stmtSelect = $this->conn->prepare("SELECT `file` FROM materials WHERE id = ?");
+        $deletedNoUrut = null;
+        $stmtSelect = $this->conn->prepare("SELECT `file`, `no_urut` FROM materials WHERE id = ?");
         if ($stmtSelect) {
             $stmtSelect->bind_param("i", $id);
             $stmtSelect->execute();
@@ -95,6 +120,7 @@ class Materi
 
             if ($row = $result->fetch_assoc()) {
                 $fileName = $row['file'];
+                $deletedNoUrut = $row['no_urut'];
             }
             $stmtSelect->close(); // Tutup statement setelah selesai
         }
@@ -109,9 +135,14 @@ class Materi
         // 3. Cek apakah penghapusan database berhasil
         if ($stmt->execute()) {
 
+            // Shift down materials with no_urut > deletedNoUrut to fill the gap
+            if ($deletedNoUrut !== null) {
+                $this->shiftNoUrutRange($deletedNoUrut + 1, PHP_INT_MAX, null, -1);
+            }
+
             // JIKA berhasil, BARU kita hapus file fisiknya
             if ($fileName) {
-                $filePath = __DIR__ . '/../uploads/' . $fileName;
+                $filePath = __DIR__ . '/../../uploads/' . $fileName;
 
                 // Tambahkan is_file() untuk memastikan itu benar-benar file, bukan direktori
                 if (file_exists($filePath) && is_file($filePath)) {
@@ -158,7 +189,7 @@ class Materi
         $namaFileTersimpan = $materiLama['file'];
 
         if ($file && $file['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../uploads/';
+            $uploadDir = __DIR__ . '/../../uploads/';
 
             if (!empty($materiLama['file']) && file_exists($uploadDir . $materiLama['file'])) {
                 unlink($uploadDir . $materiLama['file']);
@@ -187,6 +218,20 @@ class Materi
             }
         }
 
+        // Handle no_urut shifting if it's being changed
+        $oldNoUrut = $materiLama['no_urut'];
+        if ($noUrut !== null && $noUrut > 0 && $noUrut !== $oldNoUrut) {
+            // If moving to a lower number, shift materials from new position up
+            // If moving to a higher number, shift materials from old position down
+            if ($noUrut < $oldNoUrut) {
+                // Moving up: shift materials in range [new_no_urut, old_no_urut - 1] up by 1
+                $this->shiftNoUrutRange($noUrut, $oldNoUrut - 1, $id, 1);
+            } else {
+                // Moving down: shift materials in range [old_no_urut + 1, new_no_urut] down by 1
+                $this->shiftNoUrutRange($oldNoUrut + 1, $noUrut, $id, -1);
+            }
+        }
+
         $stmt = $this->conn->prepare("UPDATE materials SET judul = ?, deskripsi = ?, `file` = ?, video_url = ?, no_urut = ? WHERE id = ?");
         $stmt->bind_param("ssssii", $judul, $deskripsi, $namaFileTersimpan, $videoUrl, $noUrut, $id);
 
@@ -200,6 +245,26 @@ class Materi
                 'status' => 'error',
                 'message' => 'Gagal memperbarui materi: ' . $stmt->error
             ];
+        }
+    }
+
+    private function shiftNoUrutRange(int $start, int $end, ?int $excludeId = null, int $direction = 1): void
+    {
+        // Shift materials in range [start, end] by direction (1 = up, -1 = down)
+        $sql = "UPDATE materials SET no_urut = no_urut + ? WHERE no_urut BETWEEN ? AND ?";
+        $params = [$direction, $start, $end];
+        $types = "iii";
+        
+        if ($excludeId !== null) {
+            $sql .= " AND id != ?";
+            $params[] = $excludeId;
+            $types .= "i";
+        }
+        
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt) {
+            $stmt->bind_param($types, ...$params);
+            $stmt->execute();
         }
     }
 

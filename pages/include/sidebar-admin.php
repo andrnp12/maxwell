@@ -30,7 +30,7 @@
                         <i data-feather="award">
                         </i>
                         <span data-key="t-skill">
-                            Kuis
+                            Test
                         </span>
                     </a>
                 </li>
@@ -42,31 +42,6 @@
                             Materi
                         </span>
                     </a>
-                </li>
-                <li>
-                    <a class="has-arrow" href="javascript: void(0);">
-                        <i data-feather="layers">
-                        </i>
-                        <span data-key="t-apps">
-                            Test
-                        </span>
-                    </a>
-                    <ul aria-expanded="false" class="sub-menu">
-                        <li>
-                            <a href="pretest.php">
-                                <span data-key="t-subtopik">
-                                    Pre-Test
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="postest.php">
-                                <span data-key="t-materi">
-                                    Post-Test
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
                 <li>
                     <a class="has-arrow" href="javascript: void(0);">

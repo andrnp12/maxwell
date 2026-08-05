@@ -1,7 +1,13 @@
 <?php
 require_once '../../src/classes/auth.php';
+require_once '../../src/classes/user.php';
+
 $auth = new auth();
 $auth->authOrNot();
+
+$userModel = new User();
+$userResult = $userModel->getAllUsersWithQuizResults();
+$users = $userResult['data'] ?? [];
 ?>
 
 <!--header start-->
@@ -32,7 +38,7 @@ $auth->authOrNot();
                                     Lihat Ringkasan Pengguna
                                 </h4>
                                 <p class="text-muted">
-                                    Kelola pengguna anda.
+                                    Kelola pengguna sistem anda.
                                 </p>
                             </div>
                         </div>
@@ -43,27 +49,27 @@ $auth->authOrNot();
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">
-                                        Daftar Pengguna
+                                        Ringkasan Pengguna
                                     </h4>
                                 </div>
                                 <div class="card-body">
-                                    <table class="table table-bordered dt-responsive nowrap w-100" id="datatable">
+                                    <table class="table table-bordered dt-responsive w-100" id="datatable">
                                         <thead>
                                             <tr>
                                                 <th>
-                                                    Name
+                                                    No
                                                 </th>
                                                 <th>
-                                                    Position
+                                                    Nama
                                                 </th>
                                                 <th>
-                                                    Office
+                                                    Pretest
                                                 </th>
                                                 <th>
-                                                    Age
+                                                    Kuis Rata2
                                                 </th>
                                                 <th>
-                                                    Start date
+                                                    Posttest
                                                 </th>
                                                 <th>
                                                     Aksi
@@ -71,130 +77,38 @@ $auth->authOrNot();
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    Tiger Nixon
-                                                </td>
-                                                <td>
-                                                    System Architect
-                                                </td>
-                                                <td>
-                                                    Edinburgh
-                                                </td>
-                                                <td>
-                                                    61
-                                                </td>
-                                                <td>
-                                                    2011/04/25
-                                                </td>
-                                                <td>
-                                                    $120,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Garrett Winters
-                                                </td>
-                                                <td>
-                                                    Accountant
-                                                </td>
-                                                <td>
-                                                    Tokyo
-                                                </td>
-                                                <td>
-                                                    63
-                                                </td>
-                                                <td>
-                                                    2011/07/25
-                                                </td>
-                                                <td>
-                                                    $170,750
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Ashton Cox
-                                                </td>
-                                                <td>
-                                                    Junior Technical Author
-                                                </td>
-                                                <td>
-                                                    San Francisco
-                                                </td>
-                                                <td>
-                                                    66
-                                                </td>
-                                                <td>
-                                                    2009/01/12
-                                                </td>
-                                                <td>
-                                                    $86,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Cedric Kelly
-                                                </td>
-                                                <td>
-                                                    Senior Javascript Developer
-                                                </td>
-                                                <td>
-                                                    Edinburgh
-                                                </td>
-                                                <td>
-                                                    22
-                                                </td>
-                                                <td>
-                                                    2012/03/29
-                                                </td>
-                                                <td>
-                                                    $433,060
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Airi Satou
-                                                </td>
-                                                <td>
-                                                    Accountant
-                                                </td>
-                                                <td>
-                                                    Tokyo
-                                                </td>
-                                                <td>
-                                                    33
-                                                </td>
-                                                <td>
-                                                    2008/11/28
-                                                </td>
-                                                <td>
-                                                    <div>
-                                                        <a class="btn btn-primary btn-sm" href="detail-user.php">
-                                                            <i class="fas fa-eye"></i> Detail
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Brielle Williamson
-                                                </td>
-                                                <td>
-                                                    Integration Specialist
-                                                </td>
-                                                <td>
-                                                    New York
-                                                </td>
-                                                <td>
-                                                    61
-                                                </td>
-                                                <td>
-                                                    2012/12/02
-                                                </td>
-                                                <td>
-                                                    $372,000
-                                                </td>
-                                            </tr>
+                                            <?php $no = 1; ?>
+                                            <?php foreach ($users as $user): ?>
+                                                <tr id="user-row-<?= $user['id'] ?>">
+                                                    <td>
+                                                        <?= $no++ ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= htmlspecialchars($user['name'] ?? '-') ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= $user['pretest_nilai'] ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= $user['kuis_rata2'] ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= $user['posttest_nilai'] ?>
+                                                    </td>
+                                                    <td>
+                                                        <div>
+                                                            <a class="btn btn-primary btn-sm" href="detail-user.php?id=<?= $user['id'] ?>">
+                                                                Lihat Detail
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                            <?php if (empty($users)): ?>
+                                                <tr>
+                                                    <td colspan="6" class="text-center">Tidak ada data pengguna.</td>
+                                                </tr>
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>

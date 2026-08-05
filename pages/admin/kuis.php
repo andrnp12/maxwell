@@ -64,7 +64,7 @@ $dataMateri = $materi->getMateriNonKuis();
                                     </h4>
                                 </div>
                                 <div class="card-body">
-                                    <table class="table table-bordered dt-responsive nowrap w-100" id="datatable">
+                                    <table class="table table-bordered dt-responsive w-100" id="datatable">
                                         <thead>
                                             <tr>
                                                 <th>
@@ -75,6 +75,9 @@ $dataMateri = $materi->getMateriNonKuis();
                                                 </th>
                                                 <th>
                                                     Materi Kuis
+                                                </th>
+                                                <th>
+                                                    Jenis Kuis
                                                 </th>
                                                 <th>
                                                     Passing grade
@@ -96,7 +99,10 @@ $dataMateri = $materi->getMateriNonKuis();
                                                         <?= htmlspecialchars($kuis['judul_kuis']) ?>
                                                     </td>
                                                     <td>
-                                                        <?= htmlspecialchars($kuis['judul_materi']) ?>
+                                                        <?= htmlspecialchars($kuis['judul_materi'] ?? '-') ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= htmlspecialchars($kuis['jenis'] ?? 'kuis') ?>
                                                     </td>
                                                     <td>
                                                         <?= htmlspecialchars($kuis['passing_grade']) ?>
@@ -108,11 +114,12 @@ $dataMateri = $materi->getMateriNonKuis();
                                                             data-material_title="<?= htmlspecialchars($kuis['judul_materi']) ?>"
                                                             data-judul_kuis="<?= htmlspecialchars($kuis['judul_kuis']) ?>"
                                                             data-passing_grade="<?= htmlspecialchars($kuis['passing_grade']) ?>"
+                                                            data-jenis_kuis="<?= htmlspecialchars($kuis['jenis'] ?? 'kuis') ?>"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#modalEditKuis"
                                                             class="btn btn-sm btn-warning btn-edit">Edit</a>
-                                                        <a href="list-kuis.php?id=<?= $kuis['id_kuis'] ?>" class="btn btn-sm btn-info">Lihat</a>
                                                         <button type="button" data-id="<?= $kuis['id_kuis'] ?>" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus1">Hapus</button>
+                                                        <a href="list-kuis.php?id=<?= $kuis['id_kuis'] ?>" class="btn btn-sm btn-info">Lihat</a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -148,7 +155,7 @@ $dataMateri = $materi->getMateriNonKuis();
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="id_materi_tambah" class="form-label">Pilih Materi</label>
-                                    <select id="id_materi_tambah" name="id_materi" class="form-select" required>
+                                    <select id="id_materi_tambah" name="id_materi" class="form-select">
                                         <option value="" disabled selected>-- Pilih Materi --</option>
                                         <?php foreach ($dataMateri as $materi) : ?>
                                             <option value="<?= $materi['id'] ?>">
@@ -164,6 +171,14 @@ $dataMateri = $materi->getMateriNonKuis();
                                 <div class="mb-3">
                                     <label for="passing_grade_tambah" class="form-label">Passing Grade</label>
                                     <input class="form-control" name="passing_grade" id="passing_grade_tambah" type="number" min="0" max="100" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jenis_kuis_tambah" class="form-label">Jenis Kuis</label>
+                                    <select id="jenis_kuis_tambah" name="jenis_kuis" class="form-select" required>
+                                        <option value="kuis" selected>Kuis</option>
+                                        <option value="pretest">Pretest</option>
+                                        <option value="posttest">Posttest</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -195,7 +210,7 @@ $dataMateri = $materi->getMateriNonKuis();
                                 <input type="hidden" name="id" id="edit_id">
                                 <div class="mb-3">
                                     <label for="id_materi" class="form-label">Pilih Materi</label>
-                                    <select id="id_materi" name="id_materi" class="form-select" required>
+                                    <select id="id_materi" name="id_materi" class="form-select">
                                         <option value="" disabled>-- Pilih Materi --</option>
                                         <?php foreach ($dataMateri as $materi) : ?>
                                             <option value="<?= $materi['id'] ?>">
@@ -211,6 +226,14 @@ $dataMateri = $materi->getMateriNonKuis();
                                 <div class="mb-3">
                                     <label for="passing_grade" class="form-label">Passing Grade</label>
                                     <input class="form-control" name="passing_grade" id="passing_grade" type="number" min="0" max="100" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jenis_kuis" class="form-label">Jenis Kuis</label>
+                                    <select id="jenis_kuis" name="jenis_kuis" class="form-select" required>
+                                        <option value="kuis">Kuis</option>
+                                        <option value="pretest">Pretest</option>
+                                        <option value="posttest">Posttest</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -332,6 +355,7 @@ $dataMateri = $materi->getMateriNonKuis();
                     const judul_kuis = formElement.querySelector('[name="judul_kuis"]')?.value || '';
                     const passing_grade = formElement.querySelector('[name="passing_grade"]')?.value || '';
                     const id_materi = formElement.querySelector('[name="id_materi"]')?.value || '';
+                    const jenis_kuis = formElement.querySelector('[name="jenis_kuis"]')?.value || 'tryout';
 
                     // Ambil material_title dari response server, atau dari text option dropdown sebelum di-reset
                     let material_title = result.material_title || '';
@@ -361,7 +385,8 @@ $dataMateri = $materi->getMateriNonKuis();
                             judul_kuis,
                             passing_grade,
                             id_materi,
-                            material_title
+                            material_title,
+                            jenis_kuis
                         });
                     } else {
                         updateRow({
@@ -369,7 +394,8 @@ $dataMateri = $materi->getMateriNonKuis();
                             judul_kuis,
                             passing_grade,
                             id_materi,
-                            material_title
+                            material_title,
+                            jenis_kuis
                         });
                     }
 
@@ -387,7 +413,7 @@ $dataMateri = $materi->getMateriNonKuis();
         }
 
         // --- Render Row ke Tabel ---
-        function buildActions(id, judul_kuis, passing_grade, id_materi, material_title) {
+        function buildActions(id, judul_kuis, passing_grade, id_materi, material_title, jenis_kuis) {
             return `
                 <a href="#"
                    data-id="${id}"
@@ -395,6 +421,7 @@ $dataMateri = $materi->getMateriNonKuis();
                    data-material_title="${escapeHtml(material_title, true)}"
                    data-judul_kuis="${escapeHtml(judul_kuis, true)}"
                    data-passing_grade="${escapeHtml(passing_grade, true)}"
+                   data-jenis_kuis="${escapeHtml(jenis_kuis, true)}"
                    data-bs-toggle="modal"
                    data-bs-target="#modalEditKuis"
                    class="btn btn-sm btn-warning btn-edit">Edit</a>
@@ -419,8 +446,9 @@ $dataMateri = $materi->getMateriNonKuis();
                 getRowNumber(),
                 escapeHtml(data.judul_kuis),
                 escapeHtml(data.material_title),
+                escapeHtml(data.jenis_kuis || 'tryout'),
                 escapeHtml(data.passing_grade),
-                buildActions(data.id, data.judul_kuis, data.passing_grade, data.id_materi, data.material_title)
+                buildActions(data.id, data.judul_kuis, data.passing_grade, data.id_materi, data.material_title, data.jenis_kuis || 'tryout')
             ];
 
             if (dataTable) {
@@ -438,8 +466,9 @@ $dataMateri = $materi->getMateriNonKuis();
                 <td>${getRowNumber()}</td>
                 <td>${escapeHtml(data.judul_kuis)}</td>
                 <td>${escapeHtml(data.material_title)}</td>
+                <td>${escapeHtml(data.jenis_kuis || 'tryout')}</td>
                 <td>${escapeHtml(data.passing_grade)}</td>
-                <td>${buildActions(data.id, data.judul_kuis, data.passing_grade, data.id_materi, data.material_title)}</td>
+                <td>${buildActions(data.id, data.judul_kuis, data.passing_grade, data.id_materi, data.material_title, data.jenis_kuis || 'tryout')}</td>
             `;
             tbody.appendChild(tr);
         }
@@ -454,8 +483,9 @@ $dataMateri = $materi->getMateriNonKuis();
                         rowNumber,
                         escapeHtml(data.judul_kuis),
                         escapeHtml(data.material_title),
+                        escapeHtml(data.jenis_kuis || 'tryout'),
                         escapeHtml(data.passing_grade),
-                        buildActions(data.id, data.judul_kuis, data.passing_grade, data.id_materi, data.material_title)
+                        buildActions(data.id, data.judul_kuis, data.passing_grade, data.id_materi, data.material_title, data.jenis_kuis || 'tryout')
                     ];
                     row.data(rowData).draw(false);
                     const node = row.node();
@@ -473,11 +503,12 @@ $dataMateri = $materi->getMateriNonKuis();
 
             // Update setiap sel secara individual
             const cells = row.querySelectorAll('td');
-            if (cells.length >= 4) {
+            if (cells.length >= 5) {
                 cells[1].textContent = data.judul_kuis;
                 cells[2].textContent = data.material_title;
-                cells[3].textContent = data.passing_grade;
-                cells[4].innerHTML = buildActions(data.id, data.judul_kuis, data.passing_grade, data.id_materi, data.material_title);
+                cells[3].textContent = data.jenis_kuis || 'tryout';
+                cells[4].textContent = data.passing_grade;
+                cells[5].innerHTML = buildActions(data.id, data.judul_kuis, data.passing_grade, data.id_materi, data.material_title, data.jenis_kuis || 'tryout');
             }
         }
 
@@ -498,8 +529,31 @@ $dataMateri = $materi->getMateriNonKuis();
             });
         }
 
+        // --- Fungsi untuk toggle required pada materi berdasarkan jenis kuis ---
+        function toggleMateriRequired(jenisKuisSelect, materiSelect) {
+            const jenisKuis = jenisKuisSelect.value;
+            const isOptional = ['pretest', 'posttest'].includes(jenisKuis);
+            
+            if (isOptional) {
+                materiSelect.removeAttribute('required');
+                // Add empty option for optional selection
+                if (!materiSelect.querySelector('option[value=""]')) {
+                    const emptyOption = new Option('-- Pilih Materi (Opsional) --', '');
+                    emptyOption.disabled = false;
+                    materiSelect.insertBefore(emptyOption, materiSelect.firstChild);
+                }
+            } else {
+                materiSelect.setAttribute('required', 'required');
+                // Remove empty option if exists
+                const emptyOption = materiSelect.querySelector('option[value=""]');
+                if (emptyOption) {
+                    emptyOption.remove();
+                }
+            }
+        }
+
         // --- Fungsi Load Materi Options ---
-        async function loadMateriOptions(selectElement, currentId, selectedMaterialId) {
+        async function loadMateriOptions(selectElement, currentId, selectedMaterialId, jenisKuisSelect) {
             if (!selectElement) return;
 
             // Tampilkan loading
@@ -519,7 +573,17 @@ $dataMateri = $materi->getMateriNonKuis();
                 const result = await response.json();
 
                 if (result.status === 'success') {
-                    selectElement.innerHTML = '<option value="" disabled>-- Pilih Materi --</option>';
+                    selectElement.innerHTML = '';
+                    
+                    // Check if materi is optional based on jenis kuis
+                    const jenisKuis = jenisKuisSelect ? jenisKuisSelect.value : 'tryout';
+                    const isOptional = ['pretest', 'posttest'].includes(jenisKuis);
+                    
+                    if (isOptional) {
+                        selectElement.innerHTML = '<option value="" disabled>-- Pilih Materi (Opsional) --</option>';
+                    } else {
+                        selectElement.innerHTML = '<option value="" disabled selected>-- Pilih Materi --</option>';
+                    }
 
                     result.data.forEach(materi => {
                         const option = new Option(materi.judul, materi.id);
@@ -529,6 +593,11 @@ $dataMateri = $materi->getMateriNonKuis();
                     // Pilih materi yang sedang digunakan
                     if (selectedMaterialId) {
                         selectElement.value = selectedMaterialId;
+                    }
+                    
+                    // Update required attribute
+                    if (jenisKuisSelect) {
+                        toggleMateriRequired(jenisKuisSelect, selectElement);
                     }
                 } else {
                     selectElement.innerHTML = '<option value="" disabled>Gagal memuat materi</option>';
@@ -551,14 +620,37 @@ $dataMateri = $materi->getMateriNonKuis();
                 const judul_kuis = button.getAttribute('data-judul_kuis') || '';
                 const passing_grade = button.getAttribute('data-passing_grade') || '';
                 const id_materi = button.getAttribute('data-id_materi') || '';
+                const jenis_kuis = button.getAttribute('data-jenis_kuis') || 'tryout';
 
                 document.getElementById('edit_id').value = id;
                 document.getElementById('judul_kuis').value = judul_kuis;
                 document.getElementById('passing_grade').value = passing_grade;
+                document.getElementById('jenis_kuis').value = jenis_kuis;
 
                 // Load materi options secara dinamis
                 const selectMateri = document.getElementById('id_materi');
-                await loadMateriOptions(selectMateri, id, id_materi);
+                const jenisKuisSelect = document.getElementById('jenis_kuis');
+                await loadMateriOptions(selectMateri, id, id_materi, jenisKuisSelect);
+            });
+        }
+
+        // --- Event Listener: Jenis Kuis Change (Tambah) ---
+        const jenisKuisTambah = document.getElementById('jenis_kuis_tambah');
+        const materiTambah = document.getElementById('id_materi_tambah');
+        if (jenisKuisTambah && materiTambah) {
+            // Initial check on load
+            toggleMateriRequired(jenisKuisTambah, materiTambah);
+            jenisKuisTambah.addEventListener('change', function() {
+                toggleMateriRequired(this, materiTambah);
+            });
+        }
+
+        // --- Event Listener: Jenis Kuis Change (Edit) ---
+        const jenisKuisEdit = document.getElementById('jenis_kuis');
+        const materiEdit = document.getElementById('id_materi');
+        if (jenisKuisEdit && materiEdit) {
+            jenisKuisEdit.addEventListener('change', function() {
+                toggleMateriRequired(this, materiEdit);
             });
         }
 
@@ -575,15 +667,18 @@ $dataMateri = $materi->getMateriNonKuis();
                     const judul_kuis = editButton.getAttribute('data-judul_kuis') || '';
                     const passing_grade = editButton.getAttribute('data-passing_grade') || '';
                     const id_materi = editButton.getAttribute('data-id_materi') || '';
+                    const jenis_kuis = editButton.getAttribute('data-jenis_kuis') || 'tryout';
 
                     // Isi form edit
                     document.getElementById('edit_id').value = id;
                     document.getElementById('judul_kuis').value = judul_kuis;
                     document.getElementById('passing_grade').value = passing_grade;
+                    document.getElementById('jenis_kuis').value = jenis_kuis;
 
                     // Load materi options secara dinamis
                     const selectMateri = document.getElementById('id_materi');
-                    await loadMateriOptions(selectMateri, id, id_materi);
+                    const jenisKuisSelect = document.getElementById('jenis_kuis');
+                    await loadMateriOptions(selectMateri, id, id_materi, jenisKuisSelect);
 
                     const editModal = bootstrap.Modal.getOrCreateInstance(modalEditKuis);
                     editModal.show();
@@ -591,19 +686,19 @@ $dataMateri = $materi->getMateriNonKuis();
                 }
 
 
-                 // Tangani tombol Hapus - Tampilkan konfirmasi tahap 1
-                 const deleteButton = event.target.closest('.btn-delete');
-                 if (!deleteButton) return;
+                // Tangani tombol Hapus - Tampilkan konfirmasi tahap 1
+                const deleteButton = event.target.closest('.btn-delete');
+                if (!deleteButton) return;
 
-                 const id = deleteButton.getAttribute('data-id');
-                 if (!id) return;
+                const id = deleteButton.getAttribute('data-id');
+                if (!id) return;
 
-                 kuisIdToDelete = id;
-                 kuisRowToDelete = document.getElementById('row-' + id);
+                kuisIdToDelete = id;
+                kuisRowToDelete = document.getElementById('row-' + id);
 
-                 const modalDelete1 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus1'));
-                 modalDelete1.show();
-             });
+                const modalDelete1 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus1'));
+                modalDelete1.show();
+            });
         }
 
         // --- Event Listener: Lanjutkan Hapus (Tahap 1 ke Tahap 2) ---
@@ -613,7 +708,7 @@ $dataMateri = $materi->getMateriNonKuis();
                 // Hide first confirmation modal
                 const modalDelete1 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus1'));
                 modalDelete1.hide();
-                
+
                 // Show second confirmation modal
                 const modalDelete2 = bootstrap.Modal.getOrCreateInstance(document.getElementById('modalKonfirmasiHapus2'));
                 modalDelete2.show();

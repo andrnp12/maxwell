@@ -89,7 +89,6 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                                             <select class="form-select" id="role" name="role" required>
                                                 <option value="" selected disabled>-- Pilih Kriteria --</option>
                                                 <option value="ortu">Orang Tua</option>
-                                                <option value="konsultan">Konsultan</option>
                                                 <option value="user">Siswa</option>
                                             </select>
                                             <small class="form-text text-muted">Pilih kriteria yang sesuai dengan anda</small>
