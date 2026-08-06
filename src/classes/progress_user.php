@@ -43,39 +43,60 @@ class ProgressUser
         if ($progress) {
 
             $sql = "
-                UPDATE user_progress
-                SET material_selesai = 1
-                WHERE user_id = ?
-                AND material_id = ?
-            ";
+            UPDATE user_progress
+            SET material_selesai = 1
+            WHERE user_id = ?
+            AND material_id = ?
+        ";
 
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("ii", $userId, $materialId);
 
-            return $stmt->execute();
+            $result = $stmt->execute();
         } else {
 
             $sql = "
-                INSERT INTO user_progress
-(
-    user_id,
-    material_id,
-    material_selesai,
-    quizz_selesai
-)
-VALUES
-(?, ?, 1, 0)
-
-ON DUPLICATE KEY UPDATE
-
-material_selesai = VALUES(material_selesai)
-            ";
+            INSERT INTO user_progress
+            (
+                user_id,
+                material_id,
+                material_selesai,
+                quizz_selesai
+            )
+            VALUES
+            (?, ?, 1, 0)
+            ON DUPLICATE KEY UPDATE
+                material_selesai = VALUES(material_selesai)
+        ";
 
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("ii", $userId, $materialId);
 
-            return $stmt->execute();
+            $result = $stmt->execute();
         }
+
+        // Jika gagal update/insert user_progress
+        if (!$result) {
+            return false;
+        }
+
+        // Simpan ke materials_progress
+        $sql = "
+        INSERT INTO materials_progress
+        (
+            user_id,
+            material_id,
+            material_selesai
+        )
+        VALUES (?, ?, 1)
+        ON DUPLICATE KEY UPDATE
+            material_selesai = VALUES(material_selesai)
+    ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $userId, $materialId);
+
+        return $stmt->execute();
     }
 
     /**

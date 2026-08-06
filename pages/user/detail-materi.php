@@ -226,7 +226,7 @@ $nextMateri = $data->getNextMateri((int)$_GET['id']);
                 let elapsed = 0;
                 let isCompleted = false;
 
-                const MINIMUM_READ_TIME = 10;
+                const MINIMUM_READ_TIME = 5;
 
                 const timer = setInterval(function() {
 
