@@ -1,7 +1,21 @@
 <?php
 require_once '../../src/classes/auth.php';
+require_once '../../src/classes/materi.php';
+require_once '../../src/classes/progress_user.php';
+
+$progress = new ProgressUser();
 $auth = new auth();
+$data = new Materi();
+
 $auth->authOrNot();
+$dataMateri = $data->getMateriById($_GET['id']);
+$materialFinished = $progress->isMaterialFinished(
+    $_SESSION['id'],
+    (int)$_GET['id']
+);
+
+$previousMateri = $data->getPreviousMateri((int)$_GET['id']);
+$nextMateri = $data->getNextMateri((int)$_GET['id']);
 ?>
 
 <?php include '../include/header.php'; ?>
@@ -46,7 +60,7 @@ $auth->authOrNot();
                                     <div class="">
                                         <div class="mb-3">
                                             <h4>
-                                                Pernikahan Dini: Dampak dan Solusi
+                                                <?= htmlspecialchars($dataMateri['judul']) ?>
                                             </h4>
                                         </div>
                                         <div class="mb-4">
@@ -55,34 +69,61 @@ $auth->authOrNot();
                                         <div class="mt-4">
                                             <div class="text-muted font-size-14">
                                                 <p>
-                                                    Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam enim ad minima veniam quis
+                                                    <?= htmlspecialchars($dataMateri['deskripsi']) ?>
                                                 </p>
                                                 <div class="mt-3 mb-4">
-                                                    <iframe src="/assets/ViewerJS/index.html?zoom=page-width#../pdf/C4.pdf"
+                                                    <iframe src="/assets/ViewerJS/index.html?zoom=page-width#/uploads/<?= htmlspecialchars($dataMateri['file']) ?>"
                                                         title="Pratinjau PDF"
                                                         class="w-100 rounded border"
                                                         style="min-height: 500px; border: 1px solid #dee2e6;">
                                                     </iframe>
                                                 </div>
-                                                <p class="mb-4">
-                                                    Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt
-                                                </p>
                                             </div>
                                         </div>
                                         <hr />
                                         <div class="d-flex justify-content-between mt-4">
+
                                             <div>
-                                                <a href="#" class="btn btn-outline-light btn-sm btn-rounded waves-effect">
-                                                    <i class="mdi mdi-arrow-left"></i>
-                                                    Sebelumnya
-                                                </a>
+
+                                                <?php if ($previousMateri): ?>
+
+                                                    <a
+                                                        href="detail-materi.php?id=<?= $previousMateri['id'] ?>"
+                                                        class="btn btn-outline-light btn-sm btn-rounded waves-effect">
+
+                                                        <i class="mdi mdi-arrow-left"></i>
+
+                                                        Sebelumnya
+
+                                                    </a>
+
+                                                <?php endif; ?>
+
                                             </div>
+
                                             <div>
-                                                <a href="#" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                                    Materi Selanjutnya
-                                                    <i class="mdi mdi-arrow-right"></i>
-                                                </a>
+
+                                                <?php if ($nextMateri): ?>
+
+                                                    <?php if ($nextMateri): ?>
+
+                                                        <a
+                                                            id="btnNextMaterial"
+                                                            href="<?= $materialFinished ? 'detail-materi.php?id=' . $nextMateri['id'] : '#' ?>"
+                                                            class="btn <?= $materialFinished ? 'btn-primary' : 'btn-secondary' ?> btn-sm btn-rounded <?= !$materialFinished ? 'disabled' : '' ?>">
+
+                                                            Materi Selanjutnya
+
+                                                            <i class="mdi <?= $materialFinished ? 'mdi-arrow-right' : 'mdi-lock' ?>"></i>
+
+                                                        </a>
+
+                                                    <?php endif; ?>
+
+                                                <?php endif; ?>
+
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -166,7 +207,95 @@ $auth->authOrNot();
         <div class="rightbar-overlay">
         </div>
         <!-- JAVASCRIPT -->
+
         <?php include '../include/script.php'; ?>
+
+        <script>
+            const materialId = <?= (int)$dataMateri['id']; ?>;
+
+            const materialFinished = <?= $materialFinished ? 'true' : 'false'; ?>;
+
+            document.addEventListener("DOMContentLoaded", function() {
+
+                // Kalau materi sudah selesai, tidak perlu jalankan timer
+                if (materialFinished) {
+                    // console.log("Materi sudah pernah dipelajari.");
+                    return;
+                }
+
+                let elapsed = 0;
+                let isCompleted = false;
+
+                const MINIMUM_READ_TIME = 5;
+
+                const timer = setInterval(function() {
+
+                    // Pause jika tab tidak aktif
+                    if (document.hidden) {
+                        return;
+                    }
+
+                    elapsed++;
+
+                    // console.log("Belajar:", elapsed, "detik");
+
+                    if (elapsed >= MINIMUM_READ_TIME && !isCompleted) {
+
+                        isCompleted = true;
+
+                        clearInterval(timer);
+
+                        saveProgress();
+                    }
+                }, 1000);
+
+                function saveProgress() {
+                    fetch("../../src/actions/proses_materi_end.php", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: new URLSearchParams({
+                                material_id: materialId
+                            })
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error("HTTP Error " + response.status);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                console.log("Progress berhasil disimpan");
+
+                                const btn = document.getElementById("btnNextMaterial");
+
+                                if (btn) {
+
+                                    btn.classList.remove("btn-secondary");
+                                    btn.classList.remove("disabled");
+
+                                    btn.classList.add("btn-primary");
+
+                                    btn.href = "detail-materi.php?id=<?= $nextMateri['id'] ?>";
+
+                                    btn.innerHTML = `
+                Materi Selanjutnya
+                <i class="mdi mdi-arrow-right"></i>
+            `;
+
+                                }
+                            } else {
+                                console.error(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                }
+            });
+        </script>
     </div>
 </body>
 

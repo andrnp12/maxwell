@@ -20,11 +20,13 @@ class Notifikasi
         if ($role === 'user') {
             // 1. Chat personal dari konselor (hanya pesan dari konselor, bukan dari user sendiri)
             $sql = "SELECT c.id, c.chat, c.time_stamp, u.name AS konselor_name
-                    FROM chat_konsultan c
-                    JOIN users u ON c.id_konselor = u.id
-                    WHERE c.id_user = ? AND c.pengirim != 'user'
-                    ORDER BY c.time_stamp DESC
-                    LIMIT 5";
+        FROM chat_konsultan c
+        JOIN users u ON c.sender_id = u.id
+        WHERE c.id_user = ?
+        AND c.sender_id = c.id_konselor
+        ORDER BY c.time_stamp DESC
+        LIMIT 5";
+
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("i", $userId);
             $stmt->execute();
@@ -44,20 +46,28 @@ class Notifikasi
             // Skip jika tabel anggota_komunitas tidak ada
             $tableCheck = $this->conn->query("SHOW TABLES LIKE 'anggota_komunitas'");
             if ($tableCheck && $tableCheck->num_rows > 0) {
-                $sql = "SELECT ck.id, ck.chat, ck.time_stamp, k.nama_komunitas, u.name AS sender_name
-                        FROM chat_komunitas ck
-                        JOIN anggota_komunitas ak ON ak.id_komunitas = ck.id_komunitas AND ak.id_user = ?
-                        JOIN komunitas k ON k.id = ck.id_komunitas
-                        JOIN users u ON u.id = ck.sender_id
-                        WHERE ck.id IN (
-                            SELECT MAX(id) FROM chat_komunitas
-                            WHERE id_komunitas IN (
-                                SELECT id_komunitas FROM anggota_komunitas WHERE id_user = ?
-                            )
-                            GROUP BY id_komunitas
-                        )
-                        ORDER BY ck.time_stamp DESC
-                        LIMIT 3";
+                $sql = "SELECT ck.id,
+               ck.chat,
+               ck.time_stamp,
+               k.nama_komunitas,
+               u.name AS sender_name
+        FROM chat_komunitas ck
+        JOIN anggota_komunitas ak
+            ON ak.id_komunitas = ck.id_komunitas
+        JOIN komunitas k
+            ON k.id = ck.id_komunitas
+        JOIN users u
+            ON u.id = ck.sender_id
+        WHERE ak.id_user = ?
+        AND ck.id = (
+            SELECT MAX(c2.id)
+            FROM chat_komunitas c2
+            WHERE c2.id_komunitas = ck.id_komunitas
+            AND c2.sender_id != ?
+        )
+        ORDER BY ck.time_stamp DESC
+        LIMIT 3";
+
                 $stmt = $this->conn->prepare($sql);
                 $stmt->bind_param("ii", $userId, $userId);
                 $stmt->execute();
@@ -162,8 +172,9 @@ class Notifikasi
 
             // Chat personal: hitung distinct konselor yang punya pesan baru (bukan total pesan)
             $chatPersonalSql = "SELECT COUNT(DISTINCT c.id_konselor)
-                FROM chat_konsultan c
-                WHERE c.id_user = ? AND c.pengirim != 'user'";
+    FROM chat_konsultan c
+    WHERE c.id_user = ?
+    AND c.sender_id = c.id_konselor";
 
             // Chat grup: hitung distinct komunitas dengan pesan (sudah benar)
             $chatGroupSql = $hasAnggotaTable ? "(SELECT COUNT(DISTINCT ck.id_komunitas)
@@ -212,11 +223,13 @@ class Notifikasi
         } elseif ($role === 'konsultan') {
             // 1. Chat personal dari user (hanya pesan dari user, bukan dari konsultan sendiri)
             $sql = "SELECT c.id, c.chat, c.time_stamp, u.name AS user_name
-                    FROM chat_konsultan c
-                    JOIN users u ON c.id_user = u.id
-                    WHERE c.id_konselor = ? AND c.pengirim != 'konsultan'
-                    ORDER BY c.time_stamp DESC
-                    LIMIT 5";
+        FROM chat_konsultan c
+        JOIN users u ON c.sender_id = u.id
+        WHERE c.id_konselor = ?
+        AND c.sender_id = c.id_user
+        ORDER BY c.time_stamp DESC
+        LIMIT 5";
+
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("i", $userId);
             $stmt->execute();
@@ -235,7 +248,10 @@ class Notifikasi
             // Konsultan tidak bisa join komunitas, skip chat grup
             // Hitung distinct user yang mengirim pesan (bukan total pesan)
             $countSql = "SELECT
-                (SELECT COUNT(DISTINCT c.id_user) FROM chat_konsultan c WHERE c.id_konselor = ? AND c.pengirim != 'konsultan') as total";
+    (SELECT COUNT(DISTINCT c.id_user)
+    FROM chat_konsultan c
+    WHERE c.id_konselor = ?
+    AND c.sender_id = c.id_user) as total";
             $stmtCount = $this->conn->prepare($countSql);
             $stmtCount->bind_param("i", $userId);
             $stmtCount->execute();

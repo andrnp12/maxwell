@@ -1,7 +1,16 @@
 <?php
 require_once '../../src/classes/auth.php';
+require_once '../../src/classes/materi.php';
+
 $auth = new auth();
 $auth->authOrNot();
+
+
+$data = new Materi();
+$dataMateri = $data->getMateriById($_GET['id']);
+
+$previousMateri = $data->getPreviousMateri((int)$_GET['id']);
+$nextMateri = $data->getNextMateri((int)$_GET['id']);
 ?>
 
 <?php include '../include/header.php'; ?>
@@ -46,7 +55,7 @@ $auth->authOrNot();
                                     <div class="">
                                         <div class="mb-3">
                                             <h4>
-                                                Pernikahan Dini: Dampak dan Solusi
+                                                <?= $dataMateri['judul']; ?>
                                             </h4>
                                         </div>
                                         <div class="mb-4">
@@ -55,8 +64,7 @@ $auth->authOrNot();
                                         <div class="mt-4">
                                             <div class="text-muted font-size-14">
                                                 <p>
-                                                    Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam enim ad minima veniam quis
-                                                </p>
+                                                    <?= $dataMateri['deskripsi']; ?> </p>
                                                 <div class="mt-3 mb-4">
                                                     <iframe src="../../assets/ViewerJS/index.html?zoom=page-width#../pdf/C4.pdf"
                                                         title="Pratinjau PDF"
@@ -64,24 +72,38 @@ $auth->authOrNot();
                                                         style="min-height: 500px; border: 1px solid #dee2e6;">
                                                     </iframe>
                                                 </div>
-                                                <p class="mb-4">
-                                                    Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt
-                                                </p>
                                             </div>
                                         </div>
                                         <hr />
                                         <div class="d-flex justify-content-between mt-4">
+
                                             <div>
-                                                <a href="#" class="btn btn-outline-light btn-sm btn-rounded waves-effect">
-                                                    <i class="mdi mdi-arrow-left"></i>
-                                                    Sebelumnya
-                                                </a>
+
+                                                <?php if ($previousMateri): ?>
+
+                                                    <a
+                                                        href="detail-materi.php?id=<?= $previousMateri['id'] ?>"
+                                                        class="btn btn-outline-light btn-sm btn-rounded waves-effect">
+
+                                                        <i class="mdi mdi-arrow-left"></i>
+
+                                                        Sebelumnya
+
+                                                    </a>
+
+                                                <?php endif; ?>
+
                                             </div>
+
                                             <div>
-                                                <a href="#" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                                    Materi Selanjutnya
-                                                    <i class="mdi mdi-arrow-right"></i>
-                                                </a>
+                                                <?php if ($nextMateri): ?>
+                                                    <a
+                                                        href="detail-materi.php?id=<?= $nextMateri['id'] ?>"
+                                                        class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
+                                                        Materi Selanjutnya
+                                                        <i class="mdi mdi-arrow-right"></i>
+                                                    </a>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>

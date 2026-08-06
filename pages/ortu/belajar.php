@@ -1,7 +1,12 @@
 <?php
 require_once '../../src/classes/auth.php';
+require_once '../../src/classes/materi.php';
+
 $auth = new auth();
 $auth->authOrNot();
+
+$data = new Materi();
+$dataMateri = $data->getAllMateri();
 ?>
 
 <?php include '../include/header.php'; ?>
@@ -68,84 +73,31 @@ $auth->authOrNot();
                                 </div>
                             </div>
                         </div>
-                        <a class="col-12 col-xl-6 col-md-6" href="detail-materi.php">
-                            <div class="card mb-3 border border-success">
-                                <div class="row g-0 align-items-center">
-                                    <div class="col-3 text-center">
-                                        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                            <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
+                        <?php foreach ($dataMateri as $materi) : ?>
+                            <a class="col-12 col-xl-6 col-md-6" href="detail-materi.php?id=<?= $materi['id'] ?>">
+                                <div class="card mb-3 border border-success">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-3 text-center">
+                                            <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
+                                                <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="card-body">
-                                            <h5 class="card-title mb-0 font-weight-bold">
-                                                Sahabat Tumbuh
-                                            </h5>
-                                            <p class="card-text mb-0">
-                                                <small class="text-muted">
-                                                    Perkumpulan tumbuh bersama.
-                                                </small>
-                                            </p>
-                                            <p class="card-text">
-                                                <small class="badge bg-success text-white px-2 py-1 rounded-pill">
-                                                    <i class="mdi mdi-check-circle"></i>
-                                                    Telah Dipelajari
-                                                </small>
-                                            </p>
+                                        <div class="col-9">
+                                            <div class="card-body">
+                                                <h5 class="card-title mb-0 font-weight-bold">
+                                                    <?= htmlspecialchars($materi['judul']) ?>
+                                                </h5>
+                                                <p class="card-text mb-0">
+                                                    <small class="text-muted text-truncate d-block" style="max-width: 100%;">
+                                                        <?= htmlspecialchars($materi['deskripsi']) ?>
+                                                    </small>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
-                        <!-- end col -->
-                        <div class="col-12 col-xl-6 col-md-6">
-                            <div class="card mb-3">
-                                <div class="row g-0 align-items-center">
-                                    <div class="col-3 text-center">
-                                        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                            <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
-                                        </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="card-body">
-                                            <h5 class="card-title mb-0 font-weight-bold">
-                                                Anti Nikah Dini
-                                            </h5>
-                                            <p class="card-text">
-                                                <small class="text-muted">
-                                                    Perkumpulan tumbuh bersama.
-                                                </small>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
-                        <div class="col-12 col-xl-6 col-md-6">
-                            <div class="card mb-3">
-                                <div class="row g-0 align-items-center">
-                                    <div class="col-3 text-center">
-                                        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                            <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
-                                        </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="card-body">
-                                            <h5 class="card-title mb-0 font-weight-bold">
-                                                Remaja Berencana
-                                            </h5>
-                                            <p class="card-text">
-                                                <small class="text-muted">
-                                                    Perkumpulan tumbuh bersama.
-                                                </small>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
+                            </a>
+                        <?php endforeach; ?>
                     </div>
                     <!-- end row -->
                 </div>
