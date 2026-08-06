@@ -179,15 +179,6 @@ if ($id_lawan > 0) {
                                             </span>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a aria-expanded="false" class="nav-link" data-bs-toggle="tab" href="#contacts">
-                                            <i class="bx bx-book-content font-size-20 d-sm-none">
-                                            </i>
-                                            <span class="d-none d-sm-block">
-                                                Contacts
-                                            </span>
-                                        </a>
-                                    </li>
                                 </ul>
                                 <div class="tab-content">
                                     <!-- tab Chat personel -->
@@ -274,41 +265,6 @@ if ($id_lawan > 0) {
                                                         </li>
                                                     <?php endforeach; ?>
                                                 </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- tab contact -->
-                                    <div class="tab-pane" id="contacts">
-                                        <div class="chat-message-list" data-simplebar="">
-                                            <div class="pt-3">
-                                                <div class="px-3">
-                                                    <h5 class="font-size-14 mb-3">
-                                                        Contacts
-                                                    </h5>
-                                                </div>
-                                                <div>
-                                                    <div>
-                                                        <div class="px-3 contact-list">
-                                                            A
-                                                        </div>
-                                                        <ul class="list-unstyled chat-list">
-                                                            <li>
-                                                                <a href="#">
-                                                                    <h5 class="font-size-14 mb-0">
-                                                                        Adam Miller
-                                                                    </h5>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#">
-                                                                    <h5 class="font-size-14 mb-0">
-                                                                        Alfonso Fisher
-                                                                    </h5>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

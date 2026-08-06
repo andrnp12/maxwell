@@ -100,4 +100,46 @@ class PertanyaanKuis
             ];
         }
     }
+
+    // user
+
+    public function calculateResult(int $kuisId, array $jawabanUser): array
+    {
+        $soal = $this->getAllPertanyaanKuis($kuisId);
+
+        $jumlahBenar = 0;
+        $jumlahSalah = 0;
+
+        foreach ($soal as $item) {
+
+            $idSoal = (int)$item['id'];
+
+            $jawaban = strtoupper(trim($jawabanUser[$idSoal] ?? ''));
+
+            $jawabanBenar = strtoupper(trim($item['jawaban'] ?? ''));
+
+            if ($jawaban === $jawabanBenar) {
+
+                $jumlahBenar++;
+            } else {
+
+                $jumlahSalah++;
+            }
+        }
+
+        $total = count($soal);
+
+        $persentase = 0;
+
+        if ($total > 0) {
+            $persentase = round(($jumlahBenar / $total) * 100, 2);
+        }
+
+        return [
+            'benar'      => $jumlahBenar,
+            'salah'      => $jumlahSalah,
+            'total'      => $total,
+            'persentase' => $persentase
+        ];
+    }
 }

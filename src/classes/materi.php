@@ -311,4 +311,98 @@ class Materi
 
         return $MateriPilihan;
     }
+
+    // user 
+    public function getAllMateriUser(int $userId): array
+    {
+        $sql = "
+        SELECT
+            m.*,
+            COALESCE(up.material_selesai, 0) AS material_selesai,
+            COALESCE(up.quizz_selesai, 0) AS quizz_selesai
+        FROM materials m
+        LEFT JOIN user_progress up
+            ON up.material_id = m.id
+            AND up.user_id = ?
+        ORDER BY m.no_urut ASC
+    ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        $materiList = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $materiList[] = $row;
+        }
+
+        return $materiList;
+    }
+
+    public function getNextMateri(int $currentMaterialId): ?array
+    {
+        // Ambil no_urut materi saat ini
+        $stmt = $this->conn->prepare("
+        SELECT no_urut
+        FROM materials
+        WHERE id = ?
+    ");
+
+        $stmt->bind_param("i", $currentMaterialId);
+        $stmt->execute();
+
+        $current = $stmt->get_result()->fetch_assoc();
+
+        if (!$current) {
+            return null;
+        }
+
+        // Cari materi berikutnya
+        $stmt = $this->conn->prepare("
+        SELECT *
+        FROM materials
+        WHERE no_urut > ?
+        ORDER BY no_urut ASC
+        LIMIT 1
+    ");
+
+        $stmt->bind_param("i", $current['no_urut']);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    public function getPreviousMateri(int $currentMaterialId): ?array
+    {
+        $stmt = $this->conn->prepare("
+        SELECT no_urut
+        FROM materials
+        WHERE id = ?
+    ");
+
+        $stmt->bind_param("i", $currentMaterialId);
+        $stmt->execute();
+
+        $current = $stmt->get_result()->fetch_assoc();
+
+        if (!$current) {
+            return null;
+        }
+
+        $stmt = $this->conn->prepare("
+        SELECT *
+        FROM materials
+        WHERE no_urut < ?
+        ORDER BY no_urut DESC
+        LIMIT 1
+    ");
+
+        $stmt->bind_param("i", $current['no_urut']);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_assoc();
+    }
 }

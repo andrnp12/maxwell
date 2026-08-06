@@ -115,4 +115,49 @@ class Kuis
 
         return $kuisList;
     }
+
+    // user
+    public function getAllKuisUser(int $userId): array
+    {
+        $sql = "
+        SELECT
+            q.id AS id_kuis,
+            q.material_id,
+            q.judul AS judul_kuis,
+            q.passing_grade,
+            q.jenis,
+
+            m.judul AS judul_materi,
+
+            COALESCE(up.material_selesai,0) AS material_selesai,
+            COALESCE(up.quizz_selesai,0) AS quizz_selesai
+
+        FROM quizzes q
+
+        INNER JOIN materials m
+            ON m.id = q.material_id
+
+        LEFT JOIN user_progress up
+            ON up.material_id = q.material_id
+            AND up.user_id = ?
+
+        WHERE q.jenis = 'kuis'
+
+        ORDER BY m.no_urut ASC
+    ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        $data = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        return $data;
+    }
 }

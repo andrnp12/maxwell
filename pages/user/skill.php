@@ -1,7 +1,11 @@
 <?php
 require_once '../../src/classes/auth.php';
+require_once '../../src/classes/kuis.php';
 $auth = new auth();
 $auth->authOrNot();
+
+$data = new Kuis();
+$dataKuis = $data->getAllKuisUser($_SESSION['id']);
 ?>
 
 <?php include '../include/header.php'; ?>
@@ -132,81 +136,59 @@ $auth->authOrNot();
                                 </div>
                             </div>
                         </div>
-                        <a class="col-12 col-xl-6 col-md-6" href="skill-detail.php">
-                            <div class="card mb-3 border border-success">
-                                <div class="row g-0 align-items-center">
-                                    <div class="col-3 text-center">
-                                        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                            <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
+                        <?php foreach ($dataKuis as $kuis): ?>
+                            <?php
+                            $canAccess = $kuis['material_selesai'] == 1;
+                            ?>
+                            <a
+                                class="col-12 col-xl-6 col-md-6 <?= !$canAccess ? 'pe-none' : '' ?>"
+                                href="<?= $canAccess ? 'skill-detail.php?id=' . $kuis['id_kuis'] : '#' ?>">
+                                <div class="card mb-3 border border-success">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-3 text-center">
+                                            <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
+                                                <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="card-body">
-                                            <h5 class="card-title mb-0 font-weight-bold">
-                                                Sahabat Tumbuh
-                                            </h5>
-                                            <p class="card-text mb-0">
-                                                <small class="text-muted">
-                                                    Perkumpulan tumbuh bersama.
-                                                </small>
-                                            </p>
-                                            <p class="card-text">
-                                                <small class="badge bg-success text-white px-2 py-1 rounded-pill">
-                                                    <i class="mdi mdi-check-circle"></i>
-                                                    Telah Lulus
-                                                </small>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <div class="col-12 col-xl-6 col-md-6">
-                            <div class="card mb-3">
-                                <div class="row g-0 align-items-center">
-                                    <div class="col-3 text-center">
-                                        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                            <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
-                                        </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="card-body">
-                                            <h5 class="card-title mb-0 font-weight-bold">
-                                                Anti Nikah Dini
-                                            </h5>
-                                            <p class="card-text">
-                                                <small class="text-muted">
-                                                    Perkumpulan tumbuh bersama.
-                                                </small>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xl-6 col-md-6">
-                            <div class="card mb-3">
-                                <div class="row g-0 align-items-center">
-                                    <div class="col-3 text-center">
-                                        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                            <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
-                                        </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="card-body">
-                                            <h5 class="card-title mb-0 font-weight-bold">
-                                                Remaja Berencana
-                                            </h5>
-                                            <p class="card-text">
-                                                <small class="text-muted">
-                                                    Perkumpulan tumbuh bersama.
-                                                </small>
-                                            </p>
+                                        <div class="col-9">
+                                            <div class="card-body">
+                                                <h5 class="card-title mb-0 font-weight-bold">
+                                                    <?= htmlspecialchars($kuis['judul_kuis']) ?>
+                                                </h5>
+                                                <!-- <p class="card-text mb-0">
+                                                    <small class="text-muted">
+                                                    </small>
+                                                </p> -->
+                                                <p class="card-text">
+                                                    <?php if (!$kuis['material_selesai']) : ?>
+
+                                                        <small class="badge bg-secondary">
+                                                            <i class="mdi mdi-lock"></i>
+                                                            Kunci
+                                                        </small>
+
+                                                    <?php elseif (!$kuis['quizz_selesai']) : ?>
+
+                                                        <small class="badge bg-warning text-dark">
+                                                            <i class="mdi mdi-pencil"></i>
+                                                            Belum Dikerjakan
+                                                        </small>
+
+                                                    <?php else : ?>
+
+                                                        <small class="badge bg-success">
+                                                            <i class="mdi mdi-check-circle"></i>
+                                                            Telah Lulus
+                                                        </small>
+
+                                                    <?php endif; ?>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </a>
+                        <?php endforeach; ?>
                         <!-- end col -->
                     </div>
                     <!-- end row -->

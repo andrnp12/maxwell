@@ -112,4 +112,106 @@ class tests
             'sudah_dikerjakan' => $sudahDikerjakan
         ];
     }
+
+    public function hasPassed(int $userId, int $quizId): bool
+    {
+        $sql = "
+        SELECT id
+        FROM quiz_results
+        WHERE user_id = ?
+        AND kuis_id = ?
+        AND lulus = 1
+        LIMIT 1
+    ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $userId, $quizId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        return $result->num_rows > 0;
+    }
+
+    public function getLastResult(int $userId, int $quizId): ?array
+    {
+        $sql = "
+        SELECT *
+        FROM quiz_results
+        WHERE user_id = ?
+        AND kuis_id = ?
+        ORDER BY percobaan DESC
+        LIMIT 1
+    ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $userId, $quizId);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    public function getBestResult(int $userId, int $quizId): ?array
+    {
+        $sql = "
+        SELECT *
+        FROM quiz_results
+        WHERE user_id = ?
+        AND kuis_id = ?
+        ORDER BY nilai DESC, percobaan ASC
+        LIMIT 1
+    ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $userId, $quizId);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    public function getHistory(int $userId, int $quizId): array
+    {
+        $sql = "
+        SELECT *
+        FROM quiz_results
+        WHERE user_id = ?
+        AND kuis_id = ?
+        ORDER BY percobaan ASC
+    ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $userId, $quizId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        $history = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $history[] = $row;
+        }
+
+        return $history;
+    }
+
+    // untuk dashboard
+
+    public function getStatistic(int $userId, int $quizId): array
+    {
+        $sql = "
+        SELECT
+            COUNT(*) AS total_attempt,
+            MAX(nilai) AS highest_score,
+            AVG(nilai) AS average_score
+        FROM quiz_results
+        WHERE user_id = ?
+        AND kuis_id = ?
+    ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $userId, $quizId);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_assoc();
+    }
 }
