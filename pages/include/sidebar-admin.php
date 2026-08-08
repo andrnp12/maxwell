@@ -27,7 +27,7 @@
                 </li>
                 <li>
                     <a href="kuis.php">
-                        <i data-feather="award">
+                        <i data-feather="edit">
                         </i>
                         <span data-key="t-skill">
                             Test
@@ -39,10 +39,39 @@
                         <i data-feather="book">
                         </i>
                         <span data-key="t-skill">
-                            Materi
+                            Silabus
                         </span>
                     </a>
                 </li>
+                <!-- <li>
+                    <a class="has-arrow" href="javascript: void(0);">
+                        <i data-feather="book">
+                        </i>
+                        <span data-key="t-skill">
+                            Silabus
+                        </span>
+                    </a>
+                    <ul aria-expanded="false" class="sub-menu">
+                        <li>
+                            <a href="materi.php">
+                                <i data-feather="book">
+                                </i>
+                                <span data-key="t-skill">
+                                    Materi
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="sertifikat.php">
+                                <i data-feather="award">
+                                </i>
+                                <span data-key="t-sertifikat">
+                                    Sertifikat
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li> -->
                 <li>
                     <a class="has-arrow" href="javascript: void(0);">
                         <i data-feather="users">
@@ -54,6 +83,7 @@
                     <ul aria-expanded="false" class="sub-menu">
                         <li>
                             <a href="komunitas.php">
+                                <i data-feather="users"></i>
                                 <span data-key="t-subtopik">
                                     Daftar Komunitas
                                 </span>
@@ -61,6 +91,7 @@
                         </li>
                         <li>
                             <a href="konselor.php">
+                                <i data-feather="users"></i>
                                 <span data-key="t-materi">
                                     Konselor
                                 </span>

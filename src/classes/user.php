@@ -166,12 +166,13 @@ class User
     /**
      * Get detailed quiz results for a user (for detail page)
      * Returns attempts grouped by type: pre, post, kuis
+     * Includes passing_grade from quizzes table for status computation
      */
     public function getUserQuizResultsDetail(int $userId): array
     {
         // Get pretest attempts (latest first)
         $pretestSql = "
-            SELECT qr.*, q.judul AS kuis_judul
+            SELECT qr.*, q.judul AS kuis_judul, q.passing_grade
             FROM quiz_results qr
             LEFT JOIN quizzes q ON qr.kuis_id = q.id
             WHERE qr.user_id = ? AND qr.jenis = 'pre'
@@ -188,7 +189,7 @@ class User
 
         // Get posttest attempts (latest first)
         $posttestSql = "
-            SELECT qr.*, q.judul AS kuis_judul
+            SELECT qr.*, q.judul AS kuis_judul, q.passing_grade
             FROM quiz_results qr
             LEFT JOIN quizzes q ON qr.kuis_id = q.id
             WHERE qr.user_id = ? AND qr.jenis = 'post'
@@ -205,7 +206,7 @@ class User
 
         // Get kuis attempts grouped by quiz
         $kuisSql = "
-            SELECT qr.*, q.judul AS kuis_judul, q.jenis AS kuis_jenis
+            SELECT qr.*, q.judul AS kuis_judul, q.jenis AS kuis_jenis, q.passing_grade
             FROM quiz_results qr
             LEFT JOIN quizzes q ON qr.kuis_id = q.id
             WHERE qr.user_id = ? AND qr.jenis = 'kuis'
@@ -229,6 +230,7 @@ class User
                     'kuis_id' => $kuisId,
                     'kuis_judul' => $attempt['kuis_judul'] ?? 'Kuis Tanpa Judul',
                     'kuis_jenis' => $attempt['kuis_jenis'] ?? 'kuis',
+                    'passing_grade' => $attempt['passing_grade'] ?? 0,
                     'attempts' => []
                 ];
             }
@@ -645,6 +647,525 @@ class User
                     'not_started' => $notStartedCount,
                     'completion_rate' => $completionRate
                 ]
+            ]
+        ];
+    }
+    /**
+     * Get average course completion rate across all materials
+     * Returns overall completion rate and per-material breakdown
+     */
+    public function getCourseCompletionRate(): array
+    {
+        // Overall completion rate (same logic as getMaterialProgressStats but focused)
+        $sql = "
+            SELECT
+                COUNT(DISTINCT mp.user_id) as completed_users,
+                (SELECT COUNT(*) FROM users WHERE role = 'user') as total_users,
+                ROUND(
+                    COUNT(DISTINCT mp.user_id) /
+                    NULLIF((SELECT COUNT(*) FROM users WHERE role = 'user'), 0) * 100, 1
+                ) as overall_completion_rate
+            FROM materials_progress mp
+            WHERE mp.material_selesai = 1
+        ";
+        $result = $this->conn->query($sql);
+        $overall = $result ? $result->fetch_assoc() : [
+            'completed_users' => 0,
+            'total_users' => 0,
+            'overall_completion_rate' => 0
+        ];
+
+        // Per-material completion rates
+        $sql = "
+            SELECT
+                m.id,
+                m.judul,
+                m.no_urut,
+                COUNT(DISTINCT mp.user_id) as completed_users,
+                (SELECT COUNT(*) FROM users WHERE role = 'user') as total_users,
+                ROUND(
+                    COUNT(DISTINCT mp.user_id) /
+                    NULLIF((SELECT COUNT(*) FROM users WHERE role = 'user'), 0) * 100, 1
+                ) as completion_rate_pct
+            FROM materials m
+            LEFT JOIN materials_progress mp ON m.id = mp.material_id AND mp.material_selesai = 1
+            GROUP BY m.id, m.judul, m.no_urut
+            ORDER BY m.no_urut ASC
+        ";
+        $result = $this->conn->query($sql);
+        $byMaterial = [];
+        while ($row = $result->fetch_assoc()) {
+            $byMaterial[] = $row;
+        }
+
+        // Average completion rate across materials
+        $avgRate = 0;
+        if (!empty($byMaterial)) {
+            $sum = array_sum(array_column($byMaterial, 'completion_rate_pct'));
+            $avgRate = round($sum / count($byMaterial), 1);
+        }
+
+        return [
+            'status' => 'success',
+            'data' => [
+                'overall_completion_rate' => (float)$overall['overall_completion_rate'],
+                'avg_completion_rate' => $avgRate,
+                'completed_users' => (int)$overall['completed_users'],
+                'total_users' => (int)$overall['total_users'],
+                'by_material' => $byMaterial
+            ]
+        ];
+    }
+
+    /**
+     * Get active learners count for 7 days and 30 days
+     * Uses chat timestamps (most reliable) and ID-based proxies for quiz/materials
+     */
+    public function getActiveLearners(): array
+    {
+        // Active in last 7 days - based on chat activity (has real timestamps)
+        $sql7d = "
+            SELECT COUNT(DISTINCT u.id) as active_7d
+            FROM users u
+            WHERE u.role = 'user'
+            AND (
+                -- Personal chat in last 7 days
+                EXISTS (
+                    SELECT 1 FROM chat_konsultan ck
+                    WHERE ck.id_user = u.id
+                    AND ck.time_stamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+                )
+                OR
+                -- Group chat in last 7 days
+                EXISTS (
+                    SELECT 1 FROM chat_komunitas ck
+                    JOIN anggota_komunitas ak ON ck.id_komunitas = ak.id_komunitas
+                    WHERE ak.id_user = u.id
+                    AND ck.time_stamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+                )
+            )
+        ";
+        $result = $this->conn->query($sql7d);
+        $active7d = $result ? (int)$result->fetch_assoc()['active_7d'] : 0;
+
+        // Active in last 30 days
+        $sql30d = "
+            SELECT COUNT(DISTINCT u.id) as active_30d
+            FROM users u
+            WHERE u.role = 'user'
+            AND (
+                -- Personal chat in last 30 days
+                EXISTS (
+                    SELECT 1 FROM chat_konsultan ck
+                    WHERE ck.id_user = u.id
+                    AND ck.time_stamp >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+                )
+                OR
+                -- Group chat in last 30 days
+                EXISTS (
+                    SELECT 1 FROM chat_komunitas ck
+                    JOIN anggota_komunitas ak ON ck.id_komunitas = ak.id_komunitas
+                    WHERE ak.id_user = u.id
+                    AND ck.time_stamp >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+                )
+            )
+        ";
+        $result = $this->conn->query($sql30d);
+        $active30d = $result ? (int)$result->fetch_assoc()['active_30d'] : 0;
+
+        // Total users for context
+        $totalUsers = (int)$this->conn->query("SELECT COUNT(*) as c FROM users WHERE role = 'user'")->fetch_assoc()['c'];
+
+        return [
+            'status' => 'success',
+            'data' => [
+                'active_7d' => $active7d,
+                'active_30d' => $active30d,
+                'total_users' => $totalUsers,
+                'active_7d_pct' => $totalUsers > 0 ? round($active7d / $totalUsers * 100, 1) : 0,
+                'active_30d_pct' => $totalUsers > 0 ? round($active30d / $totalUsers * 100, 1) : 0
+            ]
+        ];
+    }
+
+    /**
+     * Get funnel completion rate with drop-off analysis
+     * Returns overall funnel completion and biggest drop-off point
+     */
+    public function getFunnelCompletionRate(): array
+    {
+        $sql = "
+            SELECT
+                'Registered' as stage,
+                COUNT(*) as users_count,
+                100.0 as rate_pct,
+                0 as dropoff_from_prev,
+                1 as stage_order
+            FROM users WHERE role = 'user'
+
+            UNION ALL
+
+            SELECT
+                'Pretest Completed' as stage,
+                COUNT(DISTINCT qr.user_id) as users_count,
+                ROUND(COUNT(DISTINCT qr.user_id) / (SELECT COUNT(*) FROM users WHERE role = 'user') * 100, 1) as rate_pct,
+                ROUND((1 - COUNT(DISTINCT qr.user_id) / NULLIF((SELECT COUNT(*) FROM users WHERE role = 'user'), 0)) * 100, 1) as dropoff_from_prev,
+                2 as stage_order
+            FROM quiz_results qr
+            JOIN users u ON qr.user_id = u.id
+            WHERE u.role = 'user' AND qr.jenis = 'pre' AND qr.nilai > 0
+
+            UNION ALL
+
+            SELECT
+                'At Least 1 Kuis Completed' as stage,
+                COUNT(DISTINCT qr.user_id) as users_count,
+                ROUND(COUNT(DISTINCT qr.user_id) / (SELECT COUNT(*) FROM users WHERE role = 'user') * 100, 1) as rate_pct,
+                ROUND((
+                    1 - COUNT(DISTINCT qr.user_id) / NULLIF((
+                        SELECT COUNT(DISTINCT qr2.user_id)
+                        FROM quiz_results qr2
+                        JOIN users u2 ON qr2.user_id = u2.id
+                        WHERE u2.role = 'user' AND qr2.jenis = 'pre' AND qr2.nilai > 0
+                    ), 0)) * 100, 1) as dropoff_from_prev,
+                3 as stage_order
+            FROM quiz_results qr
+            JOIN users u ON qr.user_id = u.id
+            WHERE u.role = 'user' AND qr.jenis = 'kuis' AND qr.nilai > 0
+
+            UNION ALL
+
+            SELECT
+                'Posttest Completed' as stage,
+                COUNT(DISTINCT qr.user_id) as users_count,
+                ROUND(COUNT(DISTINCT qr.user_id) / (SELECT COUNT(*) FROM users WHERE role = 'user') * 100, 1) as rate_pct,
+                ROUND((
+                    1 - COUNT(DISTINCT qr.user_id) / NULLIF((
+                        SELECT COUNT(DISTINCT qr2.user_id)
+                        FROM quiz_results qr2
+                        JOIN users u2 ON qr2.user_id = u2.id
+                        WHERE u2.role = 'user' AND qr2.jenis = 'kuis' AND qr2.nilai > 0
+                    ), 0)) * 100, 1) as dropoff_from_prev,
+                4 as stage_order
+            FROM quiz_results qr
+            JOIN users u ON qr.user_id = u.id
+            WHERE u.role = 'user' AND qr.jenis = 'post' AND qr.nilai > 0
+
+            ORDER BY stage_order
+        ";
+        $result = $this->conn->query($sql);
+        $funnel = [];
+        while ($row = $result->fetch_assoc()) {
+            $funnel[] = $row;
+        }
+
+        // Overall funnel completion rate (Posttest / Registered)
+        $registered = (int)$this->conn->query("SELECT COUNT(*) as c FROM users WHERE role = 'user'")->fetch_assoc()['c'];
+        $posttestCompleted = 0;
+        foreach ($funnel as $stage) {
+            if ($stage['stage'] === 'Posttest Completed') {
+                $posttestCompleted = (int)$stage['users_count'];
+                break;
+            }
+        }
+        $overallRate = $registered > 0 ? round($posttestCompleted / $registered * 100, 1) : 0;
+
+        // Find biggest drop-off
+        $biggestDropoff = ['stage' => '', 'dropoff' => 0];
+        foreach ($funnel as $stage) {
+            if ($stage['dropoff_from_prev'] > $biggestDropoff['dropoff']) {
+                $biggestDropoff = [
+                    'stage' => $stage['stage'],
+                    'dropoff' => (float)$stage['dropoff_from_prev']
+                ];
+            }
+        }
+
+        return [
+            'status' => 'success',
+            'data' => [
+                'overall_completion_rate' => $overallRate,
+                'registered' => $registered,
+                'posttest_completed' => $posttestCompleted,
+                'funnel_stages' => $funnel,
+                'biggest_dropoff' => $biggestDropoff
+            ]
+        ];
+    }
+
+    /**
+     * Get unified chronological activity timeline for admin dashboard
+     * Merges: registrations, quiz completions, material completions, chat messages, community joins
+     * Returns newest first, limited to $limit items
+     */
+    public function getUnifiedActivityTimeline(int $limit = 20): array
+    {
+        $activities = [];
+        $perSourceLimit = max(50, $limit * 3); // Fetch more from each source to ensure good merge
+
+        // 1. User Registrations (ID as timestamp proxy)
+        $sql = "
+            SELECT
+                'registration' as activity_type,
+                u.id as user_id,
+                u.name as user_name,
+                u.foto as user_avatar,
+                u.id as reference_id,
+                CONCAT('Pengguna baru mendaftar: ', u.name) as description,
+                JSON_OBJECT() as metadata_json,
+                u.id as sort_key,
+                NULL as created_at
+            FROM users u
+            WHERE u.role = 'user'
+            ORDER BY u.id DESC
+            LIMIT ?
+        ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $perSourceLimit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $activities[] = $row;
+        }
+
+        // 2. Quiz Completions (pre, kuis, post, tryout)
+        $sql = "
+            SELECT
+                'quiz_completion' as activity_type,
+                u.id as user_id,
+                u.name as user_name,
+                u.foto as user_avatar,
+                qr.id as reference_id,
+                CONCAT(u.name, ' menyelesaikan ',
+                    CASE qr.jenis
+                        WHEN 'pre' THEN 'Pretest'
+                        WHEN 'post' THEN 'Posttest'
+                        WHEN 'tryout' THEN 'Tryout'
+                        ELSE 'Kuis'
+                    END,
+                    ' ', COALESCE(q.judul, ''),
+                    ' dengan nilai ', qr.nilai
+                ) as description,
+                JSON_OBJECT(
+                    'jenis', qr.jenis,
+                    'nilai', qr.nilai,
+                    'kuis_id', qr.kuis_id,
+                    'kuis_judul', q.judul
+                ) as metadata_json,
+                qr.id as sort_key,
+                NULL as created_at
+            FROM quiz_results qr
+            JOIN users u ON qr.user_id = u.id
+            LEFT JOIN quizzes q ON qr.kuis_id = q.id
+            WHERE u.role = 'user'
+            ORDER BY qr.id DESC
+            LIMIT ?
+        ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $perSourceLimit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $activities[] = $row;
+        }
+
+        // 3. Material Completions
+        $sql = "
+            SELECT
+                'material_completion' as activity_type,
+                u.id as user_id,
+                u.name as user_name,
+                u.foto as user_avatar,
+                mp.id as reference_id,
+                CONCAT(u.name, ' menyelesaikan materi: ', m.judul) as description,
+                JSON_OBJECT(
+                    'material_id', m.id,
+                    'material_judul', m.judul,
+                    'no_urut', m.no_urut
+                ) as metadata_json,
+                mp.id as sort_key,
+                NULL as created_at
+            FROM materials_progress mp
+            JOIN users u ON mp.user_id = u.id
+            JOIN materials m ON mp.material_id = m.id
+            WHERE u.role = 'user' AND mp.material_selesai = 1
+            ORDER BY mp.id DESC
+            LIMIT ?
+        ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $perSourceLimit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $activities[] = $row;
+        }
+
+        // 6. Community Joins
+        $sql = "
+            SELECT
+                'community_join' as activity_type,
+                u.id as user_id,
+                u.name as user_name,
+                u.foto as user_avatar,
+                ak.id as reference_id,
+                CONCAT(u.name, ' bergabung ke komunitas ', ko.nama_komunitas) as description,
+                JSON_OBJECT(
+                    'komunitas_id', ko.id,
+                    'komunitas_name', ko.nama_komunitas
+                ) as metadata_json,
+                UNIX_TIMESTAMP(ak.joined_at) as sort_key,
+                ak.joined_at as created_at
+            FROM anggota_komunitas ak
+            JOIN users u ON ak.id_user = u.id
+            JOIN komunitas ko ON ak.id_komunitas = ko.id
+            WHERE u.role = 'user'
+            ORDER BY ak.joined_at DESC
+            LIMIT ?
+        ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $perSourceLimit);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $activities[] = $row;
+        }
+
+        // Sort all activities by sort_key descending (newest first)
+        usort($activities, function ($a, $b) {
+            return (int)$b['sort_key'] - (int)$a['sort_key'];
+        });
+
+        // Limit to requested amount
+        $activities = array_slice($activities, 0, $limit);
+
+        // Normalize timestamp for display
+        foreach ($activities as &$activity) {
+            if ($activity['created_at']) {
+                $activity['timestamp'] = $activity['created_at'];
+            } else {
+                // For ID-based activities, use a placeholder - will show as "Baru saja" in UI
+                $activity['timestamp'] = date('Y-m-d H:i:s');
+            }
+        }
+
+        return [
+            'status' => 'success',
+            'data' => $activities
+        ];
+    }
+
+    /**
+     * Compute attempt status based on score, passing grade, and completion
+     *
+     * @param float|null $score The user's score (null if not submitted)
+     * @param int $passingGrade The passing grade (KKM) threshold
+     * @param bool $isCompleted Whether the attempt was completed/submitted
+     * @return array ['label' => string, 'class' => string] Badge label and CSS class
+     */
+    public static function getAttemptStatus(?float $score, int $passingGrade, bool $isCompleted): array
+    {
+        // Default passing grade to 0 if null
+        $passingGrade = $passingGrade ?? 0;
+
+        if (!$isCompleted || $score === null) {
+            return [
+                'label' => 'Belum Selesai',
+                'class' => 'bg-secondary'
+            ];
+        }
+
+        if ($score >= $passingGrade) {
+            return [
+                'label' => 'Lulus',
+                'class' => 'bg-success'
+            ];
+        }
+
+        return [
+            'label' => 'Gagal',
+            'class' => 'bg-danger'
+        ];
+    }
+
+    /**
+     * Check if user is eligible to download certificate
+     * Replicates exact logic from pages/user/index.php for progress calculation
+     *
+     * @param int $userId
+     * @return array [
+     *     'eligible' => bool,
+     *     'progress_percent' => float,
+     *     'missing_requirements' => array<string>,
+     *     'details' => array (component breakdown)
+     * ]
+     */
+    public function canDownloadCertificate(int $userId): array
+    {
+        // Reuse existing methods to avoid code duplication
+        $userResult = $this->getUserWithQuizResults($userId);
+        $quizDetail = $this->getUserQuizResultsDetail($userId);
+        $materialProgress = $this->getUserMaterialProgress($userId);
+
+        $user = $userResult['data'] ?? null;
+        if (!$user) {
+            return [
+                'eligible' => false,
+                'progress_percent' => 0,
+                'missing_requirements' => ['User not found'],
+                'details' => []
+            ];
+        }
+
+        // Extract counts (mirroring index.php logic)
+        $pretestAttempts  = (int)($user['pretest_attempts'] ?? 0);
+        $kuisAttempts     = (int)($user['kuis_attempts'] ?? 0);
+        $posttestAttempts = (int)($user['posttest_attempts'] ?? 0);
+
+        $matCompleted    = $materialProgress['data']['summary']['completed'] ?? 0;
+        $matInProgress   = $materialProgress['data']['summary']['in_progress'] ?? 0;
+        $matTotal        = $materialProgress['data']['summary']['total'] ?? 0;
+
+        // Get total kuis from database
+        $allKuisResult = $this->conn->query("SELECT id FROM quizzes WHERE jenis = 'kuis'");
+        $allKuis = $allKuisResult ? $allKuisResult->fetch_all(MYSQLI_ASSOC) : [];
+        $totalKuis = count($allKuis);
+        $completedKuis = count($quizDetail['data']['kuis'] ?? []);
+
+        // Compute totals
+        $totalActivities  = $matTotal + 1 + $totalKuis + 1;
+        $completedActivities = ($matCompleted + $matInProgress)
+            + ($pretestAttempts > 0 ? 1 : 0)
+            + $completedKuis
+            + ($posttestAttempts > 0 ? 1 : 0);
+
+        $progressPercent = $totalActivities > 0
+            ? round(($completedActivities / $totalActivities) * 100, 1)
+            : 0;
+
+        // Identify missing requirements
+        $missing = [];
+        if ($matCompleted + $matInProgress < $matTotal) {
+            $missing[] = "Materi: " . ($matTotal - $matCompleted - $matInProgress) . " modul belum dimulai";
+        }
+        if ($pretestAttempts === 0) {
+            $missing[] = "Pre-Test: Belum dikerjakan";
+        }
+        if ($completedKuis < $totalKuis) {
+            $missing[] = "Kuis: " . ($totalKuis - $completedKuis) . " kuis belum selesai";
+        }
+        if ($posttestAttempts === 0) {
+            $missing[] = "Post-Test: Belum dikerjakan";
+        }
+
+        return [
+            'eligible' => $progressPercent >= 100.0,
+            'progress_percent' => $progressPercent,
+            'missing_requirements' => $missing,
+            'details' => [
+                'materi' => ['completed' => $matCompleted + $matInProgress, 'total' => $matTotal],
+                'pretest' => ['completed' => $pretestAttempts > 0 ? 1 : 0, 'total' => 1],
+                'kuis' => ['completed' => $completedKuis, 'total' => $totalKuis],
+                'posttest' => ['completed' => $posttestAttempts > 0 ? 1 : 0, 'total' => 1],
             ]
         ];
     }

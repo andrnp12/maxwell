@@ -250,13 +250,37 @@ body[data-topbar="dark"]
 body[data-topbar="dark"] .app-search span {
   color: rgba(255, 255, 255, 0.5);
 }
-@media (max-width: 600px) {
+/* Ensure proper positioning context for notification dropdown */
+.navbar-header .dropdown {
+  position: relative;
+}
+
+/* Mobile dropdown: fixed positioning relative to viewport */
+@media (max-width: 768px) {
   .navbar-header .dropdown {
     position: static;
   }
   .navbar-header .dropdown .dropdown-menu {
+    position: fixed !important;
+    top: 70px !important;
     left: 10px !important;
     right: 10px !important;
+    max-width: calc(100vw - 20px) !important;
+    max-height: calc(100vh - 80px) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    z-index: 1050 !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  }
+  .navbar-header .dropdown .dropdown-menu .dropdown-header {
+    position: sticky;
+    top: 0;
+    background: var(--bs-dropdown-bg);
+    z-index: 1;
+  }
+  #noti-dropdown {
+    max-height: calc(100vh - 160px) !important;
+    overflow-y: auto !important;
   }
 }
 @media (max-width: 380px) {
@@ -4947,4 +4971,66 @@ body[data-layout="horizontal"] .chat-conversation {
 [data-bs-theme="dark"] .pricing-tab-box .nav-link {
   border-color: var(--bs-border-color);
 }
+
+/* Certificate Button Styles */
+.btn-certificate {
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-certificate:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-certificate:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-certificate--locked {
+  background-color: #e9ecef !important;
+  color: #6c757d !important;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.btn-certificate--locked:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.icon-lock {
+  font-size: 1.1rem;
+}
+
+.badge-progress {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Tooltip customization for locked button */
+.tooltip-inner {
+  max-width: 300px;
+  text-align: left;
+  white-space: pre-line;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .btn-certificate {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.75rem;
+  }
+  .badge-progress {
+    font-size: 0.65rem;
+  }
+}
+
 /*# sourceMappingURL=app.min.css.map */

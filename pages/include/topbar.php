@@ -54,7 +54,7 @@ $notiItems = $notifikasiData['items'];
             <button aria-expanded="false" aria-haspopup="true" class="btn header-item noti-icon position-relative" data-bs-toggle="dropdown" id="page-header-notifications-dropdown" type="button">
                <i class="icon-lg" data-feather="bell">
                </i>
-               <span class="badge bg-danger rounded-pill">
+               <span id="noti-badge" class="badge bg-danger rounded-pill">
                   <?php echo $notiCount; ?>
                </span>
             </button>
@@ -68,7 +68,7 @@ $notiItems = $notifikasiData['items'];
                      </div>
                   </div>
                </div>
-               <div data-simplebar="" style="max-height: 230px;">
+               <div data-simplebar="" style="max-height: 230px; overflow-y: auto;" id="noti-dropdown">
                   <?php if (empty($notiItems)): ?>
                      <div class="text-center p-3 text-muted">
                         Tidak ada notifikasi
@@ -123,3 +123,43 @@ $notiItems = $notifikasiData['items'];
       </div>
    </div>
 </header>
+
+<script>
+   (function() {
+      var url = '/src/actions/proses_notifikasi.php';
+
+      function fetchNoti() {
+         fetch(url, {
+               credentials: 'same-origin'
+            })
+            .then(function(r) {
+               return r.json();
+            })
+            .then(function(data) {
+               var badge = document.getElementById('noti-badge');
+               if (badge && data.count !== undefined) badge.textContent = data.count;
+               var container = document.getElementById('noti-dropdown');
+               if (!container) return;
+               if (!data.items || data.items.length === 0) {
+                  container.innerHTML = '<div class="text-center p-3 text-muted">Tidak ada notifikasi</div>';
+               } else {
+                  var html = '';
+                  for (var i = 0; i < data.items.length; i++) {
+                     var item = data.items[i];
+                     var msg = item.message ? item.message.replace(/</g, '<').replace(/>/g, '>') : '';
+                     var txt = item.text ? item.text.replace(/</g, '<').replace(/>/g, '>') : '';
+                     var icon = (item.icon || 'message-square').replace(/</g, '<').replace(/>/g, '>');
+                     html += '<a class="text-reset notification-item" href="#"><div class="d-flex"><div class="flex-shrink-0 me-3"><i class="icon-lg text-primary" data-feather="' + icon + '"></i></div><div class="flex-grow-1"><h6 class="mb-1">' + msg + '</h6><p class="mb-0 font-size-13 text-muted">' + txt + '</p></div></div></a>';
+                  }
+                  container.innerHTML = html;
+                  if (window.feather) feather.replace();
+               }
+            })
+            .catch(function(e) {
+               console.error('Notifikasi polling error:', e);
+            });
+      }
+      fetchNoti();
+      setInterval(fetchNoti, 5000);
+   })();
+</script>

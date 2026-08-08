@@ -22,9 +22,12 @@ $chatModel = new ChatV2();
 $dashboardStats = $userModel->getDashboardStats();
 $learningFunnel = $userModel->getLearningFunnel();
 $scoreDistribution = $userModel->getScoreDistribution();
-$recentActivity = $userModel->getRecentActivity(10);
 $chatStats = $chatModel->getAdminDashboardStats();
 $materialProgress = $userModel->getMaterialProgressStats();
+
+// NEW: Fetch new metrics
+$courseCompletion = $userModel->getCourseCompletionRate();
+$unifiedActivity = $userModel->getUnifiedActivityTimeline(20);
 
 // Fetch counts for metric cards
 $totalMateri = count($materiModel->getAllMateri());
@@ -46,9 +49,10 @@ foreach ($kuisModel->getAllKuis() as $k) {
 $stats = $dashboardStats['data'] ?? [];
 $funnel = $learningFunnel['data'] ?? [];
 $distribution = $scoreDistribution['data'] ?? [];
-$activities = $recentActivity['data'] ?? [];
 $chatData = $chatStats['data'] ?? [];
 $matProgress = $materialProgress['data'] ?? [];
+$courseData = $courseCompletion['data'] ?? [];
+$activities = $unifiedActivity['data'] ?? [];
 ?>
 
 <!--header start-->
@@ -95,7 +99,7 @@ $matProgress = $materialProgress['data'] ?? [];
                     <!-- ============================================================== -->
                     <!-- ROW 1: KEY METRIC CARDS -->
                     <!-- ============================================================== -->
-                    <div class="row g-4">
+                    <div class="row g-lg-4">
                         <!-- Total Pengguna -->
                         <div class="col-xl-3 col-md-6">
                             <div class="card card-h-100">
@@ -135,9 +139,9 @@ $matProgress = $materialProgress['data'] ?? [];
                                             </h3>
                                             <small class="text-muted">
                                                 <?= $totalKuis ?> Kuis
-                                                (<?= $kuisByType['kuis'] ?> Kuis,
-                                                <?= $kuisByType['pretest'] ?> Pretest,
-                                                <?= $kuisByType['posttest'] ?> Posttest)
+                                                (<?= $kuisByType['kuis'] ?? 0 ?> Kuis,
+                                                <?= $kuisByType['pretest'] ?? 0 ?> Pretest,
+                                                <?= $kuisByType['posttest'] ?? 0 ?> Posttest)
                                             </small>
                                         </div>
                                         <div class="col-5 text-end">
@@ -175,25 +179,26 @@ $matProgress = $materialProgress['data'] ?? [];
                         </div>
                         <!-- end col -->
 
-                        <!-- Progress Materi -->
+                        <!-- Course Completion Rate (replaces Progress Materi) -->
                         <div class="col-xl-3 col-md-6">
                             <div class="card card-h-100">
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col-7">
                                             <span class="text-muted mb-3 lh-1 d-block text-truncate">
-                                                Progress Materi
+                                                Course Completion Rate
                                             </span>
                                             <h3 class="mb-1">
-                                                <span class="counter-value" data-target="<?= $matProgress['completion_rate'] ?? 0 ?>">0</span>
+                                                <span class="counter-value" data-target="<?= $courseData['avg_completion_rate'] ?? 0 ?>">0</span>
                                                 <span class="text-muted fw-normal">%</span>
                                             </h3>
                                             <small class="text-muted">
-                                                <?= $matProgress['completed'] ?? 0 ?> / <?= $matProgress['total_possible'] ?? 0 ?> Selesai
+                                                Rata-rata: <?= $courseData['avg_completion_rate'] ?? 0 ?>% |
+                                                <?= $courseData['completed_users'] ?? 0 ?> / <?= $courseData['total_users'] ?? 0 ?> pengguna
                                             </small>
                                         </div>
                                         <div class="col-5 text-end">
-                                            <i class="mdi mdi-book-check text-success display-4"></i>
+                                            <i class="mdi mdi-chart-line text-success display-4"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -300,20 +305,6 @@ $matProgress = $materialProgress['data'] ?? [];
                                         </div>
                                     </div>
 
-                                    <!-- Progress Materi Bar - langsung dibawah funnel -->
-                                    <div class="funnel-step mb-3">
-                                        <div class="d-flex justify-content-between mb-1">
-                                            <span class="fw-bold text-muted"></i>Progress Materi</span>
-                                            <span class="text-success"><?= $matProgress['completion_rate'] ?? 0 ?>%</span>
-                                        </div>
-                                        <div class="progress" style="height: 12px;">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: <?= $matProgress['completion_rate'] ?? 0 ?>%"></div>
-                                        </div>
-                                        <small class="text-muted">
-                                            <?= $matProgress['completed'] ?? 0 ?> / <?= $matProgress['total_possible'] ?? 0 ?> materi selesai
-                                        </small>
-                                    </div>
-
                                     <hr>
                                     <div class="row text-center mb-3">
                                         <div class="col-6">
@@ -349,17 +340,41 @@ $matProgress = $materialProgress['data'] ?? [];
                                             <div class="list-group list-group-flush">
                                                 <?php foreach ($activities as $activity): ?>
                                                     <?php
-                                                    $icon = 'mdi-information text-muted';
-                                                    $jenis = $activity['jenis'] ?? '';
+                                                    // New unified activity structure uses 'activity_type' instead of 'type'
+                                                    $activityType = $activity['activity_type'] ?? ($activity['type'] ?? '');
+                                                    $meta = json_decode($activity['metadata_json'] ?? '{}', true);
+                                                    $jenis = $meta['jenis'] ?? $activity['jenis'] ?? '';
                                                     $jenisNormalized = strtolower(trim($jenis));
-                                                    if ($activity['type'] === 'registration') {
-                                                        $icon = 'mdi-account-plus text-primary';
-                                                    } elseif ($activity['type'] === 'quiz_completion') {
-                                                        // Support both short ('pre', 'post', 'kuis') and long ('pretest', 'posttest') formats
-                                                        if (in_array($jenisNormalized, ['pre', 'pretest'])) $icon = 'mdi-checkbox-marked-circle text-success';
-                                                        elseif (in_array($jenisNormalized, ['post', 'posttest'])) $icon = 'mdi-flag-checkered text-warning';
-                                                        elseif (in_array($jenisNormalized, ['kuis', 'tryout'])) $icon = 'mdi-file-check text-info';
-                                                        else $icon = 'mdi-quiz text-info'; // fallback
+
+                                                    // Icon mapping for all activity types
+                                                    $iconMap = [
+                                                        'registration' => 'mdi-account-plus text-primary',
+                                                        'quiz_completion' => match ($jenisNormalized) {
+                                                            'pre', 'pretest' => 'mdi-checkbox-marked-circle text-success',
+                                                            'post', 'posttest' => 'mdi-flag-checkered text-warning',
+                                                            'tryout' => 'mdi-trophy text-danger',
+                                                            default => 'mdi-file-check text-info',
+                                                        },
+                                                        'material_completion' => 'mdi-book-check text-success',
+                                                        'chat_personal' => 'mdi-message-text text-primary',
+                                                        'chat_group' => 'mdi-account-group text-info',
+                                                        'community_join' => 'mdi-account-multiple-plus text-purple',
+                                                    ];
+                                                    $icon = $iconMap[$activityType] ?? 'mdi-information text-muted';
+
+                                                    // Time ago helper
+                                                    $timeAgo = '';
+                                                    if (!empty($activity['timestamp'])) {
+                                                        $now = new DateTime();
+                                                        $then = new DateTime($activity['timestamp']);
+                                                        $diff = $now->getTimestamp() - $then->getTimestamp();
+                                                        if ($diff < 60) $timeAgo = 'Baru saja';
+                                                        elseif ($diff < 3600) $timeAgo = floor($diff / 60) . ' menit lalu';
+                                                        elseif ($diff < 86400) $timeAgo = floor($diff / 3600) . ' jam lalu';
+                                                        elseif ($diff < 604800) $timeAgo = floor($diff / 86400) . ' hari lalu';
+                                                        else $timeAgo = $then->format('d M Y');
+                                                    } else {
+                                                        $timeAgo = 'Baru saja';
                                                     }
                                                     ?>
                                                     <div class="list-group-item px-3 py-2 border-0 border-bottom">
@@ -367,15 +382,9 @@ $matProgress = $materialProgress['data'] ?? [];
                                                             <i class="mdi <?= $icon ?> fs-4 flex-shrink-0"></i>
                                                             <div class="flex-grow-1 min-w-0 text-md-start">
                                                                 <p class="mb-1 fw-medium small text-truncate d-inline-block w-100"><?= htmlspecialchars($activity['description'] ?? 'Aktivitas') ?></p>
-                                                                <small class="text-muted d-flex flex-wrap gap-2">
-                                                                    <?php if ($activity['type'] === 'registration'): ?>
-                                                                        <span>ID Pengguna: #<?= htmlspecialchars($activity['timestamp']) ?></span>
-                                                                    <?php elseif ($activity['type'] === 'quiz_completion'): ?>
-                                                                        <span class="badge bg-secondary"><?= strtoupper($jenis) ?></span>
-                                                                        <span>ID Hasil: #<?= htmlspecialchars($activity['timestamp']) ?></span>
-                                                                    <?php else: ?>
-                                                                        <span><?= date('d M Y H:i', strtotime($activity['timestamp'] ?? 'now')) ?></span>
-                                                                    <?php endif; ?>
+                                                                <small class="text-muted d-flex flex-wrap gap-2 align-items-center">
+                                                                    <span class="badge bg-light text-dark text-uppercase"><?= str_replace('_', ' ', $activityType) ?></span>
+                                                                    <span><?= $timeAgo ?></span>
                                                                 </small>
                                                             </div>
                                                         </div>

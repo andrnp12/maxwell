@@ -77,26 +77,41 @@ class ProgressUser
 
         // Jika gagal update/insert user_progress
         if (!$result) {
+            error_log("finishMaterial: Failed to update/insert user_progress for user_id=$userId, material_id=$materialId");
             return false;
         }
 
         // Simpan ke materials_progress
-        $sql = "
-        INSERT INTO materials_progress
-        (
-            user_id,
-            material_id,
-            material_selesai
-        )
-        VALUES (?, ?, 1)
-        ON DUPLICATE KEY UPDATE
-            material_selesai = VALUES(material_selesai)
-    ";
+        // Cek apakah record sudah ada di materials_progress
+        $checkSql = "SELECT id FROM materials_progress WHERE user_id = ? AND material_id = ?";
+        $checkStmt = $this->conn->prepare($checkSql);
+        $checkStmt->bind_param("ii", $userId, $materialId);
+        $checkStmt->execute();
+        $checkResult = $checkStmt->get_result();
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ii", $userId, $materialId);
+        if ($checkResult->num_rows > 0) {
+            // Update existing record
+            $sql = "UPDATE materials_progress SET material_selesai = 1 WHERE user_id = ? AND material_id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ii", $userId, $materialId);
+            error_log("finishMaterial: Updating existing materials_progress for user_id=$userId, material_id=$materialId");
+        } else {
+            // Insert new record
+            $sql = "INSERT INTO materials_progress (user_id, material_id, material_selesai) VALUES (?, ?, 1)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ii", $userId, $materialId);
+            error_log("finishMaterial: Inserting new materials_progress for user_id=$userId, material_id=$materialId");
+        }
 
-        return $stmt->execute();
+        $executeResult = $stmt->execute();
+
+        if (!$executeResult) {
+            error_log("finishMaterial: Failed to update/insert materials_progress. Error: " . $this->conn->error . " | SQL: " . $sql . " | user_id=$userId, material_id=$materialId");
+            return false;
+        }
+
+        error_log("finishMaterial: Successfully saved to materials_progress for user_id=$userId, material_id=$materialId");
+        return true;
     }
 
     /**
