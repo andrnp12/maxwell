@@ -80,8 +80,8 @@ $dataMateri = $materi->getAllMateri();
                                                     <td><?= $i++ ?></td>
                                                     <td><?= htmlspecialchars($materi['judul']) ?></td>
                                                     <td><?= htmlspecialchars($materi['deskripsi']) ?></td>
-                                                    <td><a href="../../uploads/<?= htmlspecialchars($materi['file']) ?>" target="_blank"><?= htmlspecialchars($materi['file']) ?></a></td>
-                                                    <td><a href="<?= htmlspecialchars($materi['video_url']) ?>" target="_blank"><?= htmlspecialchars($materi['video_url']) ?></a></td>
+                                                    <td><?= htmlspecialchars($materi['file']) ?></a></td>
+                                                    <td><?= htmlspecialchars($materi['video_url']) ?></td>
                                                     <td><?= htmlspecialchars($materi['no_urut']) ?></td>
                                                     <td>
                                                         <a href="#"
@@ -546,7 +546,7 @@ $dataMateri = $materi->getAllMateri();
             });
         }
 
-                // --- Event Listener: Buka Modal Edit ---
+        // --- Event Listener: Buka Modal Edit ---
         if (modalEditMateri) {
             modalEditMateri.addEventListener('show.bs.modal', async function(event) {
                 const button = event.relatedTarget;
@@ -566,7 +566,7 @@ $dataMateri = $materi->getAllMateri();
                 document.getElementById('no_urut_edit').value = noUrut;
                 document.getElementById('file_lama').value = fileNama;
                 document.getElementById('file_lama_edit').textContent = fileNama;
-                
+
                 // Store file value in form element for later retrieval
                 if (formEditMateri) {
                     formEditMateri.setAttribute('data-file-value', fileNama);
@@ -662,4 +662,5 @@ $dataMateri = $materi->getAllMateri();
         }
     </script>
 </body>
+
 </html>

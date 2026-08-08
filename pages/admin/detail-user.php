@@ -38,8 +38,9 @@ $kuisAttempts = (int)($user['kuis_attempts'] ?? 0);
 $posttestAttempts = (int)($user['posttest_attempts'] ?? 0);
 
 // Get total available activities in system
-$allKuis = $kuisModel->getAllKuis();
-$totalKuis = count($allKuis);
+// For Kuis, use only quiz-type (jenis='kuis'), excluding pretest/posttest
+$allKuisOnly = $kuisModel->getAllKuisOnly();
+$totalKuis = count($allKuisOnly);
 $totalMateri = $matTotal;
 $totalPretest = 1;  // Assuming 1 pretest exists
 $totalPosttest = 1; // Assuming 1 posttest exists
@@ -158,7 +159,7 @@ if (!$user) {
                         </div>
 
                         <!-- Progress Chart Card -->
-                        <div class="col-lg-5">
+                        <div class="col-lg-5 mt-4 mt-lg-0">
                             <div class="card h-100">
                                 <div class="card-header">
                                     <h5 class="card-title mb-0">Progres Belajar</h5>
@@ -269,7 +270,18 @@ if (!$user) {
                                                             <p class="card-text">
                                                                 <small class="text-muted">
                                                                     <?php if (!empty($quizDetail['kuis'])): ?>
-                                                                        Status: <span class="badge bg-success">Selesai Dikerjakan</span>
+                                                                        <?php
+                                                                        $firstKuis = $quizDetail['kuis'][0];
+                                                                        $bestAttempt = $firstKuis['attempts'][0] ?? null;
+                                                                        $score = $bestAttempt ? ($bestAttempt['nilai'] ?? null) : null;
+                                                                        $passingGrade = $firstKuis['passing_grade'] ?? 0;
+                                                                        $isCompleted = $bestAttempt !== null;
+                                                                        $status = User::getAttemptStatus($score, $passingGrade, $isCompleted);
+                                                                        ?>
+                                                                        Status: <span class="badge <?= $status['class'] ?>"><?= $status['label'] ?></span>
+                                                                        <?php if ($bestAttempt): ?>
+                                                                            (<?= htmlspecialchars($bestAttempt['nilai'] ?? '-') ?>/100 <?php if ($passingGrade > 0): ?>KKM: <?= $passingGrade ?> <?php endif; ?>)
+                                                                        <?php endif; ?>
                                                                     <?php else: ?>
                                                                         Belum ada riwayat kuis
                                                                     <?php endif; ?>
@@ -289,10 +301,27 @@ if (!$user) {
                                                     Evaluasi yang dilakukan pertama kali user masuk aplikasi untuk menilai pengetahuannya.
                                                 </small>
                                             </div>
-                                            <span class="badge <?= empty($quizDetail['pretest']) ? 'bg-danger' : 'bg-success' ?> rounded-pill my-2 py-1">
-                                                <i class="mdi mdi-<?= empty($quizDetail['pretest']) ? 'cancel' : 'check-circle' ?>"></i>
-                                                <?= empty($quizDetail['pretest']) ? 'Pretest Belum Dikerjakan' : 'Pretest Selesai Dikerjakan' ?>
-                                            </span>
+                                            <?php if (!empty($quizDetail['pretest'])): ?>
+                                                <?php
+                                                $attempt = $quizDetail['pretest'][0];
+                                                $score = $attempt['nilai'] ?? null;
+                                                $passingGrade = $attempt['passing_grade'] ?? 0;
+                                                $isCompleted = true; // pretest attempts are always completed
+                                                $status = User::getAttemptStatus($score, $passingGrade, $isCompleted);
+                                                ?>
+                                                <span class="badge <?= $status['class'] ?> rounded-pill my-2 py-1">
+                                                    <i class="mdi mdi-<?= $status['label'] === 'Lulus' ? 'check-circle' : ($status['label'] === 'Gagal' ? 'close-circle' : 'clock-outline') ?>"></i>
+                                                    Pretest: <?= $status['label'] ?>
+                                                    <?php if ($score !== null): ?>
+                                                        (<?= htmlspecialchars($score) ?>/100 <?php if ($passingGrade > 0): ?>KKM: <?= $passingGrade ?> <?php endif; ?>)
+                                                    <?php endif; ?>
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="badge bg-danger rounded-pill my-2 py-1">
+                                                    <i class="mdi mdi-cancel"></i>
+                                                    Pretest Belum Dikerjakan
+                                                </span>
+                                            <?php endif; ?>
                                         </div>
                                         <div class="col-lg-6 flex-wrap mb-2">
                                             <div>
@@ -303,10 +332,27 @@ if (!$user) {
                                                     Evaluasi yang dilakukan Terakhir kali user dalam aplikasi untuk menilai pengetahuannya.
                                                 </small>
                                             </div>
-                                            <span class="badge <?= empty($quizDetail['posttest']) ? 'bg-danger' : 'bg-success' ?> rounded-pill my-2 py-1">
-                                                <i class="mdi mdi-<?= empty($quizDetail['posttest']) ? 'cancel' : 'check-circle' ?>"></i>
-                                                <?= empty($quizDetail['posttest']) ? 'Posttest Belum Dikerjakan' : 'Posttest Selesai Dikerjakan' ?>
-                                            </span>
+                                            <?php if (!empty($quizDetail['posttest'])): ?>
+                                                <?php
+                                                $attempt = $quizDetail['posttest'][0];
+                                                $score = $attempt['nilai'] ?? null;
+                                                $passingGrade = $attempt['passing_grade'] ?? 0;
+                                                $isCompleted = true; // posttest attempts are always completed
+                                                $status = User::getAttemptStatus($score, $passingGrade, $isCompleted);
+                                                ?>
+                                                <span class="badge <?= $status['class'] ?> rounded-pill my-2 py-1">
+                                                    <i class="mdi mdi-<?= $status['label'] === 'Lulus' ? 'check-circle' : ($status['label'] === 'Gagal' ? 'close-circle' : 'clock-outline') ?>"></i>
+                                                    Posttest: <?= $status['label'] ?>
+                                                    <?php if ($score !== null): ?>
+                                                        (<?= htmlspecialchars($score) ?>/100 <?php if ($passingGrade > 0): ?>KKM: <?= $passingGrade ?> <?php endif; ?>)
+                                                    <?php endif; ?>
+                                                </span>
+                                            <?php else: ?>
+                                                <span class="badge bg-danger rounded-pill my-2 py-1">
+                                                    <i class="mdi mdi-cancel"></i>
+                                                    Posttest Belum Dikerjakan
+                                                </span>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -374,19 +420,25 @@ if (!$user) {
                                                     <?php if (!empty($quizDetail['pretest'])): ?>
                                                         <?php $no = 1; ?>
                                                         <?php foreach ($quizDetail['pretest'] as $attempt): ?>
+                                                            <?php
+                                                            $score = $attempt['nilai'] ?? null;
+                                                            $passingGrade = $attempt['passing_grade'] ?? 0;
+                                                            $isCompleted = true;
+                                                            $status = User::getAttemptStatus($score, $passingGrade, $isCompleted);
+                                                            ?>
                                                             <tr>
                                                                 <td><?= $no++ ?></td>
                                                                 <td><?= htmlspecialchars($attempt['kuis_judul'] ?? 'Pretest') ?></td>
-                                                                <td><?= htmlspecialchars($attempt['nilai'] ?? '-') ?></td>
+                                                                <td>
+                                                                    <?= htmlspecialchars($attempt['nilai'] ?? '-') ?>
+                                                                    <?php if ($passingGrade > 0 && $score !== null): ?>
+                                                                        <br><small class="text-muted">KKM: <?= $passingGrade ?></small>
+                                                                    <?php endif; ?>
+                                                                </td>
                                                                 <td><?= htmlspecialchars($attempt['jumlah_benar'] ?? '-') ?></td>
                                                                 <td><?= htmlspecialchars($attempt['jumlah_salah'] ?? '-') ?></td>
                                                                 <td>
-                                                                    <?php
-                                                                    $lulus = $attempt['lulus'] ?? 0;
-                                                                    $badgeClass = $lulus == 1 ? 'bg-success' : 'bg-danger';
-                                                                    $badgeText = $lulus == 1 ? 'Lulus' : 'Belum Lulus';
-                                                                    ?>
-                                                                    <span class="badge <?= $badgeClass ?>"><?= $badgeText ?></span>
+                                                                    <span class="badge <?= $status['class'] ?>"><?= $status['label'] ?></span>
                                                                 </td>
                                                             </tr>
                                                         <?php endforeach; ?>
@@ -402,8 +454,10 @@ if (!$user) {
                                                         <th>No</th>
                                                         <th>Judul Kuis</th>
                                                         <th>Jenis</th>
-                                                        <th>Percobaan Terbaik</th>
-                                                        <th>Total Percobaan</th>
+                                                        <th>Percobaan Ke-</th>
+                                                        <th>Nilai</th>
+                                                        <th>Benar</th>
+                                                        <th>Salah</th>
                                                         <th>Status</th>
                                                     </tr>
                                                 </thead>
@@ -412,24 +466,33 @@ if (!$user) {
                                                         <?php $no = 1; ?>
                                                         <?php foreach ($quizDetail['kuis'] as $kuis): ?>
                                                             <?php
-                                                            $bestAttempt = $kuis['attempts'][0] ?? null;
-                                                            $bestScore = $bestAttempt ? $bestAttempt['nilai'] : '-';
+                                                            $passingGrade = $kuis['passing_grade'] ?? 0;
                                                             $attemptCount = count($kuis['attempts']);
-                                                            // Get lulus status from best attempt
-                                                            $lulus = $bestAttempt ? ($bestAttempt['lulus'] ?? 0) : 0;
-                                                            $badgeClass = $lulus == 1 ? 'bg-success' : 'bg-danger';
-                                                            $badgeText = $lulus == 1 ? 'Lulus' : 'Belum Lulus';
                                                             ?>
-                                                            <tr>
-                                                                <td><?= $no++ ?></td>
-                                                                <td><?= htmlspecialchars($kuis['kuis_judul'] ?? 'Kuis') ?></td>
-                                                                <td><?= htmlspecialchars($kuis['kuis_jenis'] ?? 'kuis') ?></td>
-                                                                <td><?= htmlspecialchars($bestScore) ?></td>
-                                                                <td><?= $attemptCount ?></td>
-                                                                <td>
-                                                                    <span class="badge <?= $badgeClass ?>"><?= $badgeText ?></span>
-                                                                </td>
-                                                            </tr>
+                                                            <?php foreach ($kuis['attempts'] as $attemptIndex => $attempt): ?>
+                                                                <?php
+                                                                $score = $attempt['nilai'] ?? null;
+                                                                $isCompleted = true;
+                                                                $status = User::getAttemptStatus($score, $passingGrade, $isCompleted);
+                                                                ?>
+                                                                <tr>
+                                                                    <td><?= $no++ ?></td>
+                                                                    <td><?= $attemptIndex === 0 ? htmlspecialchars($kuis['kuis_judul'] ?? 'Kuis') : '' ?></td>
+                                                                    <td><?= $attemptIndex === 0 ? htmlspecialchars($kuis['kuis_jenis'] ?? 'kuis') : '' ?></td>
+                                                                    <td><?= $attempt['percobaan'] ?? ($attemptIndex + 1) ?></td>
+                                                                    <td>
+                                                                        <?= htmlspecialchars($attempt['nilai'] ?? '-') ?>
+                                                                        <?php if ($passingGrade > 0 && $score !== null): ?>
+                                                                            <br><small class="text-muted">KKM: <?= $passingGrade ?></small>
+                                                                        <?php endif; ?>
+                                                                    </td>
+                                                                    <td><?= htmlspecialchars($attempt['jumlah_benar'] ?? '-') ?></td>
+                                                                    <td><?= htmlspecialchars($attempt['jumlah_salah'] ?? '-') ?></td>
+                                                                    <td>
+                                                                        <span class="badge <?= $status['class'] ?>"><?= $status['label'] ?></span>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php endforeach; ?>
                                                         <?php endforeach; ?>
                                                     <?php endif; ?>
                                                 </tbody>
@@ -452,19 +515,25 @@ if (!$user) {
                                                     <?php if (!empty($quizDetail['posttest'])): ?>
                                                         <?php $no = 1; ?>
                                                         <?php foreach ($quizDetail['posttest'] as $attempt): ?>
+                                                            <?php
+                                                            $score = $attempt['nilai'] ?? null;
+                                                            $passingGrade = $attempt['passing_grade'] ?? 0;
+                                                            $isCompleted = true;
+                                                            $status = User::getAttemptStatus($score, $passingGrade, $isCompleted);
+                                                            ?>
                                                             <tr>
                                                                 <td><?= $no++ ?></td>
                                                                 <td><?= htmlspecialchars($attempt['kuis_judul'] ?? 'Posttest') ?></td>
-                                                                <td><?= htmlspecialchars($attempt['nilai'] ?? '-') ?></td>
+                                                                <td>
+                                                                    <?= htmlspecialchars($attempt['nilai'] ?? '-') ?>
+                                                                    <?php if ($passingGrade > 0 && $score !== null): ?>
+                                                                        <br><small class="text-muted">KKM: <?= $passingGrade ?></small>
+                                                                    <?php endif; ?>
+                                                                </td>
                                                                 <td><?= htmlspecialchars($attempt['jumlah_benar'] ?? '-') ?></td>
                                                                 <td><?= htmlspecialchars($attempt['jumlah_salah'] ?? '-') ?></td>
                                                                 <td>
-                                                                    <?php
-                                                                    $lulus = $attempt['lulus'] ?? 0;
-                                                                    $badgeClass = $lulus == 1 ? 'bg-success' : 'bg-danger';
-                                                                    $badgeText = $lulus == 1 ? 'Lulus' : 'Belum Lulus';
-                                                                    ?>
-                                                                    <span class="badge <?= $badgeClass ?>"><?= $badgeText ?></span>
+                                                                    <span class="badge <?= $status['class'] ?>"><?= $status['label'] ?></span>
                                                                 </td>
                                                             </tr>
                                                         <?php endforeach; ?>

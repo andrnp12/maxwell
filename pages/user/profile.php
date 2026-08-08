@@ -1,12 +1,135 @@
 <?php
 require_once '../../src/classes/profile.php';
 require_once '../../src/classes/auth.php';
+require_once '../../src/classes/user.php';
 
 $auth = new auth();
 $auth->authOrNot();
 
+$userId = $_SESSION['id'];
+
+// Handle certificate download action
+if (isset($_GET['action']) && $_GET['action'] === 'download_certificate') {
+    header('Content-Type: application/json');
+
+    $userModel = new User();
+    $eligibility = $userModel->canDownloadCertificate($userId);
+
+    if (!$eligibility['eligible']) {
+        http_response_code(403);
+        echo json_encode([
+            'status' => 'locked',
+            'message' => 'Progress requirement not met',
+            'progress_percent' => $eligibility['progress_percent'],
+            'missing_requirements' => $eligibility['missing_requirements']
+        ]);
+        exit;
+    }
+
+    // Generate PDF certificate
+    try {
+        require_once '../../src/classes/certificate.php';
+
+        // Enable debug mode with ?debug=1 parameter
+        $debugMode = isset($_GET['debug']) && $_GET['debug'] === '1';
+        $certGenerator = new CertificateGenerator($debugMode);
+
+        $profileModel = new Profile();
+        $userData = $profileModel->getProfileById($userId);
+
+        if (!$userData) {
+            throw new Exception('User data not found');
+        }
+
+        // Background image for certificate (optional)
+        $bgImagePath = __DIR__ . '/../../uploads/sertifikat/bg.webp'; // Change to your preferred background
+        // $bgImagePath = null; // Uncomment to disable background
+
+        // Custom logo(s) for certificate (optional)
+        // Supports single logo (string) or multiple logos (array)
+        // Each logo can be: string (path/URL) OR array with 'src' and optional 'position'
+        // Position options: 'top-center' (default), 'top-left', 'top-right', 'bottom-center', 'bottom-left', 'bottom-right'
+
+        // Example 1: Single logo (backward compatible)
+        // $customLogo = __DIR__ . '/../../assets/icon/mortarboard.webp';
+
+        // Example 2: Multiple logos with positions
+        $customLogo = [
+            [
+                'src' => __DIR__ . '/../../assets/icon/saintek.webp',
+                'position' => 'top-center'
+            ],
+            [
+                'src' => __DIR__ . '/../../assets/icon/tut.webp',
+                'position' => 'top-left'
+            ],
+            [
+                'src' => __DIR__ . '/../../assets/icon/unisnu.webp',
+                'position' => 'top-right'
+            ],
+            // URL example:
+            // [
+            //     'src' => 'https://example.com/logo.png',
+            //     'position' => 'bottom-right'
+            // ],
+        ];
+        // $customLogo = null; // Uncomment to disable custom logos
+
+        // Signature images for certificate footer (optional)
+        $signatures = [
+            [
+                'src' => __DIR__ . '/../../assets/icon/unisnu.webp',
+                'label' => 'Ketua Panitia',
+                'position' => 'left'
+            ],
+            [
+                'src' => __DIR__ . '/../../assets/icon/tut.webp',
+                'label' => 'Sekretaris',
+                'position' => 'right'
+            ],
+            // URL example:
+            // [
+            //     'src' => 'https://example.com/signature.png',
+            //     'label' => 'Manager',
+            //     'position' => 'left'
+            // ],
+        ];
+        // $signatures = null; // Uncomment to disable signatures
+
+        // Use minimal template with ?minimal=1 for layout debugging
+        if (isset($_GET['minimal']) && $_GET['minimal'] === '1') {
+            $pdfContent = $certGenerator->generateMinimal($userData);
+        } else {
+            $pdfContent = $certGenerator->generate($userData, $eligibility['details'], $bgImagePath, $customLogo, $signatures);
+        }
+
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="sertifikat_' . $userId . '_' . date('Ymd') . '.pdf"');
+        header('Content-Length: ' . strlen($pdfContent));
+        echo $pdfContent;
+        exit;
+    } catch (Exception $e) {
+        error_log("Certificate generation failed for user $userId: " . $e->getMessage());
+        http_response_code(500);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Gagal generate sertifikat. Silakan coba lagi nanti.'
+        ]);
+        exit;
+    }
+}
+
+// Normal profile logic
 $profile = new Profile();
-$dataProfile = $profile->getProfile($_SESSION['id']);
+$dataProfile = $profile->getProfile($userId);
+
+// Compute certificate eligibility for view
+$userModel = new User();
+$certEligibility = $userModel->canDownloadCertificate($userId);
+$currentProgressPercent = $certEligibility['progress_percent'];
+$isEligible = $certEligibility['eligible'];
+$missingRequirements = $certEligibility['missing_requirements'];
+$progressDetails = $certEligibility['details'];
 ?>
 
 <!--header start-->
@@ -130,6 +253,34 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
                                     </h5>
                                 </div>
                                 <ul class="list-group list-group-flush">
+                                    <!-- Certificate Download Button -->
+                                    <li class="list-group-item">
+                                        <a class="pb-2 d-block text-muted" href="#"><i class="mdi mdi-download text-primary me-1"></i>Unduh Sertifikat</a>
+                                        <?php if ($isEligible): ?>
+                                            <!-- STATE: ELIGIBLE (100%) -->
+                                            <a href="profile.php?action=download_certificate"
+                                                class="btn btn-certificate btn-success w-100 d-flex align-items-center justify-content-center gap-2"
+                                                id="btnDownloadCertificate">
+                                                <!-- <i class="mdi mdi-download"></i> -->
+                                                <span>Unduh Sekarang</span>
+                                            </a>
+                                        <?php else: ?>
+                                            <!-- STATE: LOCKED (< 100%) -->
+                                            <button type="button"
+                                                class="btn btn-certificate btn-certificate--locked w-100 d-flex align-items-center justify-content-center gap-2"
+                                                id="btnCertificateLocked"
+                                                disabled
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="right"
+                                                title="<?= htmlspecialchars(implode("\n", $missingRequirements)) ?>">
+                                                <i class="mdi mdi-lock icon-lock"></i>
+                                                <span>Sertifikat Terkunci</span>
+                                                <span class="badge badge-progress bg-warning text-dark">
+                                                    Progres: <?= $currentProgressPercent ?>%
+                                                </span>
+                                            </button>
+                                        <?php endif; ?>
+                                    </li>
                                     <li class="list-group-item">
                                         <a href="#"
                                             data-id="<?= $dataProfile['data']['id']; ?>"
@@ -148,7 +299,7 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
                                     </li>
                                     <li class="list-group-item">
                                         <a class="pb-2 d-block text-muted" href="../../src/actions/proses_auth.php?action=logout">
-                                            <i class="mdi mdi-note-text-outline text-primary me-1">
+                                            <i class="mdi mdi-logout text-primary me-1">
                                             </i>
                                             Logout
                                         </a>
@@ -364,6 +515,57 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
                 btnEdit.disabled = false;
                 btnEdit.innerText = 'Simpan Perubahan';
             }
+        });
+
+        // Certificate Download Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnDownload = document.getElementById('btnDownloadCertificate');
+            const btnLocked = document.getElementById('btnCertificateLocked');
+
+            // Re-validation on click (race condition protection)
+            if (btnDownload) {
+                btnDownload.addEventListener('click', async function(e) {
+                    e.preventDefault();
+
+                    // Show loading state
+                    const originalHtml = this.innerHTML;
+                    this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Memproses...';
+                    this.disabled = true;
+
+                    try {
+                        // HEAD request to re-validate eligibility
+                        const response = await fetch('profile.php?action=download_certificate', {
+                            method: 'HEAD',
+                            credentials: 'same-origin'
+                        });
+
+                        if (response.status === 403) {
+                            // Progress dropped - reload page to show locked state
+                            const data = await response.json();
+                            tampilkanNotif('Gagal', data.message || 'Progress requirement not met', 'error');
+                            setTimeout(() => location.reload(), 1500);
+                            return;
+                        }
+
+                        if (response.ok || response.status === 501) {
+                            // Proceed with actual download (GET)
+                            window.location.href = 'profile.php?action=download_certificate';
+                        }
+                    } catch (error) {
+                        console.error('Certificate download error:', error);
+                        tampilkanNotif('Koneksi Gagal', 'Terjadi kesalahan koneksi jaringan.', 'error');
+                    } finally {
+                        this.innerHTML = originalHtml;
+                        this.disabled = false;
+                    }
+                });
+            }
+
+            // Initialize Bootstrap tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
         });
     </script>
 </body>
