@@ -116,6 +116,33 @@ class Kuis
         return $kuisList;
     }
 
+    /**
+     * Get all quiz-type quizzes only (jenis = 'kuis')
+     * Excludes pretest and posttest
+     */
+    public function getAllKuisOnly(): array
+    {
+        $result = $this->conn->query("SELECT 
+        quizzes.id AS id_kuis,
+        quizzes.material_id, 
+        quizzes.judul AS judul_kuis,
+        materials.judul AS judul_materi,
+        quizzes.passing_grade,
+        quizzes.jenis
+    FROM quizzes
+    LEFT JOIN materials 
+        ON quizzes.material_id = materials.id
+    WHERE quizzes.jenis = 'kuis';");
+
+        $kuisList = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $kuisList[] = $row;
+        }
+
+        return $kuisList;
+    }
+
     // user
     public function getAllKuisUser(int $userId): array
     {

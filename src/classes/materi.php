@@ -6,6 +6,9 @@ class Materi
     private dbconnect $db;
     private mysqli $conn;
 
+    // Konstanta direktori upload materi
+    private const UPLOAD_DIR = __DIR__ . '/../../uploads/materi/';
+
     public function __construct()
     {
         $this->db = new dbconnect();
@@ -32,13 +35,13 @@ class Materi
         $sql = "UPDATE materials SET no_urut = no_urut + 1 WHERE no_urut >= ?";
         $params = [$noUrut];
         $types = "i";
-        
+
         if ($excludeId !== null) {
             $sql .= " AND id != ?";
             $params[] = $excludeId;
             $types .= "i";
         }
-        
+
         $stmt = $this->conn->prepare($sql);
         if ($stmt) {
             $stmt->bind_param($types, ...$params);
@@ -58,10 +61,10 @@ class Materi
         $namaFileTersimpan = null;
 
         if ($file && $file['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../../uploads/';
+            $uploadDir = self::UPLOAD_DIR;
 
             if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
+                mkdir($uploadDir, 0775, true);
             }
             $ekstensi = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
@@ -142,7 +145,7 @@ class Materi
 
             // JIKA berhasil, BARU kita hapus file fisiknya
             if ($fileName) {
-                $filePath = __DIR__ . '/../../uploads/' . $fileName;
+                $filePath = self::UPLOAD_DIR . $fileName;
 
                 // Tambahkan is_file() untuk memastikan itu benar-benar file, bukan direktori
                 if (file_exists($filePath) && is_file($filePath)) {
@@ -189,7 +192,7 @@ class Materi
         $namaFileTersimpan = $materiLama['file'];
 
         if ($file && $file['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../../uploads/';
+            $uploadDir = self::UPLOAD_DIR;
 
             if (!empty($materiLama['file']) && file_exists($uploadDir . $materiLama['file'])) {
                 unlink($uploadDir . $materiLama['file']);
@@ -254,13 +257,13 @@ class Materi
         $sql = "UPDATE materials SET no_urut = no_urut + ? WHERE no_urut BETWEEN ? AND ?";
         $params = [$direction, $start, $end];
         $types = "iii";
-        
+
         if ($excludeId !== null) {
             $sql .= " AND id != ?";
             $params[] = $excludeId;
             $types .= "i";
         }
-        
+
         $stmt = $this->conn->prepare($sql);
         if ($stmt) {
             $stmt->bind_param($types, ...$params);

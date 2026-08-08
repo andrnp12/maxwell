@@ -72,7 +72,7 @@ $nextMateri = $data->getNextMateri((int)$_GET['id']);
                                                     <?= htmlspecialchars($dataMateri['deskripsi']) ?>
                                                 </p>
                                                 <div class="mt-3 mb-4">
-                                                    <iframe src="/assets/ViewerJS/index.html?zoom=page-width#/uploads/<?= htmlspecialchars($dataMateri['file']) ?>"
+                                                    <iframe src="/assets/ViewerJS/index.html?zoom=page-width#/uploads/materi/<?= htmlspecialchars($dataMateri['file']) ?>"
                                                         title="Pratinjau PDF"
                                                         class="w-100 rounded border"
                                                         style="min-height: 500px; border: 1px solid #dee2e6;">
@@ -278,7 +278,9 @@ $nextMateri = $data->getNextMateri((int)$_GET['id']);
 
                                     btn.classList.add("btn-primary");
 
-                                    btn.href = "detail-materi.php?id=<?= $nextMateri['id'] ?>";
+                                    <?php if ($nextMateri): ?>
+                                        btn.href = "detail-materi.php?id=<?= $nextMateri['id'] ?>";
+                                    <?php endif; ?>
 
                                     btn.innerHTML = `
                 Materi Selanjutnya
