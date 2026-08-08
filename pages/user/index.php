@@ -1,6 +1,7 @@
 <?php
 
 require_once '../../src/classes/auth.php';
+require_once '../../src/classes/tests.php';
 require_once '../../src/classes/user.php';
 require_once '../../src/classes/kuis.php';
 require_once '../../src/classes/tests.php';
