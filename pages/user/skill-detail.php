@@ -14,6 +14,8 @@ $dataKuis = $kuis->getKuisById((int)$_GET['id']);
 
 $dataPertanyaan = $dataPertanyaan->getAllPertanyaanKuis($_GET['id']);
 
+$total = count($dataPertanyaan);
+
 if (!$dataKuis) {
     header("Location: skill.php");
     exit;
@@ -82,7 +84,7 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
                                                             passing grade: <?= $dataKuis['passing_grade'] ?>
                                                         </p>
                                                         <p class="badge bg-light text-dark rounded-pill mb-0">
-                                                            5 Soal pilihan ganda
+                                                            <?= $total ?> Soal pilihan ganda
                                                         </p>
                                                     </div>
                                                 </div>
@@ -101,6 +103,7 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
                                             type="hidden"
                                             name="quiz_id"
                                             value="<?= (int)$dataKuis['id'] ?>">
+                                        <input type="hidden" name="jenis" value="kuis">
 
                                         <div class="d-flex flex-column-reverse flex-md-row gap-3 gap-md-4">
                                             <!-- Soal -->
@@ -117,7 +120,7 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
                                                     <div class="card-body">
 
                                                         <?php
-                                                        $total = count($dataPertanyaan);
+
 
                                                         foreach ($dataPertanyaan as $i => $pertanyaan):
 

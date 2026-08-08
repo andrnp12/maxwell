@@ -14,12 +14,22 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$userId = (int)$_SESSION['id'];
+$userId = (int) $_SESSION['id'];
 
-$quizId = filter_input(INPUT_POST, 'quiz_id', FILTER_VALIDATE_INT);
+$quizId = filter_input(
+    INPUT_POST,
+    'quiz_id',
+    FILTER_VALIDATE_INT
+);
+
+$jenis = $_POST['jenis'] ?? null;
 
 if (!$quizId) {
+    header("Location: ../../pages/user/skill.php");
+    exit;
+}
 
+if (!in_array($jenis, ['kuis', 'pre', 'post'], true)) {
     header("Location: ../../pages/user/skill.php");
     exit;
 }
@@ -31,28 +41,25 @@ $pertanyaan = new PertanyaanKuis();
 $progress = new ProgressUser();
 $hasilKuis = new HasilKuis();
 
+
 $dataKuis = $kuis->getKuisById($quizId);
 
-$hasil = $pertanyaan->calculateResult(
-    $quizId,
-    $jawabanUser
-);
-
 if (!$dataKuis) {
-
     header("Location: ../../pages/user/skill.php");
     exit;
 }
 
-if (
-    !$progress->isMaterialFinished(
-        $userId,
-        (int)$dataKuis['material_id']
-    )
-) {
+if ($jenis === 'kuis') {
 
-    header("Location: ../../pages/user/skill.php");
-    exit;
+    if (
+        !$progress->isMaterialFinished(
+            $userId,
+            (int) $dataKuis['material_id']
+        )
+    ) {
+        header("Location: ../../pages/user/skill.php");
+        exit;
+    }
 }
 
 $hasil = $pertanyaan->calculateResult(
@@ -60,9 +67,13 @@ $hasil = $pertanyaan->calculateResult(
     $jawabanUser
 );
 
-$lulus = (
-    $hasil['persentase'] >= $dataKuis['passing_grade']
-);
+if ($jenis === 'kuis') {
+    $lulus = (
+        $hasil['persentase'] >= $dataKuis['passing_grade']
+    );
+} else {
+    $lulus = 1;
+}
 
 $resultId = $hasilKuis->saveResult(
     $userId,
@@ -71,7 +82,7 @@ $resultId = $hasilKuis->saveResult(
     $hasil['salah'],
     $hasil['persentase'],
     $lulus,
-    'kuis'
+    $jenis
 );
 
 if (!$resultId) {
@@ -79,15 +90,18 @@ if (!$resultId) {
     exit;
 }
 
-if ($lulus) {
+if ($jenis === 'kuis' && $lulus) {
+
     $progress->finishQuiz(
         $userId,
-        (int)$dataKuis['material_id']
+        (int) $dataKuis['material_id']
     );
 }
 
-header(
-    "Location: ../../pages/user/hasil-test.php?result=" . $resultId
-);
+if ($jenis === 'kuis') {
+    header("Location: ../../pages/user/hasil-test.php?result=$resultId");
+} else {
+    header("Location: ../../pages/user/hasil-prepost.php?result=$resultId&type=$jenis");
+}
 
 exit;

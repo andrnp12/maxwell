@@ -1,6 +1,7 @@
 <?php
 $name = $_SESSION['username'];
 require_once __DIR__ . '/../../src/classes/notifikasi.php';
+require_once __DIR__ . '/../../src/classes/profile.php';
 
 $notifikasiData = ['count' => 0, 'items' => []];
 if (isset($_SESSION['role']) && isset($_SESSION['id'])) {
@@ -9,6 +10,9 @@ if (isset($_SESSION['role']) && isset($_SESSION['id'])) {
 }
 $notiCount = $notifikasiData['count'];
 $notiItems = $notifikasiData['items'];
+
+$profile = new Profile();
+$dataProfile = $profile->getProfile($_SESSION['id']);
 ?>
 
 <header id="page-topbar">
@@ -97,7 +101,7 @@ $notiItems = $notifikasiData['items'];
          </div>
          <div class="dropdown">
             <button aria-expanded="false" aria-haspopup="true" class="btn header-item bg-light-subtle border-start border-end page-header-user-dropdown" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
-               <img alt="Header Avatar" class="rounded-circle header-profile-user" src="/assets/images/users/avatar-1.jpg" />
+               <img alt="Header Avatar" class="rounded-circle header-profile-user" src="/uploads/profile/<?= $dataProfile['data']['foto']; ?>" />
                <span class="d-none d-xl-inline-block ms-1 fw-medium">
                   <?php echo $name ?>
                </span>

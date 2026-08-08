@@ -13,15 +13,91 @@ class tests
         $this->conn = $this->db->conn;
     }
 
-    public function hasUserTakenTest(int $userId, int $testId, string $tipeSesi): bool
-    {
-        // Cek apakah user_id ini sudah punya nilai dengan tipe_sesi tertentu (pre/post)
-        $sql = "SELECT id FROM test_result WHERE user_id = ? AND test_id = ? AND tipe_sesi = ?";
+    public function hasUserTakenTest(
+        int $userId,
+        int $kuisId,
+        string $jenis
+    ): bool {
+
+        $sql = "SELECT id
+            FROM quiz_results
+            WHERE user_id = ?
+              AND kuis_id = ?
+              AND jenis = ?
+            LIMIT 1";
+
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("iis", $userId, $testId, $tipeSesi);
+
+        if (!$stmt) {
+            throw new Exception("Prepare failed: " . $this->conn->error);
+        }
+
+        $stmt->bind_param("iis", $userId, $kuisId, $jenis);
         $stmt->execute();
 
-        return $stmt->get_result()->num_rows > 0;
+        $result = $stmt->get_result();
+
+        return $result->num_rows > 0;
+    }
+
+    public function getQuizByJenis(string $jenis): ?array
+    {
+        $sql = "SELECT id, material_id, judul, passing_grade, jenis
+                FROM quizzes
+                WHERE jenis = ?
+                AND material_id IS NULL
+                LIMIT 1";
+
+        $stmt = $this->conn->prepare($sql);
+
+        if (!$stmt) {
+            throw new Exception("Prepare failed: " . $this->conn->error);
+        }
+
+        $stmt->bind_param("s", $jenis);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
+            return null;
+        }
+
+        return $result->fetch_assoc();
+    }
+
+    public function getQuestionsByQuiz(int $kuisId): array
+    {
+        $sql = "SELECT 
+                id,
+                kuis_id,
+                pertanyaan,
+                opsi_a,
+                opsi_b,
+                opsi_c,
+                opsi_d
+            FROM quiz_questions
+            WHERE kuis_id = ?
+            ORDER BY id ASC";
+
+        $stmt = $this->conn->prepare($sql);
+
+        if (!$stmt) {
+            throw new Exception("Prepare failed: " . $this->conn->error);
+        }
+
+        $stmt->bind_param("i", $kuisId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        $questions = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $questions[] = $row;
+        }
+
+        return $questions;
     }
 
 

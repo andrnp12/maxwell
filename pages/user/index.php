@@ -1,24 +1,50 @@
 <?php
+
 require_once '../../src/classes/auth.php';
+require_once '../../src/classes/tests.php';
 
 $auth = new auth();
 $auth->authOrNot();
 
-require_once '../../src/classes/tests.php';
-
 $testManager = new tests();
-$userId = $_SESSION['id'];
 
-$idAktif = $_SESSION['id'];
-// $sudahPreTest = $testManager->hasUserTakenTest($userId, $idAktif, 'pre');
-// $sudahPostTest = $testManager->hasUserTakenTest($userId, $idAktif, 'post');
+$userId = (int) $_SESSION['id'];
 
-// if (!$sudahPreTest) {
-//    header('Location: preposttest.php?type=pre');
-//    exit;
-// }
+$preQuiz = $testManager->getQuizByJenis('pre');
 
-global $sudahPreTest, $sudahPostTest;
+if (!$preQuiz) {
+   die('Pre-test belum tersedia.');
+}
+
+$preQuizId = (int) $preQuiz['id'];
+
+$sudahPreTest = $testManager->hasUserTakenTest(
+   $userId,
+   $preQuizId,
+   'pre'
+);
+
+$postQuiz = $testManager->getQuizByJenis('post');
+
+$sudahPostTest = false;
+
+if ($postQuiz) {
+
+   $postQuizId = (int) $postQuiz['id'];
+
+   $sudahPostTest = $testManager->hasUserTakenTest(
+      $userId,
+      $postQuizId,
+      'post'
+   );
+}
+
+
+if (!$sudahPreTest) {
+
+   header('Location: preposttest.php?type=pre');
+   exit;
+}
 ?>
 
 <!--header start-->
@@ -191,16 +217,34 @@ global $sudahPreTest, $sudahPostTest;
                            <div class="row align-items-center">
                               <div class="col-12">
                                  <h4 class="mb-3">
-                                    <img src="/assets/icon/notes.webp" alt="icon" style="width: 40px; height: 40px;" />
+                                    <img
+                                       src="/assets/icon/notes.webp"
+                                       alt="icon"
+                                       style="width: 40px; height: 40px;" />
                                  </h4>
+
                                  <?php if (!$sudahPreTest): ?>
-                                    <span style="color: gray;">Kerjakan Pre-Test terlebih dahulu</span>
-                                 <?php elseif ($sudahPreTest && !$sudahPostTest): ?>
-                                    <a href="preposttest.php?type=post"><button class="btn btn-primary btn-sm">Mulai Post-Test</button></a>
+
+                                    <span class="text-secondary">
+                                       Kerjakan Pre-Test terlebih dahulu
+                                    </span>
+
+                                 <?php elseif (!$sudahPostTest): ?>
+
+                                    <a
+                                       href="preposttest.php?type=post"
+                                       class="btn btn-primary btn-sm">
+                                       Mulai Post-Test
+                                    </a>
+
                                  <?php else: ?>
-                                    <span class="text-success">✔ Nilai Resmi Tersimpan</span>
-                                    <a href="preposttest.php?type=post"><button class="btn btn-warning btn-sm" style="margin-left:6px;">Kerjakan Ulang (Latihan)</button></a>
+
+                                    <span class="text-success">
+                                       ✔ Nilai Resmi Tersimpan
+                                    </span>
+
                                  <?php endif; ?>
+
                               </div>
                            </div>
                         </div>

@@ -12,22 +12,33 @@ class HasilKuis
         $this->conn = $this->db->conn;
     }
 
-    public function getAttempt(int $userId, int $quizId): int
-    {
+    public function getAttempt(
+        int $userId,
+        int $quizId,
+        string $jenis
+    ): int {
         $sql = "
         SELECT COALESCE(MAX(percobaan), 0) AS percobaan
         FROM quiz_results
         WHERE user_id = ?
         AND kuis_id = ?
+        AND jenis = ?
     ";
 
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ii", $userId, $quizId);
+
+        $stmt->bind_param(
+            "iis",
+            $userId,
+            $quizId,
+            $jenis
+        );
+
         $stmt->execute();
 
         $result = $stmt->get_result()->fetch_assoc();
 
-        return ((int)$result['percobaan']) + 1;
+        return ((int) $result['percobaan']) + 1;
     }
 
     public function saveResult(
@@ -40,7 +51,11 @@ class HasilKuis
         string $jenis = 'kuis'
     ): int|false {
 
-        $attempt = $this->getAttempt($userId, $quizId);
+        $attempt = $this->getAttempt(
+            $userId,
+            $quizId,
+            $jenis
+        );
 
         $sql = "
         INSERT INTO quiz_results
@@ -75,8 +90,7 @@ class HasilKuis
         );
 
         if ($stmt->execute()) {
-
-            return (int)$this->conn->insert_id;
+            return (int) $this->conn->insert_id;
         }
 
         return false;
