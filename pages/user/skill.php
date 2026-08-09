@@ -109,7 +109,7 @@ $dataKuis = $data->getAllKuisUser($_SESSION['id']);
                                 <h5 class="mb-sm-0">
                                     Daftar Skill Tes
                                 </h5>
-                                <div class="page-title-right">
+                                <!-- <div class="page-title-right">
                                     <div class="btn-group">
                                         <button aria-expanded="false" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" type="button">
                                             Filter Skill
@@ -133,7 +133,7 @@ $dataKuis = $data->getAllKuisUser($_SESSION['id']);
                                             </a>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <?php foreach ($dataKuis as $kuis): ?>

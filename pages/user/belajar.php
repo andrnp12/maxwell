@@ -61,7 +61,7 @@ $persen = $total > 0
                                 <h5 class="mb-sm-0">
                                     Kategori Belajar
                                 </h5>
-                                <div class="page-title-right">
+                                <!-- <div class="page-title-right">
                                     <div class="btn-group">
                                         <button aria-expanded="false" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" type="button">
                                             Filter Kategori
@@ -85,7 +85,7 @@ $persen = $total > 0
                                             </a>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="progress mb-3" style="height:8px;">
                                 <div

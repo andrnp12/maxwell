@@ -179,6 +179,24 @@ class Materi
         return $result->num_rows > 0 ? $result->fetch_assoc() : null;
     }
 
+    public function getMateriLainnya(int $currentId): array
+    {
+        $currentId = (int) $currentId;
+
+        $sql = "SELECT *
+            FROM materials
+            WHERE id != ?
+            ORDER BY no_urut ASC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $currentId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function updateMateri(int $id, string $judul, string $deskripsi, ?string $videoUrl, ?int $noUrut, ?array $file): array
     {
         $materiLama = $this->getMateriById($id);

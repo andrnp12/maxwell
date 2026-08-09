@@ -17,8 +17,8 @@ $data = new Konsultan();
 $dataKomunitas = new Komunitas();
 
 $auth->authOrNot();
-$komunitas = $dataKomunitas->getAllKomunitas((int) $_SESSION['id']);
-$konsultan = $data->getAllKonsultan();
+$komunitas = $dataKomunitas->getTopKomunitas((int) $_SESSION['id']);
+$konsultan = $data->getTopKonsultan();
 
 include '../include/header.php';
 ?>
@@ -155,14 +155,14 @@ include '../include/header.php';
                                         </p>
                                     </div>
                                     <div class="btn-group" role="group">
-                                        <button class="btn btn-outline-light text-truncate" type="button">
+                                        <button class="btn btn-secondary text-truncate" type="button">
                                             <i class="uil uil-user me-1">
                                             </i>
                                             Profile
                                         </button>
-                                        <button class="btn btn-outline-light text-truncate" type="button">
+                                        <button class="btn btn-primary text-truncate" type="button">
                                             <a href="chat.php?id=<?= $konsul['id'] ?>&type=personal"
-                                                class="text-decoration-none text-dark">
+                                                class="text-decoration-none text-white">
                                                 <i class="uil uil-envelope-alt me-1"></i>
                                                 Message
                                             </a>

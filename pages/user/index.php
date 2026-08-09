@@ -107,6 +107,28 @@ if (!$sudahPreTest) {
 }
 
 global $sudahPreTest, $sudahPostTest;
+
+// 1. Pre-Test harus sudah selesai
+$syaratPretest = $sudahPreTest;
+
+// 2. Semua materi harus selesai
+$syaratMateri = (
+   $totalMateri > 0 &&
+   $completedMateri >= $totalMateri
+);
+
+// 3. Semua kuis harus selesai
+$syaratKuis = (
+   $totalKuis > 0 &&
+   $completedKuis >= $totalKuis
+);
+
+// Post-Test boleh dikerjakan jika semua syarat terpenuhi
+$bolehPostTest = (
+   $syaratPretest &&
+   $syaratMateri &&
+   $syaratKuis
+);
 ?>
 
 <!--header start-->
@@ -277,6 +299,18 @@ global $sudahPreTest, $sudahPostTest;
 
                                     <span class="text-secondary">
                                        Kerjakan Pre-Test terlebih dahulu
+                                    </span>
+
+                                 <?php elseif (!$syaratMateri): ?>
+
+                                    <span class="text-secondary">
+                                       Selesaikan seluruh materi terlebih dahulu
+                                    </span>
+
+                                 <?php elseif (!$syaratKuis): ?>
+
+                                    <span class="text-secondary">
+                                       Selesaikan seluruh kuis terlebih dahulu
                                     </span>
 
                                  <?php elseif (!$sudahPostTest): ?>
