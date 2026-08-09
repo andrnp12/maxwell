@@ -228,7 +228,7 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
                         </div>
 
                         <!-- Isi Pop-up (Form Anda masuk ke sini) -->
-                        <form id="formPertanyaan">
+                        <form id="formPertanyaan" method="POST">
                             <div class="modal-body">
                                 <input type="hidden" name="kuis_id" value="<?= htmlspecialchars($_GET['id'] ?? 0) ?>">
                                 <div class="mb-3">

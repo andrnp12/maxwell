@@ -484,14 +484,14 @@ global $sudahPreTest, $sudahPostTest;
                            <div class="text-muted small"><?= $completedKuis ?>/<?= $totalKuis ?></div>
                        </div>
                        <div class="col-3">
-                           <div class="fw-bold text-warning"><?= $posttestCompletion ?>%</div>
-                           <div class="text-muted">Post-Test</div>
-                           <div class="text-muted small"><?= $completedPosttest ?>/<?= $totalPosttest ?></div>
-                       </div>
-                       <div class="col-3">
                            <div class="fw-bold text-success"><?= $materiCompletion ?>%</div>
                            <div class="text-muted">Materi</div>
                            <div class="text-muted small"><?= $completedMateri ?>/<?= $totalMateri ?></div>
+                       </div>
+                       <div class="col-3">
+                           <div class="fw-bold text-warning"><?= $posttestCompletion ?>%</div>
+                           <div class="text-muted">Post-Test</div>
+                           <div class="text-muted small"><?= $completedPosttest ?>/<?= $totalPosttest ?></div>
                        </div>
                    </div>
                    <div class="text-center mt-2 text-muted small">

@@ -27,7 +27,7 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
                <span class="logo-lg">
                   <img alt="" height="24" src="/assets/images/logo-sm.svg" />
                   <span class="logo-txt">
-                     StarCode Kh
+                     Remaja Tumbuh
                   </span>
                </span>
             </a>
@@ -38,7 +38,7 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
                <span class="logo-lg">
                   <img alt="" height="24" src="/assets/images/logo-sm.svg" />
                   <span class="logo-txt">
-                     StarCode Kh
+                     Remaja Tumbuh
                   </span>
                </span>
             </a>

@@ -24,7 +24,7 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
 <head>
     <meta charset="utf-8" />
     <title>
-        Login | StarCode Kh - Minimal Admin &amp; Dashboard Template
+        Login | REMAJA TUMBUH - Minimal Admin &amp; Dashboard Template
     </title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta content="Premium Multipurpose Admin &amp; Dashboard Template" name="description">
@@ -56,7 +56,7 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                                     <a class="d-block auth-logo" href="#">
                                         <img alt="" height="28" src="../assets/images/logo-sm.svg" />
                                         <span class="logo-txt">
-                                            StarCode Kh
+                                            REMAJA TUMBUH
                                         </span>
                                     </a>
                                 </div>
@@ -126,11 +126,16 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                                         <script>
                                             document.write(new Date().getFullYear())
                                         </script>
-                                        StarCode Kh . Crafted with
-                                        <i class="mdi mdi-heart text-danger">
-                                        </i>
-                                        by davied&njah
+                                        REMAJA TUMBUH . Supported by
+                                        <!-- <i class="mdi mdi-heart text-danger">
+                                        </i> -->
                                     </p>
+                                    <div class="d-flex justify-content-center align-items-center gap-3 mt-3">
+                                        <!-- Gunakan style="height: 40px;" untuk membatasi tinggi maksimal logo -->
+                                        <img class="img-fluid" style="height: 40px; width: auto;" src="\assets\images\logos\tutwuri.png" alt="Tut Wuri">
+                                        <img class="img-fluid" style="height: 40px; width: auto;" src="\assets\images\logos\diktisaintek.png" alt="Diktisaintek">
+                                        <img class="img-fluid" style="height: 40px; width: auto;" src="\assets\images\logos\unisnu.png" alt="Unisnu">
+                                    </div>
                                 </div>
                             </div>
                         </div>
