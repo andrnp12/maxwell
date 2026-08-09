@@ -1,173 +1,556 @@
 <?php
-require_once '../../src/classes/auth.php';
-$auth = new auth();
-$auth->authOrNot();
+
+session_start();
 
 require_once '../../src/classes/tests.php';
 
 $testManager = new tests();
 
-$type = $_GET['type'] ?? 'pre';
+$userId = (int) ($_SESSION['id'] ?? 0);
 
-$dataTest = $testManager->getTestQuestion();
-
-if (!$dataTest) {
-    die("<h2>Maaf, soal untuk test ini belum tersedia.</h2>");
+if ($userId <= 0) {
+    header('Location: ../../login.php');
+    exit;
 }
 
-$testInfo = $dataTest['test'];
-$questions = $dataTest['questions'];
+$jenis = $_GET['type'] ?? 'pre';
+
+if (!in_array($jenis, ['pre', 'post'], true)) {
+    header('Location: index.php');
+    exit;
+}
+
+$dataKuis = $testManager->getQuizByJenis($jenis);
+
+if (!$dataKuis) {
+    die('Quiz tidak ditemukan.');
+}
+
+$kuisId = (int) $dataKuis['id'];
+
+
+$sudahMengerjakan = $testManager->hasUserTakenTest(
+    $userId,
+    $kuisId,
+    $jenis
+);
+
+if ($sudahMengerjakan) {
+    header('Location: index.php');
+    exit;
+}
+
+
+$dataPertanyaan = $testManager->getQuestionsByQuiz($kuisId);
+
+if (empty($dataPertanyaan)) {
+    die('Soal quiz belum tersedia.');
+}
+
+$totalSoal = count($dataPertanyaan);
+
 ?>
 
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($testInfo['judul_test']) ?></title>
-    <style>
-        /* Sedikit styling dasar agar rapi */
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-
-        .card-soal {
-            background: #f9f9f9;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-
-        .opsi {
-            margin-bottom: 10px;
-        }
-
-        #resultBox {
-            display: none;
-            background: #d4edda;
-            color: #155724;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .btn:disabled {
-            background: #ccc;
-        }
-    </style>
-</head>
+<?php include '../include/header.php'; ?>
 
 <body>
+    <div class="">
+        <div class="container-fluid py-3">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm mb-4">
+                                    <div class="d-flex align-items-center mt-3 mt-sm-0">
+                                        <div class="flex-shrink-0">
+                                            <div class="avatar-xl me-3">
+                                                <img alt="" class="img-fluid" src="/assets/icon/focus-group.webp" />
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div>
+                                                <h5 class="mb-1">
+                                                    <?= htmlspecialchars($dataKuis['judul']) ?>
+                                                </h5>
+                                                <p class="badge bg-light text-dark rounded-pill mb-0">
+                                                    <?= $totalSoal ?> Soal Pilihan Ganda
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                    <div class="col-lg-12">
+                        <div class="card border-0">
 
-    <h1><?= htmlspecialchars($testInfo['judul_test']) ?></h1>
-    <p><i><?= htmlspecialchars($testInfo['deskripsi']) ?></i></p>
-    <hr>
+                            <form
+                                id="formKuis"
+                                method="POST"
+                                action="../../src/actions/proses_submit_test.php">
 
-    <!-- Area untuk menampilkan hasil setelah submit -->
-    <div id="resultBox">
-        <h2 id="teksSkor"></h2>
-        <p id="teksDetail"></p>
-        <button class="btn" onclick="window.location.href='index.php'">Kembali ke Dashboard</button>
+                                <input
+                                    type="hidden"
+                                    name="quiz_id"
+                                    value="<?= (int) $dataKuis['id'] ?>">
+
+                                <input
+                                    type="hidden"
+                                    name="jenis"
+                                    value="<?= htmlspecialchars($jenis) ?>">
+
+                                <div class="d-flex flex-column-reverse flex-md-row gap-3 gap-md-4">
+                                    <!-- Soal -->
+
+                                    <div class="col-lg-9">
+
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4 class="card-title mb-0">
+                                                    Soal Pertanyaan
+                                                </h4>
+                                            </div>
+
+                                            <div class="card-body">
+
+                                                <?php
+                                                $total = count($dataPertanyaan);
+                                                ?>
+
+                                                <?php foreach ($dataPertanyaan as $i => $pertanyaan): ?>
+
+                                                    <?php $no = $i + 1; ?>
+
+                                                    <div
+                                                        class="question <?= $i === 0 ? '' : 'd-none' ?>"
+                                                        data-index="<?= $i ?>">
+
+                                                        <h5 class="mb-3">
+                                                            Soal <?= $no ?> dari <?= $total ?>
+                                                        </h5>
+
+                                                        <div class="progress mb-4" style="height: 8px;">
+
+                                                            <div
+                                                                class="progress-bar progressBar"
+                                                                role="progressbar"
+                                                                style="width: <?= ($no / $total) * 100 ?>%;"
+                                                                aria-valuenow="<?= $no ?>"
+                                                                aria-valuemin="1"
+                                                                aria-valuemax="<?= $total ?>"></div>
+
+                                                        </div>
+
+                                                        <h4 class="mb-4">
+                                                            <?= nl2br(htmlspecialchars($pertanyaan['pertanyaan'])) ?>
+                                                        </h4>
+
+
+                                                        <?php
+                                                        $opsi = [
+                                                            'A' => $pertanyaan['opsi_a'],
+                                                            'B' => $pertanyaan['opsi_b'],
+                                                            'C' => $pertanyaan['opsi_c'],
+                                                            'D' => $pertanyaan['opsi_d']
+                                                        ];
+                                                        ?>
+
+                                                        <?php foreach ($opsi as $kode => $teks): ?>
+
+                                                            <div class="form-check border rounded p-3 mb-3">
+
+                                                                <input
+                                                                    class="form-check-input jawaban"
+                                                                    type="radio"
+                                                                    name="jawaban[<?= (int) $pertanyaan['id'] ?>]"
+                                                                    id="q<?= (int) $pertanyaan['id'] . $kode ?>"
+                                                                    value="<?= $kode ?>">
+
+                                                                <label
+                                                                    class="form-check-label w-100"
+                                                                    for="q<?= (int) $pertanyaan['id'] . $kode ?>">
+                                                                    <strong><?= $kode ?>.</strong>
+                                                                    <?= htmlspecialchars($teks) ?>
+                                                                </label>
+
+                                                            </div>
+
+                                                        <?php endforeach; ?>
+
+                                                    </div>
+
+                                                <?php endforeach; ?>
+
+                                                <div class="d-flex justify-content-between mb-3">
+
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-secondary"
+                                                        id="btnPrev">
+
+                                                        Prev
+
+                                                    </button>
+
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-primary"
+                                                        id="btnNext">
+
+                                                        Next
+
+                                                    </button>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Nomor soal -->
+                                    <div class="col-lg-3">
+
+                                        <div class="card">
+
+                                            <div class="card-header">
+
+                                                Nomor Soal
+
+                                            </div>
+
+                                            <div class="card-body">
+
+                                                <?php foreach ($dataPertanyaan as $i => $p): ?>
+
+                                                    <button
+                                                        type="button"
+                                                        class="btn <?= $i === 0 ? 'btn-primary' : 'btn-outline-secondary' ?> nomor-soal"
+                                                        data-index="<?= $i ?>">
+                                                        <?= $i + 1 ?>
+                                                    </button>
+
+                                                <?php endforeach; ?>
+
+                                                <hr>
+                                                <button
+                                                    type="button"
+                                                    id="btnFinish"
+                                                    class="btn btn-success w-100">
+                                                    Selesai
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+                            <!-- modal konfirmasi   -->
+                            <div class="modal fade" id="finishModal" tabindex="-1">
+
+                                <div class="modal-dialog">
+
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+
+                                            <h5 class="modal-title">
+
+                                                Konfirmasi Penyelesaian
+
+                                            </h5>
+
+                                            <button
+                                                type="button"
+                                                class="btn-close"
+                                                data-bs-dismiss="modal">
+                                            </button>
+
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <p>Total Soal :
+                                                <strong id="totalSoal"></strong>
+                                            </p>
+
+                                            <p>Sudah Dijawab :
+                                                <strong id="sudahJawab"></strong>
+                                            </p>
+
+                                            <p>Belum Dijawab :
+                                                <strong id="belumJawab"></strong>
+                                            </p>
+
+                                            <div
+                                                id="daftarBelum"
+                                                class="alert alert-warning d-none">
+
+                                                <p class="mb-2">
+                                                    Nomor yang belum dijawab
+                                                </p>
+
+                                                <div id="listBelum"></div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="modal-footer">
+
+                                            <button
+                                                class="btn btn-secondary"
+                                                data-bs-dismiss="modal">
+
+                                                Kembali
+
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                id="submitQuiz"
+                                                class="btn btn-success">
+                                                Ya, Selesaikan
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+                    </div>
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end col -->
+            <!-- end row -->
+        </div>
+        <!-- container-fluid -->
     </div>
 
-    <!-- Form Soal -->
-    <form id="formTest">
-        <!-- Input tersembunyi untuk mengirim ID Test ke backend -->
-        <input type="hidden" name="test_id" value="<?= $testInfo['id'] ?>">
-        <input type="hidden" name="tipe_sesi" value="<?= htmlspecialchars($type) ?>">
-
-        <?php
-        // Lakukan perulangan untuk mencetak semua soal
-        $nomor = 1;
-        foreach ($questions as $q):
-        ?>
-            <div class="card-soal">
-                <p><strong><?= $nomor ?>. <?= htmlspecialchars($q['pertanyaan']) ?></strong></p>
-
-                <!-- Perhatikan attribute name="answers[ID_SOAL]". Ini kunci agar dibaca sebagai array di PHP -->
-                <div class="opsi">
-                    <label><input type="radio" name="answers[<?= $q['id'] ?>]" value="a" required> A. <?= htmlspecialchars($q['opsi_a']) ?></label>
-                </div>
-                <div class="opsi">
-                    <label><input type="radio" name="answers[<?= $q['id'] ?>]" value="b"> B. <?= htmlspecialchars($q['opsi_b']) ?></label>
-                </div>
-                <div class="opsi">
-                    <label><input type="radio" name="answers[<?= $q['id'] ?>]" value="c"> C. <?= htmlspecialchars($q['opsi_c']) ?></label>
-                </div>
-                <div class="opsi">
-                    <label><input type="radio" name="answers[<?= $q['id'] ?>]" value="d"> D. <?= htmlspecialchars($q['opsi_d']) ?></label>
-                </div>
-            </div>
-        <?php
-            $nomor++;
-        endforeach;
-        ?>
-
-        <button type="submit" id="btnSubmit" class="btn">Kumpulkan Jawaban</button>
-    </form>
+    <?php include '../include/script.php'; ?>
 
     <script>
-        const formTest = document.getElementById('formTest');
-        const btnSubmit = document.getElementById('btnSubmit');
-        const resultBox = document.getElementById('resultBox');
-        const teksSkor = document.getElementById('teksSkor');
-        const teksDetail = document.getElementById('teksDetail');
+        document.addEventListener("DOMContentLoaded", function() {
 
-        formTest.addEventListener('submit', async function(e) {
-            e.preventDefault(); // Cegah reload halaman
+            let current = 0;
 
-            // Konfirmasi sebelum submit
-            if (!confirm('Apakah kamu yakin ingin mengumpulkan jawaban?')) return;
+            const questions = document.querySelectorAll(".question");
+            const nomor = document.querySelectorAll(".nomor-soal");
 
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = 'Memproses...';
+            function updateNomorSoal() {
 
-            const formData = new FormData(formTest);
+                nomor.forEach((btn, index) => {
 
-            try {
-                // Kirim data ke proses_test.php menggunakan path yang sesuai
-                const response = await fetch('actions/proses_test.php', {
-                    method: 'POST',
-                    body: formData
+                    btn.classList.remove(
+                        "btn-primary",
+                        "btn-success",
+                        "btn-outline-secondary"
+                    );
+
+                    let question = questions[index];
+
+                    let checked = question.querySelector(
+                        "input[type=radio]:checked"
+                    );
+
+                    if (index === current) {
+
+                        btn.classList.add("btn-primary");
+
+                    } else if (checked) {
+
+                        btn.classList.add("btn-success");
+
+                    } else {
+
+                        btn.classList.add("btn-outline-secondary");
+
+                    }
+
                 });
 
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    // Sembunyikan form
-                    formTest.style.display = 'none';
-
-                    // Tampilkan kotak hasil dan datanya
-                    resultBox.style.display = 'block';
-                    teksSkor.innerText = `Skor Kamu: ${result.data.score}`;
-                    teksDetail.innerText = `Benar: ${result.data.benar} | Salah: ${result.data.salah} | Total Soal: ${result.data.total}`;
-
-                    // Otomatis scroll ke atas agar user melihat hasil
-                    window.scrollTo(0, 0);
-                } else {
-                    alert('Error: ' + result.message);
-                    btnSubmit.disabled = false;
-                    btnSubmit.innerText = 'Kumpulkan Jawaban';
-                }
-            } catch (error) {
-                alert('Terjadi kesalahan koneksi jaringan.');
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = 'Kumpulkan Jawaban';
             }
+
+            function tampil(index) {
+
+                questions.forEach(q => q.classList.add("d-none"));
+
+                questions[index].classList.remove("d-none");
+
+                current = index;
+
+                updateNomorSoal();
+
+            }
+
+            tampil(0);
+
+            nomor.forEach(function(btn) {
+
+                btn.addEventListener("click", function() {
+
+                    let index = parseInt(this.dataset.index);
+
+                    tampil(index);
+
+                });
+
+            });
+
+            document.querySelectorAll(".jawaban").forEach(function(radio) {
+
+                radio.addEventListener("change", function() {
+
+                    updateNomorSoal();
+
+                });
+
+            });
+
+            document.getElementById("btnPrev").addEventListener("click", function() {
+
+                if (current > 0) {
+
+                    tampil(current - 1);
+
+                }
+
+            });
+
+            document.getElementById("btnNext").onclick = function() {
+
+                let checked = questions[current].querySelector(
+                    "input[type=radio]:checked"
+                );
+
+                if (!checked) {
+
+                    alert("Silakan pilih jawaban terlebih dahulu.");
+
+                    return;
+
+                }
+
+                if (current < questions.length - 1) {
+
+                    tampil(current + 1);
+
+                }
+
+            }
+
+            const modalFinish = new bootstrap.Modal(
+                document.getElementById('finishModal')
+            );
+
+            document.getElementById("btnFinish").onclick = function() {
+
+                let total = questions.length;
+
+                let answered = 0;
+
+                let belum = [];
+
+                questions.forEach(function(q, index) {
+
+                    let checked = q.querySelector(
+                        "input[type=radio]:checked"
+                    );
+
+                    if (checked) {
+
+                        answered++;
+
+                    } else {
+
+                        belum.push(index + 1);
+
+                    }
+
+                });
+
+                document.getElementById("totalSoal").innerHTML = total;
+
+                document.getElementById("sudahJawab").innerHTML = answered;
+
+                document.getElementById("belumJawab").innerHTML =
+                    total - answered;
+
+                let div = document.getElementById("daftarBelum");
+
+                if (belum.length) {
+
+                    div.classList.remove("d-none");
+
+                    let list = document.getElementById("listBelum");
+
+                    list.innerHTML = "";
+
+                    belum.forEach(function(no) {
+
+                        list.innerHTML += `
+                    <span
+                        class="badge bg-danger me-1 mb-1 goto-question"
+                        data-index="${no - 1}"
+                        style="cursor:pointer">
+                        ${no}
+                    </span>
+                `;
+
+                    });
+
+                } else {
+
+                    div.classList.add("d-none");
+
+                }
+
+                modalFinish.show();
+
+            }
+
+            document.getElementById("submitQuiz").onclick = function() {
+
+                this.disabled = true;
+
+                this.innerHTML = `
+            <span class="spinner-border spinner-border-sm"></span>
+            Mengoreksi...
+        `;
+
+                document.getElementById("formKuis").submit();
+
+            }
+
+            document.addEventListener("click", function(e) {
+
+                if (e.target.classList.contains("goto-question")) {
+
+                    let index = parseInt(e.target.dataset.index);
+
+                    modalFinish.hide();
+
+                    tampil(index);
+
+                }
+
+            });
+
         });
     </script>
 

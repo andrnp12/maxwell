@@ -132,7 +132,7 @@ $nextMateri = $data->getNextMateri((int)$_GET['id']);
                             <!-- end card -->
                         </div>
                         <!-- end col -->
-                        <div class="col-lg-4">
+                        <!-- <div class="col-lg-4">
                             <div class="card">
                                 <div class="card-body">
                                     <div>
@@ -155,149 +155,119 @@ $nextMateri = $data->getNextMateri((int)$_GET['id']);
                                                     </div>
                                                 </div>
                                             </a>
-                                            <a class="list-group-item text-muted py-3 px-2" href="javascript: void(0);">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 me-3">
-                                                        <img alt="" class="avatar-xl h-auto d-block rounded" src="/assets/images/small/img-4.jpg" />
-                                                    </div>
-                                                    <div class="flex-grow-1 overflow-hidden">
-                                                        <h5 class="font-size-13 text-truncate">
-                                                            Drawing a sketch
-                                                        </h5>
-                                                        <p class="mb-0 text-truncate">
-                                                            24 May, 2022
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a class="list-group-item text-muted py-3 px-2" href="javascript: void(0);">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="flex-shrink-0 me-3">
-                                                        <img alt="" class="avatar-xl h-auto d-block rounded" src="/assets/images/small/img-1.jpg" />
-                                                    </div>
-                                                    <div class="flex-grow-1 overflow-hidden">
-                                                        <h5 class="font-size-13 text-truncate">
-                                                            Coffee with friends
-                                                        </h5>
-                                                        <p class="mb-0 text-truncate">
-                                                            15 June, 2022
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <!-- end card -->
-                        </div>
                     </div>
-                    <!-- container-fluid -->
                 </div>
-                <!-- End Page-content -->
-                <?php include '../include/footer.php'; ?>
+                <!-- container-fluid -->
             </div>
-            <!-- end main content-->
+            <!-- End Page-content -->
+            <?php include '../include/footer.php'; ?>
         </div>
-        <!-- END layout-wrapper -->
-        <!-- Right Sidebar -->
-        <?php include '../include/right-sidebar.php'; ?>
-        <!-- /Right-bar -->
-        <!-- Right bar overlay-->
-        <div class="rightbar-overlay">
-        </div>
-        <!-- JAVASCRIPT -->
+        <!-- end main content-->
+    </div>
+    <!-- END layout-wrapper -->
+    <!-- Right Sidebar -->
+    <?php include '../include/right-sidebar.php'; ?>
+    <!-- /Right-bar -->
+    <!-- Right bar overlay-->
+    <div class="rightbar-overlay">
+    </div>
+    <!-- JAVASCRIPT -->
 
-        <?php include '../include/script.php'; ?>
+    <?php include '../include/script.php'; ?>
 
-        <script>
-            const materialId = <?= (int)$dataMateri['id']; ?>;
+    <script>
+        const materialId = <?= (int)$dataMateri['id']; ?>;
 
-            const materialFinished = <?= $materialFinished ? 'true' : 'false'; ?>;
+        const materialFinished = <?= $materialFinished ? 'true' : 'false'; ?>;
 
-            document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function() {
 
-                // Kalau materi sudah selesai, tidak perlu jalankan timer
-                if (materialFinished) {
-                    // console.log("Materi sudah pernah dipelajari.");
+            // Kalau materi sudah selesai, tidak perlu jalankan timer
+            if (materialFinished) {
+                // console.log("Materi sudah pernah dipelajari.");
+                return;
+            }
+
+            let elapsed = 0;
+            let isCompleted = false;
+
+            const MINIMUM_READ_TIME = 5;
+
+            const timer = setInterval(function() {
+
+                // Pause jika tab tidak aktif
+                if (document.hidden) {
                     return;
                 }
 
-                let elapsed = 0;
-                let isCompleted = false;
+                elapsed++;
 
-                const MINIMUM_READ_TIME = 5;
+                // console.log("Belajar:", elapsed, "detik");
 
-                const timer = setInterval(function() {
+                if (elapsed >= MINIMUM_READ_TIME && !isCompleted) {
 
-                    // Pause jika tab tidak aktif
-                    if (document.hidden) {
-                        return;
-                    }
+                    isCompleted = true;
 
-                    elapsed++;
+                    clearInterval(timer);
 
-                    // console.log("Belajar:", elapsed, "detik");
+                    saveProgress();
+                }
+            }, 1000);
 
-                    if (elapsed >= MINIMUM_READ_TIME && !isCompleted) {
-
-                        isCompleted = true;
-
-                        clearInterval(timer);
-
-                        saveProgress();
-                    }
-                }, 1000);
-
-                function saveProgress() {
-                    fetch("../../src/actions/proses_materi_end.php", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/x-www-form-urlencoded"
-                            },
-                            body: new URLSearchParams({
-                                material_id: materialId
-                            })
+            function saveProgress() {
+                fetch("../../src/actions/proses_materi_end.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: new URLSearchParams({
+                            material_id: materialId
                         })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error("HTTP Error " + response.status);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.success) {
-                                console.log("Progress berhasil disimpan");
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("HTTP Error " + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            console.log("Progress berhasil disimpan");
 
-                                const btn = document.getElementById("btnNextMaterial");
+                            const btn = document.getElementById("btnNextMaterial");
 
-                                if (btn) {
+                            if (btn) {
 
-                                    btn.classList.remove("btn-secondary");
-                                    btn.classList.remove("disabled");
+                                btn.classList.remove("btn-secondary");
+                                btn.classList.remove("disabled");
 
-                                    btn.classList.add("btn-primary");
+                                btn.classList.add("btn-primary");
 
                                     <?php if ($nextMateri): ?>
                                         btn.href = "detail-materi.php?id=<?= $nextMateri['id'] ?>";
                                     <?php endif; ?>
 
-                                    btn.innerHTML = `
+                                btn.innerHTML = `
                 Materi Selanjutnya
                 <i class="mdi mdi-arrow-right"></i>
             `;
 
-                                }
-                            } else {
-                                console.error(data.message);
                             }
-                        })
-                        .catch(error => {
-                            console.error(error);
-                        });
-                }
-            });
-        </script>
+                        } else {
+                            console.error(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+        });
+    </script>
     </div>
 </body>
 

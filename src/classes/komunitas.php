@@ -46,6 +46,41 @@ class Komunitas
         return $data;
     }
 
+    // mengambil 3 data teratas dari komunitas
+    public function getTopKomunitas(int $idLogin): array
+    {
+        $sql = "
+        SELECT
+            k.*,
+            CASE
+                WHEN ak.id IS NULL THEN 0
+                ELSE 1
+            END AS is_member
+        FROM komunitas k
+        LEFT JOIN anggota_komunitas ak
+            ON ak.id_komunitas = k.id
+           AND ak.id_user = ?
+        ORDER BY k.nama_komunitas
+        LIMIT 3
+    ";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bind_param("i", $idLogin);
+
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        $data = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        return $data;
+    }
+
     /**
      * Get all communities for admin (without membership check)
      */
@@ -232,16 +267,16 @@ class Komunitas
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            
+
             if ($result->num_rows === 0) {
                 return [
                     "status" => "error",
                     "message" => "Komunitas tidak ditemukan."
                 ];
             }
-            
+
             $komunitas = $result->fetch_assoc();
-            
+
             // Delete community (cascade will handle anggota_komunitas if FK is set)
             $stmt = $this->conn->prepare("DELETE FROM komunitas WHERE id = ?");
             $stmt->bind_param("i", $id);

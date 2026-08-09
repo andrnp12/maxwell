@@ -109,7 +109,7 @@ $dataKuis = $data->getAllKuisUser($_SESSION['id']);
                                 <h5 class="mb-sm-0">
                                     Daftar Skill Tes
                                 </h5>
-                                <div class="page-title-right">
+                                <!-- <div class="page-title-right">
                                     <div class="btn-group">
                                         <button aria-expanded="false" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" type="button">
                                             Filter Skill
@@ -133,7 +133,7 @@ $dataKuis = $data->getAllKuisUser($_SESSION['id']);
                                             </a>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <?php foreach ($dataKuis as $kuis): ?>
@@ -141,8 +141,9 @@ $dataKuis = $data->getAllKuisUser($_SESSION['id']);
                             $canAccess = $kuis['material_selesai'] == 1;
                             ?>
                             <a
-                                class="col-12 col-xl-6 col-md-6 <?= !$canAccess ? 'pe-none' : '' ?>"
-                                href="<?= $canAccess ? 'skill-detail.php?id=' . $kuis['id_kuis'] : '#' ?>">
+                                class="col-12 col-xl-6 col-md-6 text-decoration-none"
+                                href="<?= $canAccess ? 'skill-detail.php?id=' . $kuis['id_kuis'] : '#' ?>"
+                                <?= !$canAccess ? 'data-bs-toggle="modal" data-bs-target="#peringatanModal"' : '' ?>>
                                 <div class="card mb-3 border border-success">
                                     <div class="row g-0 align-items-center">
                                         <div class="col-3 text-center">
@@ -155,10 +156,6 @@ $dataKuis = $data->getAllKuisUser($_SESSION['id']);
                                                 <h5 class="card-title mb-0 font-weight-bold">
                                                     <?= htmlspecialchars($kuis['judul_kuis']) ?>
                                                 </h5>
-                                                <!-- <p class="card-text mb-0">
-                                                    <small class="text-muted">
-                                                    </small>
-                                                </p> -->
                                                 <p class="card-text">
                                                     <?php if (!$kuis['material_selesai']) : ?>
 
@@ -199,6 +196,27 @@ $dataKuis = $data->getAllKuisUser($_SESSION['id']);
             <?php include '../include/footer.php'; ?>
         </div>
         <!-- end main content-->
+        <!-- Pop-up (Modal) HTML -->
+        <div class="modal fade" id="peringatanModal" tabindex="-1" aria-labelledby="peringatanModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="peringatanModalLabel">
+                            <i class="mdi mdi-lock text-warning"></i> Akses Kuis Terkunci
+                        </h5>
+                        <!-- Catatan: Jika menggunakan Bootstrap 4, ubah class="btn-close" menjadi class="close" dan tambahkan isi <span>&times;</span> -->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <p>Anda belum bisa mengerjakan kuis ini.</p>
+                        <strong>Silakan selesaikan materi terlebih dahulu!</strong>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- END layout-wrapper -->
     <!-- Right Sidebar -->

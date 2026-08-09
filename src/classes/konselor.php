@@ -48,7 +48,7 @@ class Konsultan
         }
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        
+
         $stmt = $this->conn->prepare("INSERT INTO users (`foto`, `username`, `name`, `nomor`, `email`, `deskripsi`, `password`, `role`) VALUES (?, ?, ?, ?, ?, ?, ?, 'konsultan')");
         if (!$stmt) {
             die("Error query insert konsultan: " . $this->conn->error);
@@ -198,6 +198,19 @@ class Konsultan
     public function getAllKonsultan(): array
     {
         $result = $this->conn->query("SELECT id, `username`, `name`, foto, nomor, email, deskripsi FROM users WHERE role = 'konsultan'");
+        $konsultanList = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $konsultanList[] = $row;
+        }
+
+        return $konsultanList;
+    }
+
+    // mengambil 3 data teratas dari konsultan
+    public function getTopKonsultan(): array
+    {
+        $result = $this->conn->query("SELECT id, `username`, `name`, foto, nomor, email, deskripsi FROM users WHERE role = 'konsultan' LIMIT 3");
         $konsultanList = [];
 
         while ($row = $result->fetch_assoc()) {

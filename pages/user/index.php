@@ -1,12 +1,17 @@
 <?php
+
 require_once '../../src/classes/auth.php';
+require_once '../../src/classes/tests.php';
 require_once '../../src/classes/user.php';
 require_once '../../src/classes/kuis.php';
+require_once '../../src/classes/tests.php';
 
 $auth = new auth();
 $auth->authOrNot();
 
-$userId = $_SESSION['id'];
+$testManager = new tests();
+
+$userId = (int) $_SESSION['id'];
 
 // Initialize models
 $userModel = new User();
@@ -65,7 +70,65 @@ $posttestCompletion = $posttestAttempts > 0 ? 100 : 0;
 $sudahPreTest = $pretestAttempts > 0;
 $sudahPostTest = $posttestAttempts > 0;
 
+$preQuiz = $testManager->getQuizByJenis('pre');
+
+if (!$preQuiz) {
+   die('Pre-test belum tersedia.');
+}
+
+$preQuizId = (int) $preQuiz['id'];
+
+$sudahPreTest = $testManager->hasUserTakenTest(
+   $userId,
+   $preQuizId,
+   'pre'
+);
+
+$postQuiz = $testManager->getQuizByJenis('post');
+
+$sudahPostTest = false;
+
+if ($postQuiz) {
+
+   $postQuizId = (int) $postQuiz['id'];
+
+   $sudahPostTest = $testManager->hasUserTakenTest(
+      $userId,
+      $postQuizId,
+      'post'
+   );
+}
+
+
+if (!$sudahPreTest) {
+
+   header('Location: preposttest.php?type=pre');
+   exit;
+}
+
 global $sudahPreTest, $sudahPostTest;
+
+// 1. Pre-Test harus sudah selesai
+$syaratPretest = $sudahPreTest;
+
+// 2. Semua materi harus selesai
+$syaratMateri = (
+   $totalMateri > 0 &&
+   $completedMateri >= $totalMateri
+);
+
+// 3. Semua kuis harus selesai
+$syaratKuis = (
+   $totalKuis > 0 &&
+   $completedKuis >= $totalKuis
+);
+
+// Post-Test boleh dikerjakan jika semua syarat terpenuhi
+$bolehPostTest = (
+   $syaratPretest &&
+   $syaratMateri &&
+   $syaratKuis
+);
 ?>
 
 <!--header start-->
@@ -226,16 +289,46 @@ global $sudahPreTest, $sudahPostTest;
                            <div class="row align-items-center">
                               <div class="col-12">
                                  <h4 class="mb-3">
-                                    <img src="/assets/icon/notes.webp" alt="icon" style="width: 40px; height: 40px;" />
+                                    <img
+                                       src="/assets/icon/notes.webp"
+                                       alt="icon"
+                                       style="width: 40px; height: 40px;" />
                                  </h4>
+
                                  <?php if (!$sudahPreTest): ?>
-                                    <span style="color: gray;">Kerjakan Pre-Test terlebih dahulu</span>
-                                 <?php elseif ($sudahPreTest && !$sudahPostTest): ?>
-                                    <a href="preposttest.php?type=post"><button class="btn btn-primary btn-sm">Mulai Post-Test</button></a>
+
+                                    <span class="text-secondary">
+                                       Kerjakan Pre-Test terlebih dahulu
+                                    </span>
+
+                                 <?php elseif (!$syaratMateri): ?>
+
+                                    <span class="text-secondary">
+                                       Selesaikan seluruh materi terlebih dahulu
+                                    </span>
+
+                                 <?php elseif (!$syaratKuis): ?>
+
+                                    <span class="text-secondary">
+                                       Selesaikan seluruh kuis terlebih dahulu
+                                    </span>
+
+                                 <?php elseif (!$sudahPostTest): ?>
+
+                                    <a
+                                       href="preposttest.php?type=post"
+                                       class="btn btn-primary btn-sm">
+                                       Mulai Post-Test
+                                    </a>
+
                                  <?php else: ?>
-                                    <span class="text-success">✔ Nilai Resmi Tersimpan</span>
-                                    <a href="preposttest.php?type=post"><button class="btn btn-warning btn-sm" style="margin-left:6px;">Kerjakan Ulang (Latihan)</button></a>
+
+                                    <span class="text-success">
+                                       ✔ Nilai Resmi Tersimpan
+                                    </span>
+
                                  <?php endif; ?>
+
                               </div>
                            </div>
                         </div>
@@ -425,14 +518,14 @@ global $sudahPreTest, $sudahPostTest;
                            <div class="text-muted small"><?= $completedKuis ?>/<?= $totalKuis ?></div>
                        </div>
                        <div class="col-3">
-                           <div class="fw-bold text-warning"><?= $posttestCompletion ?>%</div>
-                           <div class="text-muted">Post-Test</div>
-                           <div class="text-muted small"><?= $completedPosttest ?>/<?= $totalPosttest ?></div>
-                       </div>
-                       <div class="col-3">
                            <div class="fw-bold text-success"><?= $materiCompletion ?>%</div>
                            <div class="text-muted">Materi</div>
                            <div class="text-muted small"><?= $completedMateri ?>/<?= $totalMateri ?></div>
+                       </div>
+                       <div class="col-3">
+                           <div class="fw-bold text-warning"><?= $posttestCompletion ?>%</div>
+                           <div class="text-muted">Post-Test</div>
+                           <div class="text-muted small"><?= $completedPosttest ?>/<?= $totalPosttest ?></div>
                        </div>
                    </div>
                    <div class="text-center mt-2 text-muted small">

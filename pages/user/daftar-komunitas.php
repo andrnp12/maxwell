@@ -1,7 +1,21 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+
 require_once '../../src/classes/auth.php';
+require_once '../../src/classes/komunitas.php';
+
+$dataKomunitas = new Komunitas();
 $auth = new auth();
 $auth->authOrNot();
+
+$komunitas = $dataKomunitas->getAllKomunitas((int) $_SESSION['id']);
 ?>
 
 <?php include '../include/header.php'; ?>
@@ -49,7 +63,7 @@ $auth->authOrNot();
                                 <h5 class="mb-sm-0">
                                     Daftar Komunitas
                                 </h5>
-                                <div class="page-title-right">
+                                <!-- <div class="page-title-right">
                                     <div class="btn-group">
                                         <button aria-expanded="false" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" type="button">
                                             Filter Kategori
@@ -73,78 +87,56 @@ $auth->authOrNot();
                                             </a>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
-                        <div class="col-12 col-xl-6 col-md-6">
-                            <div class="card mb-3">
-                                <div class="row g-0 align-items-center">
-                                    <div class="col-3 text-center">
-                                        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                            <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
+                        <?php foreach ($komunitas as $kom) : ?>
+                            <div class="col-12 col-xl-6 col-md-6">
+                                <div class="card mb-3">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-3 text-center">
+                                            <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
+                                                <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="card-body">
-                                            <h5 class="card-title mb-0 font-weight-bold">
-                                                Sahabat Tumbuh
-                                            </h5>
-                                            <p class="card-text">
-                                                <small class="text-muted">
-                                                    Perkumpulan tumbuh bersama.
-                                                </small>
-                                            </p>
+                                        <div class="col-9">
+                                            <div class="card-body">
+                                                <h5 class="card-title mb-0 font-weight-bold">
+                                                    <?= $kom['nama_komunitas'] ?>
+                                                </h5>
+                                                <p class="card-text">
+                                                    <small class="text-muted">
+                                                        <?= $kom['deskripsi'] ?>
+                                                    </small>
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xl-6 col-md-6">
-                            <div class="card mb-3">
-                                <div class="row g-0 align-items-center">
-                                    <div class="col-3 text-center">
-                                        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                            <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
-                                        </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="card-body">
-                                            <h5 class="card-title mb-0 font-weight-bold">
-                                                Anti Nikah Dini
-                                            </h5>
-                                            <p class="card-text">
-                                                <small class="text-muted">
-                                                    Perkumpulan tumbuh bersama.
-                                                </small>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xl-6 col-md-6">
-                            <div class="card mb-3">
-                                <div class="row g-0 align-items-center">
-                                    <div class="col-3 text-center">
-                                        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                            <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
-                                        </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <div class="card-body">
-                                            <h5 class="card-title mb-0 font-weight-bold">
-                                                Remaja Berencana
-                                            </h5>
-                                            <p class="card-text">
-                                                <small class="text-muted">
-                                                    Perkumpulan tumbuh bersama.
-                                                </small>
-                                            </p>
+                                        <div class="btn-group" role="group">
+
+                                            <?php if ($kom['is_member']) : ?>
+
+                                                <a href="chat.php?id=<?= $kom['id'] ?>&type=group"
+                                                    class="btn btn-primary">
+                                                    <i class="uil uil-comments me-1"></i>
+                                                    Buka Chat
+                                                </a>
+
+                                            <?php else : ?>
+
+                                                <button
+                                                    class="btn btn-success btn-join"
+                                                    data-id="<?= $kom['id'] ?>">
+                                                    <i class="uil uil-users-alt me-1"></i>
+                                                    Gabung Komunitas
+                                                </button>
+
+                                            <?php endif; ?>
+
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php endforeach; ?>
                         <!-- end col -->
                     </div>
                     <!-- end row -->

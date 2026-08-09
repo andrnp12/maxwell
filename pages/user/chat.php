@@ -74,7 +74,6 @@ if ($id_lawan > 0) {
 }
 
 ?>
-
 <!--header start-->
 <?php include('../include/header.php'); ?>
 <!--headere end-->
@@ -96,18 +95,6 @@ if ($id_lawan > 0) {
             <div class="page-content">
                 <div class="container-fluid">
                     <!-- start page title -->
-                    <!-- <div class="row">
-                  <div class="col-12">
-                     <div class="row d-sm-flex align-items-center justify-content-between mb-2">
-                        <h4 class="mb-sm-0 font-weight-bold mb-1">
-                           Chat
-                        </h4>
-                        <p class="text-muted">
-                           Hubungi sesama dan dapatkan konsultasi!
-                        </p>
-                     </div>
-                  </div>
-               </div> -->
                     <!-- end page title -->
                     <div class="d-lg-flex">
                         <div id="chatSidebar" class="chat-leftsidebar card">
@@ -240,7 +227,6 @@ if ($id_lawan > 0) {
                                                 <ul class="list-unstyled chat-list">
                                                     <?php foreach ($listGroup as $group) : ?>
                                                         <li>
-                                                            <!-- <a href="chat.php?chat_type=group&id_lawan=<?= $group['id_lawan'] ?>"> -->
                                                             <a href="#"
                                                                 class="chat-user"
                                                                 data-id="<?= $group['id_lawan'] ?>"
@@ -248,7 +234,7 @@ if ($id_lawan > 0) {
                                                                 <div class="d-flex align-items-center">
                                                                     <div class="flex-shrink-0 avatar-sm me-3">
                                                                         <?php if ($group['foto']) : ?>
-                                                                            <img alt="" class="avatar-sm rounded-circle" src="../../uploads/groups/<?= $group['foto'] ?>" />
+                                                                            <img alt="" class="avatar-sm rounded-circle" src="../../uploads/komunitas/<?= $group['foto'] ?>" />
                                                                         <?php else : ?>
                                                                             <span class="avatar-title rounded-circle bg-primary-subtle text-primary">
                                                                                 P
@@ -530,15 +516,16 @@ if ($id_lawan > 0) {
         <div class="conversation-list">
             <div class="ctext-wrap">
                 <div class="ctext-wrap-content">
-                    <h5 class="conversation-name">
+                    <h5 class="conversation-name gap-3">
+                        <span class="user-name">${chat.name}</span>
                         <span class="time">${waktu}</span>
                     </h5>
-
                     <p class="mb-0"></p>
-
                 </div>
             </div>
-        </div>
+        </div> 
+
+
     `;
 
                 li.querySelector("p").textContent = chat.chat;
@@ -551,37 +538,26 @@ if ($id_lawan > 0) {
 
             renderHeader(room) {
 
-                document.getElementById("chatHeader").innerHTML = `
-
-        <div class="p-3 px-lg-4 border-bottom">
-
-            <div class="d-flex align-items-center">
-
-                <div class="flex-shrink-0 avatar-sm me-3">
-
-                    <img
-                        src="assets/images/groups/${room.foto}"
-                        class="rounded-circle avatar-sm">
-
-                </div>
-
-                <div>
-
-                    <h5>${room.name}</h5>
-
-                    <p class="text-muted mb-0">
-
-                        ${room.subtitle}
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    `;
+                document.getElementById("chatHeader").innerHTML = ` 
+                <div class="p-3 px-lg-4 border-bottom bg-white"> 
+                <div class="d-flex align-items-center"> 
+                <!-- Tombol Kembali --> 
+                <div class="flex-shrink-0 me-3 ms-lg-0 ms-xl-3"> 
+                <a href="chat.php" class="btn btn-light rounded-circle d-flex align-items-center justify-content-center shadow-sm chat-back-btn" aria-label="Kembali">
+                 <i class="bx bx-left-arrow-alt fs-3"></i> </a> 
+                 </div> <!-- Foto Group --> <div class="flex-shrink-0 avatar-sm me-3"> 
+                 <img src="../../uploads/komunitas/${room.foto}" class="rounded-circle avatar-sm" alt="Group Foto"> </div> 
+                 <!-- Informasi Group --> 
+                 <div class="overflow-hidden"> 
+                 <h5 class="mb-1 text-truncate">${room.name}</h5> 
+                 <p class="text-muted mb-0 text-truncate"> ${room.subtitle} </p>
+                  </div> </div> </div> 
+                  <style> 
+                  .chat-back-btn { width: 42px; height: 42px; padding: 0; border: 1px solid #e9ecef; transition: all 0.2s ease; } 
+                  .chat-back-btn i { font-size: 22px; transition: transform 0.2s ease; } 
+                  .chat-back-btn:hover { background-color: #f1f3f5; border-color: #dee2e6; transform: translateX(-2px); } 
+                  .chat-back-btn:hover i { transform: translateX(-2px); } .chat-back-btn:active { transform: scale(0.94); } 
+                  </style> `;
 
             },
 
@@ -759,15 +735,27 @@ Send
             const chat = document.getElementById("userChat");
             const back = document.getElementById("btnBackChat");
 
-            const isMobile = () => window.innerWidth < 992;
+            const mobileQuery = window.matchMedia("(max-width: 991.98px)");
+
+            function isMobile() {
+                return mobileQuery.matches;
+            }
 
             function toggleLayout() {
+
                 if (isMobile()) {
-                    chat.classList.add("mobile-hide");
-                    sidebar.classList.remove("mobile-hide");
+
+                    // Hanya atur kondisi awal mobile
+                    if (!chat.dataset.roomOpen) {
+                        chat.classList.add("mobile-hide");
+                        sidebar.classList.remove("mobile-hide");
+                    }
+
                 } else {
+
                     chat.classList.remove("mobile-hide");
                     sidebar.classList.remove("mobile-hide");
+
                 }
             }
 
@@ -776,8 +764,12 @@ Send
                 await Chat.openRoom(id, type);
 
                 if (isMobile()) {
+
                     sidebar.classList.add("mobile-hide");
                     chat.classList.remove("mobile-hide");
+
+                    // Tandai bahwa room sedang terbuka
+                    chat.dataset.roomOpen = "true";
                 }
             }
 
@@ -794,9 +786,9 @@ Send
             const type = params.get("type");
 
             if (id && type) {
+
                 await openChat(id, type);
 
-                // Bersihkan parameter URL
                 history.replaceState({}, "", "chat.php");
             }
 
@@ -816,16 +808,40 @@ Send
 
             });
 
-            // Tombol kembali (mobile)
+            // Tombol kembali
             if (back) {
+
                 back.addEventListener("click", () => {
+
                     sidebar.classList.remove("mobile-hide");
                     chat.classList.add("mobile-hide");
+
+                    // Tandai room sudah ditutup
+                    delete chat.dataset.roomOpen;
+
                 });
+
             }
 
-            // Responsive
-            window.addEventListener("resize", toggleLayout);
+            // Responsive hanya ketika breakpoint berubah
+            mobileQuery.addEventListener("change", () => {
+
+                if (isMobile()) {
+
+                    // Jangan tutup room yang sedang terbuka
+                    if (!chat.dataset.roomOpen) {
+                        chat.classList.add("mobile-hide");
+                        sidebar.classList.remove("mobile-hide");
+                    }
+
+                } else {
+
+                    chat.classList.remove("mobile-hide");
+                    sidebar.classList.remove("mobile-hide");
+
+                }
+
+            });
 
         });
     </script>

@@ -477,8 +477,8 @@ if (!$user) {
                                                                 ?>
                                                                 <tr>
                                                                     <td><?= $no++ ?></td>
-                                                                    <td><?= $attemptIndex === 0 ? htmlspecialchars($kuis['kuis_judul'] ?? 'Kuis') : '' ?></td>
-                                                                    <td><?= $attemptIndex === 0 ? htmlspecialchars($kuis['kuis_jenis'] ?? 'kuis') : '' ?></td>
+                                                                    <td><?= htmlspecialchars($kuis['kuis_judul'] ?? 'Kuis') ?></td>
+                                                                    <td><?= htmlspecialchars($kuis['kuis_jenis'] ?? 'kuis') ?></td>
                                                                     <td><?= $attempt['percobaan'] ?? ($attemptIndex + 1) ?></td>
                                                                     <td>
                                                                         <?= htmlspecialchars($attempt['nilai'] ?? '-') ?>
