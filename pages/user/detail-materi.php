@@ -248,9 +248,9 @@ $nextMateri = $data->getNextMateri((int)$_GET['id']);
 
                                 btn.classList.add("btn-primary");
 
-                                <?php if ($nextMateri): ?>
-                                    btn.href = "detail-materi.php?id=<?= $nextMateri['id'] ?>";
-                                <?php endif; ?>
+                                    <?php if ($nextMateri): ?>
+                                        btn.href = "detail-materi.php?id=<?= $nextMateri['id'] ?>";
+                                    <?php endif; ?>
 
                                 btn.innerHTML = `
                 Materi Selanjutnya
