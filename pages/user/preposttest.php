@@ -205,6 +205,15 @@ $totalSoal = count($dataPertanyaan);
 
                                                     </button>
 
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-success d-none"
+                                                        id="btnFinishQuiz">
+
+                                                        Selesai
+
+                                                    </button>
+
                                                 </div>
 
                                             </div>
@@ -453,6 +462,37 @@ $totalSoal = count($dataPertanyaan);
                 }
 
             }
+
+            // Handle button visibility based on current question
+            const btnNext = document.getElementById("btnNext");
+            const btnFinishQuiz = document.getElementById("btnFinishQuiz");
+
+            function updateNavigationButtons() {
+                if (current === questions.length - 1) {
+                    // Last question - show "Selesai" button, hide "Next"
+                    btnNext.classList.add("d-none");
+                    btnFinishQuiz.classList.remove("d-none");
+                } else {
+                    // Not last question - show "Next", hide "Selesai"
+                    btnNext.classList.remove("d-none");
+                    btnFinishQuiz.classList.add("d-none");
+                }
+            }
+
+            // Add click handler for the "Selesai" button
+            btnFinishQuiz.onclick = function() {
+                document.getElementById("btnFinish").click();
+            };
+
+            // Update button visibility on question change
+            const originalTampil = tampil;
+            tampil = function(index) {
+                originalTampil(index);
+                updateNavigationButtons();
+            };
+
+            // Initialize button visibility
+            updateNavigationButtons();
 
             const modalFinish = new bootstrap.Modal(
                 document.getElementById('finishModal')

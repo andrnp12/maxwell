@@ -1,5 +1,5 @@
 <?php
-require_once '../src/classes/auth.php';
+require_once 'src/classes/auth.php';
 
 $auth = new auth();
 
@@ -13,12 +13,12 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
     $allowedRoles = ['admin', 'user', 'konsultan', 'ortu'];
 
     if (in_array($role, $allowedRoles, true)) {
-        header("Location: {$role}/index.php");
+        header("Location: pages/{$role}/index.php");
         exit;
     }
 
     // Role tidak dikenali: logout atau ke login
-    header('Location: login.php');
+    header('Location: pages/login.php');
     exit;
 }
 

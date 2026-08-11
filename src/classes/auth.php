@@ -12,15 +12,50 @@ class auth
         $this->conn = $this->db->conn;
     }
 
-    public function authOrNot() : void 
+    public function authOrNot(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
+        // 1. CEK APAKAH USER SUDAH LOGIN
         if (!isset($_SESSION['is_logged_in']) || $_SESSION['is_logged_in'] !== true) {
-            header('Location: ../../pages/login.php');
+            header('Location: /pages/login.php'); // Sesuaikan path login Anda
             exit;
+        }
+
+        // 2. AMBIL ROLE DARI SESSION
+        $userRole = $_SESSION['role'] ?? '';
+        $allowedRoles = ['admin', 'user', 'konsultan', 'ortu'];
+
+        if (!in_array($userRole, $allowedRoles, true)) {
+            // Jika role tidak valid/tidak dikenal, paksa logout
+            session_destroy();
+            header('Location: /pages/login.php');
+            exit;
+        }
+
+        // 3. PROTEKSI FOLDER (ROLE-BASED ACCESS CONTROL)
+        // Ambil URI saat ini (contoh: /pages/admin/index.php)
+        $currentUri = $_SERVER['REQUEST_URI'];
+
+        // Cek apakah user sedang mencoba mengakses folder /pages/
+        if (strpos($currentUri, '/pages/') !== false) {
+
+            // Pecah URI menjadi array untuk mendapatkan nama folder setelah /pages/
+            // Contoh: /pages/admin/dashboard.php -> ['pages', 'admin', 'dashboard.php']
+            $parts = explode('/', trim($currentUri, '/'));
+            $pagesIndex = array_search('pages', $parts);
+
+            // Folder role berada tepat setelah index 'pages'
+            $accessedRoleFolder = $parts[$pagesIndex + 1] ?? '';
+
+            // Jika user mengakses folder role (admin/user/dll) tapi tidak sesuai dengan role-nya
+            if (in_array($accessedRoleFolder, $allowedRoles) && $accessedRoleFolder !== $userRole) {
+                // REDIRECT ke dashboard role mereka sendiri agar tidak bisa mengintip
+                header("Location: /pages/{$userRole}/index.php");
+                exit;
+            }
         }
     }
 

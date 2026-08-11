@@ -207,6 +207,28 @@ class Konsultan
         return $konsultanList;
     }
 
+    public function totalPesan(int $idKonsultan): int
+    {
+        $sql = "SELECT COUNT(*) AS total FROM chat_konsultan WHERE id_konselor = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $idKonsultan);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        return $row['total'];
+    }
+
+    public function totalKonsultasi(int $idKonsultan): int
+    {
+        $sql = "SELECT COUNT(DISTINCT sender_id) AS total FROM chat_konsultan WHERE sender_id != ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $idKonsultan);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        return $row['total'];
+    }
+
     // mengambil 3 data teratas dari konsultan
     public function getTopKonsultan(): array
     {

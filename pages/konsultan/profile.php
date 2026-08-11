@@ -50,7 +50,7 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
                                             <div class="d-flex align-items-center mt-3 mt-sm-0">
                                                 <div class="flex-shrink-0">
                                                     <div class="avatar-xl me-3">
-                                                        <img alt="" class="h-100 w-100 object-fit-cover rounded-circle" src="/uploads/profile/<?= $dataProfile['data']['foto']; ?>" />
+                                                        <img alt="" class="h-100 w-100 object-fit-cover rounded-circle" src="/uploads/profile/<?= (!empty($dataProfile['data']['foto'])) ? $dataProfile['data']['foto'] : 'default.webp'; ?>" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">

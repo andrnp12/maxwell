@@ -6,6 +6,21 @@ $auth->authOrNot();
 
 $data = new Kuis();
 $dataKuis = $data->getAllKuisUser($_SESSION['id']);
+
+$total = count($dataKuis);
+
+$selesai = 0;
+
+foreach ($dataKuis as $kuis) {
+
+    if ($kuis['quizz_selesai']) {
+        $selesai++;
+    }
+}
+
+$persen = $total > 0
+    ? round(($selesai / $total) * 100)
+    : 0;
 ?>
 
 <?php include '../include/header.php'; ?>
@@ -53,9 +68,7 @@ $dataKuis = $data->getAllKuisUser($_SESSION['id']);
                                             <p>
                                                 Kemampuan untuk menyampaikan pikiran dan perasaan dengan jelas dan sopan.
                                             </p>
-                                            <a class="btn btn-primary btn-sm btn-rounded" href="">
-                                                Coba Sekarang
-                                            </a>
+                                            
                                         </div>
                                     </div>
                                     <div class="carousel-item">
@@ -67,9 +80,7 @@ $dataKuis = $data->getAllKuisUser($_SESSION['id']);
                                             <p>
                                                 Kemampuan untuk menyelesaikan masalah secara efektif dan efisien.
                                             </p>
-                                            <a class="btn btn-primary btn-sm btn-rounded" href="">
-                                                Coba Sekarang
-                                            </a>
+                                            
                                         </div>
                                     </div>
                                     <div class="carousel-item active">
@@ -81,9 +92,7 @@ $dataKuis = $data->getAllKuisUser($_SESSION['id']);
                                             <p>
                                                 Kemampuan untuk memimpin dan menginspirasi orang lain.
                                             </p>
-                                            <a class="btn btn-primary btn-sm btn-rounded" href="">
-                                                Coba Sekarang
-                                            </a>
+                                           
                                         </div>
                                     </div>
                                 </div>
@@ -135,6 +144,17 @@ $dataKuis = $data->getAllKuisUser($_SESSION['id']);
                                     </div>
                                 </div> -->
                             </div>
+                            <div class="progress mb-3" style="height:8px;">
+                                <div
+                                    class="progress-bar"
+                                    style="width: <?= $persen ?>%;">
+                                </div>
+                            </div>
+
+                            <p class="text-muted mb-4">
+                                Progress Belajar
+                                <strong><?= $persen ?>%</strong>
+                            </p>
                         </div>
                         <?php foreach ($dataKuis as $kuis): ?>
                             <?php

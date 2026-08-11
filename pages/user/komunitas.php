@@ -155,11 +155,11 @@ include '../include/header.php';
                                         </p>
                                     </div>
                                     <div class="btn-group" role="group">
-                                        <button class="btn btn-secondary text-truncate" type="button">
+                                        <!-- <button class="btn btn-secondary text-truncate" type="button">
                                             <i class="uil uil-user me-1">
                                             </i>
                                             Profile
-                                        </button>
+                                        </button> -->
                                         <button class="btn btn-primary text-truncate" type="button">
                                             <a href="chat.php?id=<?= $konsul['id'] ?>&type=personal"
                                                 class="text-decoration-none text-white">

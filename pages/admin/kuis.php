@@ -176,8 +176,8 @@ $dataMateri = $materi->getMateriNonKuis();
                                     <label for="jenis_kuis_tambah" class="form-label">Jenis Kuis</label>
                                     <select id="jenis_kuis_tambah" name="jenis_kuis" class="form-select" required>
                                         <option value="kuis" selected>Kuis</option>
-                                        <option value="pretest">Pretest</option>
-                                        <option value="posttest">Posttest</option>
+                                        <option value="pre">Pretest</option>
+                                        <option value="post">Posttest</option>
                                     </select>
                                 </div>
                             </div>
@@ -231,8 +231,8 @@ $dataMateri = $materi->getMateriNonKuis();
                                     <label for="jenis_kuis" class="form-label">Jenis Kuis</label>
                                     <select id="jenis_kuis" name="jenis_kuis" class="form-select" required>
                                         <option value="kuis">Kuis</option>
-                                        <option value="pretest">Pretest</option>
-                                        <option value="posttest">Posttest</option>
+                                        <option value="pre">Pretest</option>
+                                        <option value="post">Posttest</option>
                                     </select>
                                 </div>
                             </div>
