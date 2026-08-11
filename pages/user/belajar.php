@@ -99,8 +99,10 @@ $persen = $total > 0
                                 <strong><?= $persen ?>%</strong>
                             </p>
                         </div>
-                        <?php foreach ($dataMateri as $materi) : ?>
-                            <a class="col-12 col-xl-6 col-md-6" href="detail-materi.php?id=<?= $materi['id'] ?>">
+                        <?php foreach ($dataMateri as $index => $materi) : ?>
+                            <?php $canAccess = ($index === 0 || $materi['material_selesai'] == 1); ?>
+                            <a class="col-12 col-xl-6 col-md-6" href="<?= $canAccess ? 'skill-detail.php?id=' . $materi['id'] : '#' ?>"
+                                <?= !$canAccess ? 'data-bs-toggle="modal" data-bs-target="#peringatanModal"' : '' ?>>
                                 <div class="card mb-3 border border-success">
                                     <div class="row g-0 align-items-center">
                                         <div class="col-3 text-center">
@@ -118,17 +120,26 @@ $persen = $total > 0
                                                         <?= $materi['deskripsi'] ?>
                                                     </small>
                                                 </p>
-                                                <?php if ($materi['material_selesai']) : ?>
-                                                    <p class=" card-text">
-                                                        <small class="badge bg-success text-white px-2 py-1 rounded-pill">
-                                                            <i class="mdi mdi-check-circle"></i>
-                                                            Telah Dipelajari
-                                                        </small>
-                                                    <?php else : ?>
-                                                        <span class="badge bg-secondary text-white px-2 py-1 rounded-pill">
-                                                            Belum Dipelajari
-                                                        </span>
-                                                    </p>
+                                                <?php if ($index === 0 && !$materi['material_selesai']) : ?>
+
+                                                    <small class="badge bg-primary text-white px-2 py-1 rounded-pill">
+                                                        <i class="mdi mdi-play-circle"></i>
+                                                        Mulai Belajar
+                                                    </small>
+
+                                                <?php elseif ($materi['material_selesai']) : ?>
+
+                                                    <small class="badge bg-success text-white px-2 py-1 rounded-pill">
+                                                        <i class="mdi mdi-check-circle"></i>
+                                                        Telah Dipelajari
+                                                    </small>
+
+                                                <?php else : ?>
+
+                                                    <small class="badge bg-secondary text-white px-2 py-1 rounded-pill">
+                                                        <i class="mdi mdi-lock"></i>
+                                                        Kunci
+                                                    </small>
                                                 <?php endif ?>
                                             </div>
                                         </div>
@@ -141,6 +152,26 @@ $persen = $total > 0
                     <!-- end row -->
                 </div>
                 <!-- container-fluid -->
+                <div class="modal fade" id="peringatanModal" tabindex="-1" aria-labelledby="peringatanModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="peringatanModalLabel">
+                                    <i class="mdi mdi-lock text-warning"></i> Akses Kuis Terkunci
+                                </h5>
+                                <!-- Catatan: Jika menggunakan Bootstrap 4, ubah class="btn-close" menjadi class="close" dan tambahkan isi <span>&times;</span> -->
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <p>Anda belum bisa Mempelajari Materi ini.</p>
+                                <strong>Silakan selesaikan materi dan kuis sebelumnya terlebih dahulu!</strong>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- End Page-content -->
             <?php include '../include/footer.php'; ?>

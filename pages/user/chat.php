@@ -115,7 +115,7 @@ if ($id_lawan > 0) {
                                             Daftar perpesanan anda
                                         </p>
                                     </div>
-                                    <div class="flex-shrink-0">
+                                    <!-- <div class="flex-shrink-0">
                                         <div class="dropdown chat-noti-dropdown">
                                             <button aria-expanded="false" aria-haspopup="true" class="btn dropdown-toggle p-0" data-bs-toggle="dropdown" type="button">
                                                 <i class="bx bx-dots-horizontal-rounded">
@@ -136,7 +136,7 @@ if ($id_lawan > 0) {
                                                 </a>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="p-3">
@@ -174,7 +174,7 @@ if ($id_lawan > 0) {
                                             <div class="pt-3">
                                                 <div class="px-3">
                                                     <h5 class="font-size-14 mb-3">
-                                                        Recent
+                                                        Konsultasi
                                                     </h5>
                                                 </div>
 
@@ -189,7 +189,7 @@ if ($id_lawan > 0) {
                                                                 data-type="personal">
                                                                 <div class="d-flex align-items-start">
                                                                     <div class="flex-shrink-0 user-img online align-self-center me-3">
-                                                                        <img alt="" class="rounded-circle avatar-sm" src="assets/images/users/avatar-2.jpg" />
+                                                                        <img alt="" class="rounded-circle avatar-sm" src="/uploads/profile/<?= (!empty($list['foto_lawan'])) ? $list['foto_lawan'] : 'default.webp'; ?>" />
                                                                         <span class="user-status">
                                                                         </span>
                                                                     </div>
@@ -233,13 +233,9 @@ if ($id_lawan > 0) {
                                                                 data-type="group">
                                                                 <div class="d-flex align-items-center">
                                                                     <div class="flex-shrink-0 avatar-sm me-3">
-                                                                        <?php if ($group['foto']) : ?>
-                                                                            <img alt="" class="avatar-sm rounded-circle" src="../../uploads/komunitas/<?= $group['foto'] ?>" />
-                                                                        <?php else : ?>
-                                                                            <span class="avatar-title rounded-circle bg-primary-subtle text-primary">
-                                                                                P
-                                                                            </span>
-                                                                        <?php endif; ?>
+                                                                        <?php ($group['foto']) ?>
+                                                                        <img alt="" class="avatar-sm rounded-circle" src="/uploads/profile/<?= (!empty($group['foto'])) ? $group['foto'] : 'default.webp'; ?>" />
+                                                                        <?php ?>
                                                                     </div>
                                                                     <div class="flex-grow-1">
                                                                         <h5 class="font-size-14 mb-0">
@@ -538,27 +534,71 @@ if ($id_lawan > 0) {
 
             renderHeader(room) {
 
+                const fotoRoom = room.foto && room.foto.trim() !== '' ?
+                    room.foto :
+                    'default.webp';
+
                 document.getElementById("chatHeader").innerHTML = ` 
-                <div class="p-3 px-lg-4 border-bottom bg-white"> 
-                <div class="d-flex align-items-center"> 
+        <div class="p-3 px-lg-4 border-bottom bg-white"> 
+            <div class="d-flex align-items-center"> 
+
                 <!-- Tombol Kembali --> 
                 <div class="flex-shrink-0 me-3 ms-lg-0 ms-xl-3"> 
-                <a href="chat.php" class="btn btn-light rounded-circle d-flex align-items-center justify-content-center shadow-sm chat-back-btn" aria-label="Kembali">
-                 <i class="bx bx-left-arrow-alt fs-3"></i> </a> 
-                 </div> <!-- Foto Group --> <div class="flex-shrink-0 avatar-sm me-3"> 
-                 <img src="../../uploads/komunitas/${room.foto}" class="rounded-circle avatar-sm" alt="Group Foto"> </div> 
-                 <!-- Informasi Group --> 
-                 <div class="overflow-hidden"> 
-                 <h5 class="mb-1 text-truncate">${room.name}</h5> 
-                 <p class="text-muted mb-0 text-truncate"> ${room.subtitle} </p>
-                  </div> </div> </div> 
-                  <style> 
-                  .chat-back-btn { width: 42px; height: 42px; padding: 0; border: 1px solid #e9ecef; transition: all 0.2s ease; } 
-                  .chat-back-btn i { font-size: 22px; transition: transform 0.2s ease; } 
-                  .chat-back-btn:hover { background-color: #f1f3f5; border-color: #dee2e6; transform: translateX(-2px); } 
-                  .chat-back-btn:hover i { transform: translateX(-2px); } .chat-back-btn:active { transform: scale(0.94); } 
-                  </style> `;
+                    <a href="chat.php" 
+                       class="btn btn-light rounded-circle d-flex align-items-center justify-content-center shadow-sm chat-back-btn" 
+                       aria-label="Kembali">
+                        <i class="bx bx-left-arrow-alt fs-3"></i>
+                    </a> 
+                </div>
 
+                <!-- Foto Group --> 
+                <div class="flex-shrink-0 avatar-sm me-3"> 
+                    <img src="../../uploads/profile/${fotoRoom}" 
+                         class="rounded-circle avatar-sm" 
+                         alt="Group Foto"
+                         onerror="this.onerror=null; this.src='../../uploads/profile/default.webp';">
+                </div>
+
+                <!-- Informasi Group --> 
+                <div class="overflow-hidden"> 
+                    <h5 class="mb-1 text-truncate">${room.name}</h5> 
+                    <p class="text-muted mb-0 text-truncate">
+                        ${room.subtitle}
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <style> 
+            .chat-back-btn { 
+                width: 42px; 
+                height: 42px; 
+                padding: 0; 
+                border: 1px solid #e9ecef; 
+                transition: all 0.2s ease; 
+            } 
+
+            .chat-back-btn i { 
+                font-size: 22px; 
+                transition: transform 0.2s ease; 
+            } 
+
+            .chat-back-btn:hover { 
+                background-color: #f1f3f5; 
+                border-color: #dee2e6; 
+                transform: translateX(-2px); 
+            } 
+
+            .chat-back-btn:hover i { 
+                transform: translateX(-2px); 
+            } 
+
+            .chat-back-btn:active { 
+                transform: scale(0.94); 
+            } 
+        </style>
+    `;
             },
 
             renderFooter() {

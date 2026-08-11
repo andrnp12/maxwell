@@ -3,7 +3,15 @@ require_once '../../src/classes/auth.php';
 $auth = new auth();
 $auth->authOrNot();
 
+require_once '../../src/classes/konselor.php';
+$data = new Konsultan();
+
 $nama = $_SESSION['name'];
+$id = $_SESSION['id'];
+
+$totalPesan = $data->totalPesan($id);
+$totalKonsultasi = $data->totalKonsultasi($id);
+
 ?>
 
 <!--header start-->
@@ -52,7 +60,7 @@ $nama = $_SESSION['name'];
                                     Total Pesan
                                  </span>
                                  <h4 class="mb-3">
-                                    <span class="counter-value" data-target="520">
+                                    <span class="counter-value" data-target="<?= $totalPesan; ?>">
                                        0
                                     </span>
                                  </h4>
@@ -75,10 +83,10 @@ $nama = $_SESSION['name'];
                            <div class="row align-items-center">
                               <div class="col-6">
                                  <span class="text-muted mb-3 lh-1 d-block text-truncate">
-                                    Pesan Baru
+                                    Total Konsultasi
                                  </span>
                                  <h4 class="mb-3">
-                                    <span class="counter-value" data-target="6258">
+                                    <span class="counter-value" data-target="<?= $totalKonsultasi; ?>">
                                        0
                                     </span>
                                  </h4>

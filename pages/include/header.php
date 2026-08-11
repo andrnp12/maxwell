@@ -33,6 +33,11 @@
    <style>
       @media (max-width: 991px) {
 
+         .carousel-item img {
+            filter: brightness(30%);
+            /* Mengurangi kecerahan gambar menjadi 50% */
+         }
+
          /* 0. SEMBUNYIKAN TOMBOL HAMBURGER */
          /* Menghapus tombol toggle menu di navbar */
          .vertical-menu-btn,

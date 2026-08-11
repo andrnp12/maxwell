@@ -27,7 +27,7 @@ class ChatV2
 
                 'display_column' => 'username',
 
-                'display_alias' => 'nama'
+                'display_alias' => 'name'
             ],
 
             'group' => [
@@ -42,7 +42,7 @@ class ChatV2
 
                 'display_column' => 'nama_komunitas',
 
-                'display_alias' => 'nama'
+                'display_alias' => 'name'
             ],
 
             default => throw new InvalidArgumentException(
@@ -109,13 +109,18 @@ class ChatV2
             else {
 
                 $sql = "
-                SELECT *
-                FROM {$config['table']}
-                WHERE id_user = ?
-                AND {$config['target_column']} = ?
-                AND id > ?
-                ORDER BY id ASC
-            ";
+    SELECT
+        c.*,
+        u.name AS name,
+        u.foto
+    FROM {$config['table']} c
+    INNER JOIN users u
+        ON u.id = c.sender_id
+    WHERE c.id_user = ?
+    AND c.{$config['target_column']} = ?
+    AND c.id > ?
+    ORDER BY c.id ASC
+";
 
                 $stmt = $this->conn->prepare($sql);
 
@@ -239,6 +244,7 @@ class ChatV2
             $sql = "
             SELECT
                 u.id AS id_lawan,
+                u.foto AS foto_lawan,
                 u.username AS username,
                 u.name AS name,
                 c.chat AS pesan_terakhir,
@@ -264,6 +270,7 @@ class ChatV2
             $sql = "
             SELECT
                 u.id AS id_lawan,
+                u.foto AS foto_lawan,
                 u.username AS username,
                 u.name AS name,
                 c.chat AS pesan_terakhir,
@@ -686,7 +693,7 @@ class ChatV2
         }
 
         // Sort all activities by timestamp descending
-        usort($activities, function($a, $b) {
+        usort($activities, function ($a, $b) {
             return strtotime($b['time_stamp']) - strtotime($a['time_stamp']);
         });
 

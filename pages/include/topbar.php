@@ -22,10 +22,10 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
          <div class="navbar-brand-box">
             <a class="logo logo-dark" href="index.php">
                <span class="logo-sm">
-                  <img alt="" height="24" src="/assets/images/logo-sm.svg" />
+                  <img alt="" height="24" src="/assets\images\logos\logo.webp" />
                </span>
                <span class="logo-lg">
-                  <img alt="" height="24" src="/assets/images/logo-sm.svg" />
+                  <img alt="" height="24" src="/assets\images\logos\logo.webp" />
                   <span class="logo-txt">
                      Remaja Tumbuh
                   </span>
@@ -49,11 +49,13 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
          </button>
       </div>
       <div class="d-flex">
+         <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin'): ?>
          <div class="d-sm-inline-block ms-2">
             <a href="chat.php" class="btn header-item d-flex align-items-center justify-content-center">
                <i class="icon-lg" data-feather="message-square"></i>
             </a>
          </div>
+         <?php endif; ?>
          <div class="dropdown d-inline-block me-2">
             <button aria-expanded="false" aria-haspopup="true" class="btn header-item noti-icon position-relative" data-bs-toggle="dropdown" id="page-header-notifications-dropdown" type="button">
                <i class="icon-lg" data-feather="bell">
@@ -101,7 +103,7 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
          </div>
          <div class="dropdown">
             <button aria-expanded="false" aria-haspopup="true" class="btn header-item bg-light-subtle border-start border-end page-header-user-dropdown" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
-               <img alt="Header Avatar" class="rounded-circle header-profile-user" src="/uploads/profile/<?= $dataProfile['data']['foto']; ?>" />
+               <img alt="Header Avatar" class="rounded-circle header-profile-user" src="/uploads/profile/<?= (!empty($dataProfile['data']['foto'])) ? $dataProfile['data']['foto'] : 'default.webp'; ?>" />
                <span class="d-none d-xl-inline-block ms-1 fw-medium">
                   <?php echo $name ?>
                </span>

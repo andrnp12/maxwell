@@ -54,7 +54,7 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                             <div class="d-flex flex-column h-100">
                                 <div class="mb-4 mb-md-5 text-center">
                                     <a class="d-block auth-logo" href="#">
-                                        <img alt="" height="28" src="../assets/images/logo-sm.svg" />
+                                        <img alt="" height="28" src="/assets/images/logos/logo.webp" />
                                         <span class="logo-txt">
                                             REMAJA TUMBUH
                                         </span>
