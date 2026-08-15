@@ -77,7 +77,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                                             foreach ($dataKonsultan as $konsultan) : ?>
                                                 <tr id="row-<?= $konsultan['id'] ?>">
                                                     <td><?= $no++ ?></td>
-                                                    <td><img src="../../uploads/profile/<?= htmlspecialchars($konsultan['foto']) ?>" alt="icon" class="avatar-sm rounded-circle" /></td>
+                                                    <td><img src="<?= !empty($konsultan['foto']) ? '/uploads/profile/' . htmlspecialchars($konsultan['foto']) : '/uploads/profile/default.webp' ?>" alt="icon" class="avatar-sm rounded-circle" /></td>
                                                     <td><?= htmlspecialchars($konsultan['name']) ?></td>
                                                     <td><?= htmlspecialchars($konsultan['nomor']) ?></td>
                                                     <td><?= htmlspecialchars($konsultan['email']) ?></td>
@@ -447,7 +447,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
         function tambahRow(data) {
             const desc = data.deskripsi || '';
             const rowNumber = getRowNumber();
-            
+
             const rowData = [
                 rowNumber,
                 `<img src="../../uploads/profile/${data.foto}" alt="icon" class="avatar-sm rounded-circle" />`,
@@ -508,7 +508,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
 
         function updateRow(data) {
             const desc = data.deskripsi || '';
-            
+
             // For update, we don't change the row number (first column) - keep existing
             const rowData = [
                 null, // Will keep existing row number

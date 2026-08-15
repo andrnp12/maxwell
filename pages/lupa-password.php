@@ -24,10 +24,10 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
 <head>
     <meta charset="utf-8" />
     <title>
-        Login | REMAJA TUMBUH - Minimal Admin &amp; Dashboard Template
+        Lupa Password | REMAJA TUMBUH - Minimal Admin & Dashboard Template
     </title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta content="Premium Multipurpose Admin &amp; Dashboard Template" name="description">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description">
     <meta content="admintem.com" name="author" />
     <!-- App favicon -->
     <link href="../assets/images/favicon.ico" rel="shortcut icon" />
@@ -63,59 +63,47 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                                 <div class="auth-content my-auto">
                                     <div class="text-center">
                                         <h5 class="mb-0">
-                                            Selamat Datang, Pengguna!
+                                            Lupa Password
                                         </h5>
                                         <p class="text-muted mt-2">
-                                            Masuk untuk melanjutkan.
+                                            Masukkan token dan password baru Anda
                                         </p>
                                     </div>
-                                    <form id="loginForm" class="mt-4 pt-2">
+                                    <form id="forgotPasswordForm" class="mt-4 pt-2">
                                         <div class="mb-3">
                                             <label class="form-label">
-                                                Username
+                                                Token (6 Karakter)
                                             </label>
-                                            <input class="form-control" name="username" id="username" placeholder="Enter username" type="text" required />
+                                            <input class="form-control" name="token" id="token" placeholder="Masukkan token 6 karakter" type="text" required maxlength="6" style="text-transform: uppercase;" />
+                                            <small class="form-text text-muted">Token dapat dilihat di halaman profil Anda</small>
                                         </div>
                                         <div class="mb-3">
-                                            <div class="d-flex align-items-start">
-                                                <div class="flex-grow-1">
-                                                    <label class="form-label">
-                                                        Password
-                                                    </label>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <div class="">
-                                                        <a class="text-muted" href="lupa-password.php">
-                                                            Lupa Password?
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <label class="form-label">
+                                                Password Baru
+                                            </label>
                                             <div class="input-group auth-pass-inputgroup">
-                                                <input aria-describedby="password-addon" aria-label="Password" class="form-control" placeholder="Enter password" name="password" type="password" required />
+                                                <input aria-describedby="password-addon" aria-label="Password" class="form-control" placeholder="Masukkan password baru" name="password" type="password" required minlength="6" />
                                             </div>
                                         </div>
-                                        <div class="row mb-4">
-                                            <div class="col">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" id="remember-check" name="remember_me" type="checkbox" value="1" />
-                                                    <label class="form-check-label" for="remember-check">
-                                                        Ingat Login Saya
-                                                    </label>
-                                                </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                Konfirmasi Password Baru
+                                            </label>
+                                            <div class="input-group auth-pass-inputgroup">
+                                                <input aria-describedby="confirm-password-addon" aria-label="Confirm Password" class="form-control" placeholder="Konfirmasi password baru" name="confirm_password" type="password" required minlength="6" />
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">
-                                                Masuk
+                                                Reset Password
                                             </button>
                                         </div>
                                     </form>
                                     <div class="mt-5 text-center">
                                         <p class="text-muted mb-0">
-                                            Belum memiliki akun ?
-                                            <a class="text-primary fw-semibold" href="register.php">
-                                                Daftar sekarang
+                                            Kembali ke
+                                            <a class="text-primary fw-semibold" href="login.php">
+                                                Login
                                             </a>
                                         </p>
                                     </div>
@@ -127,8 +115,6 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                                             document.write(new Date().getFullYear())
                                         </script>
                                         REMAJA TUMBUH . Supported by
-                                        <!-- <i class="mdi mdi-heart text-danger">
-                                        </i> -->
                                     </p>
                                     <div class="d-flex justify-content-center align-items-center gap-3 mt-3">
                                         <!-- Gunakan style="height: 40px;" untuk membatasi tinggi maksimal logo -->
@@ -166,8 +152,6 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                             </li>
                             <li>
                             </li>
-                            <li>
-                            </li>
                         </ul>
                         <!-- end bubble effect -->
                     </div>
@@ -182,14 +166,13 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
     <?php include('include/script.php'); ?>
 
     <script>
-        const form = document.getElementById('loginForm');
+        const form = document.getElementById('forgotPasswordForm');
 
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const formData = new FormData(form);
-            formData.append('action', 'login');
-            // remember_me is automatically included from checkbox if checked
+            formData.append('action', 'forgot_password');
 
             try {
                 const response = await fetch("../src/actions/proses_auth.php", {
@@ -200,14 +183,20 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                 const result = await response.json();
 
                 if (result.status == 'success') {
+                    alert("Sukses: " + result.message);
                     window.location.href = result.redirect;
                 } else {
                     alert("Error: " + result.message);
                 }
             } catch (error) {
                 console.error("Error:", error);
-                alert("Terjadi kesalahan saat memproses login. Silakan coba lagi.");
+                alert("Terjadi kesalahan saat memproses reset password. Silakan coba lagi.");
             }
+        });
+
+        // Auto uppercase token input
+        document.getElementById('token').addEventListener('input', function(e) {
+            e.target.value = e.target.value.toUpperCase();
         });
     </script>
 </body>

@@ -138,7 +138,7 @@ if (!$user) {
                                     <div class="d-flex flex-column align-items-center text-center mb-4">
                                         <div class="avatar-xxl mb-3">
                                             <img alt="" class="img-fluid rounded-circle d-block"
-                                                src="<?= !empty($user['foto']) ? '/uploads/profile/' . htmlspecialchars($user['foto']) : '/assets/images/users/avatar-2.jpg' ?>"
+                                                src="<?= !empty($user['foto']) ? '/uploads/profile/' . htmlspecialchars($user['foto']) : '/uploads/profile/default.webp' ?>"
                                                 style="width: 120px; height: 120px; object-fit: cover;" />
                                         </div>
                                         <div>

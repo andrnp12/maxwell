@@ -1,17 +1,13 @@
 <?php
-
-session_start();
-
+require_once '../../src/classes/auth.php';
 require_once '../../src/classes/tests.php';
+
+$auth = new auth();
+$auth->authOrNot();
 
 $testManager = new tests();
 
 $userId = (int) ($_SESSION['id'] ?? 0);
-
-if ($userId <= 0) {
-    header('Location: ../../login.php');
-    exit;
-}
 
 $jenis = $_GET['type'] ?? 'pre';
 

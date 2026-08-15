@@ -1,5 +1,4 @@
 <?php
-$name = $_SESSION['username'];
 require_once __DIR__ . '/../../src/classes/notifikasi.php';
 require_once __DIR__ . '/../../src/classes/profile.php';
 
@@ -105,7 +104,7 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
             <button aria-expanded="false" aria-haspopup="true" class="btn header-item bg-light-subtle border-start border-end page-header-user-dropdown" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
                <img alt="Header Avatar" class="rounded-circle header-profile-user" src="/uploads/profile/<?= (!empty($dataProfile['data']['foto'])) ? $dataProfile['data']['foto'] : 'default.webp'; ?>" />
                <span class="d-none d-xl-inline-block ms-1 fw-medium">
-                  <?php echo $name ?>
+                  <?php echo $dataProfile['data']['name']; ?>
                </span>
                <i class="mdi mdi-chevron-down d-none d-xl-inline-block">
                </i>

@@ -5,7 +5,7 @@ require_once '../classes/auth.php';
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
 if ($action === 'login') {
-    
+
     header('Content-Type: application/json');
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -22,9 +22,10 @@ if ($action === 'login') {
 
     $username = mysqli_escape_string($conn, $_POST['username'] ?? '');
     $password = mysqli_escape_string($conn, $_POST['password'] ?? '');
+    $rememberMe = isset($_POST['remember_me']) && $_POST['remember_me'] === '1';
 
     $auth = new auth();
-    $loginSuccess = $auth->login($username, $password);
+    $loginSuccess = $auth->login($username, $password, $rememberMe);
 
     if ($loginSuccess) {
         $roleRedirects = [
@@ -49,9 +50,8 @@ if ($action === 'login') {
         ]);
     }
     exit;
-
 } elseif ($action === 'register') {
-    
+
     header('Content-Type: application/json');
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -80,22 +80,22 @@ if ($action === 'login') {
     }
 
     $auth = new auth();
-    $registerSuccess = $auth->register($foto, $username, $name, $nomor, $email, $password, $deskripsi, $role);
+    $registerResult = $auth->register($foto, $username, $name, $nomor, $email, $password, $deskripsi, $role);
 
-    if ($registerSuccess) {
+    if ($registerResult['success']) {
         echo json_encode([
             'status' => 'success',
-            'message' => 'Registrasi berhasil.',
+            'message' => 'Registrasi berhasil. Token Anda: ' . $registerResult['token'],
+            'token' => $registerResult['token'],
             'redirect' => 'login.php'
         ]);
     } else {
         echo json_encode([
             'status' => 'error',
-            'message' => 'Registrasi gagal.'
+            'message' => $registerResult['message']
         ]);
     }
     exit;
-
 } elseif ($action === 'logout') {
 
     $auth = new auth();
@@ -103,7 +103,70 @@ if ($action === 'login') {
 
     header('Location: ../../pages/login.php');
     exit;
+} elseif ($action === 'forgot_password') {
 
+    header('Content-Type: application/json');
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Metode request tidak valid.'
+        ]);
+        exit;
+    }
+
+    $token = $_POST['token'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $confirmPassword = $_POST['confirm_password'] ?? '';
+
+    if (empty($token) || empty($password) || empty($confirmPassword)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Token, password baru, dan konfirmasi password harus diisi.'
+        ]);
+        exit;
+    }
+
+    if (strlen($token) !== 6) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Token harus 6 karakter.'
+        ]);
+        exit;
+    }
+
+    if ($password !== $confirmPassword) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Password dan konfirmasi password tidak cocok.'
+        ]);
+        exit;
+    }
+
+    if (strlen($password) < 6) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Password minimal 6 karakter.'
+        ]);
+        exit;
+    }
+
+    $auth = new auth();
+    $result = $auth->forgotPassword($token, $password);
+
+    if ($result['success']) {
+        echo json_encode([
+            'status' => 'success',
+            'message' => $result['message'],
+            'redirect' => 'login.php'
+        ]);
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'message' => $result['message']
+        ]);
+    }
+    exit;
 } else {
 
     header('Content-Type: application/json');
@@ -112,5 +175,4 @@ if ($action === 'login') {
         'message' => 'Aksi tidak valid.'
     ]);
     exit;
-
 }

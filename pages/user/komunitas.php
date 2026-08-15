@@ -143,7 +143,7 @@ include '../include/header.php';
                                 <div class="card text-center">
                                     <div class="card-body">
                                         <div class="mx-auto mb-4">
-                                            <img alt="" class="avatar-xl rounded-circle img-thumbnail" src="/assets/images/users/avatar-2.jpg">
+                                            <img alt="" class="avatar-xl rounded-circle img-thumbnail" src="<?= !empty($konsul['foto']) ? '/uploads/profile/' . htmlspecialchars($konsul['foto']) : '/uploads/profile/default.webp' ?>">
                                         </div>
                                         <h5 class="font-size-16 mb-1">
                                             <a class="text-body" href="#">

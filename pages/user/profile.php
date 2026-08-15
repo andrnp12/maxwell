@@ -202,6 +202,7 @@ $progressDetails = $certEligibility['details'];
                                                         data-email="<?= htmlspecialchars($dataProfile['data']['email'], ENT_QUOTES) ?>"
                                                         data-deskripsi="<?= htmlspecialchars($dataProfile['data']['deskripsi'], ENT_QUOTES) ?>"
                                                         data-foto="<?= htmlspecialchars($dataProfile['data']['foto'], ENT_QUOTES) ?>"
+                                                        data-token="<?= htmlspecialchars($dataProfile['data']['token'] ?? '', ENT_QUOTES) ?>"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#modalEditProfile"
                                                         class="mdi mdi-pencil-box-outline text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">Edit</a>
@@ -375,6 +376,18 @@ $progressDetails = $certEligibility['details'];
                                 <input class="form-control" id="edit_email" name="email" type="text" value="">
                             </div>
                             <div class="mb-3">
+                                <label class="form-label" for="edit_token">
+                                    Token (6 Karakter)
+                                </label>
+                                <div class="input-group">
+                                    <input class="form-control" id="edit_token" name="token" type="text" value="" readonly style="background-color: #f8f9fc;">
+                                    <button class="btn btn-outline-secondary" type="button" id="btnCopyToken" title="Salin token">
+                                        <i class="mdi mdi-content-copy"></i>
+                                    </button>
+                                </div>
+                                <small class="form-text text-muted">Token digunakan untuk reset password jika lupa. Simpan dengan aman.</small>
+                            </div>
+                            <div class="mb-3">
                                 <label class="form-label" for="edit_password">
                                     Password Pengguna
                                 </label>
@@ -476,6 +489,7 @@ $progressDetails = $certEligibility['details'];
             const deskripsi = button.getAttribute('data-deskripsi') || '';
             // const password = button.getAttribute('data-password') || '';
             const foto = button.getAttribute('data-foto') || '';
+            const token = button.getAttribute('data-token') || '';
 
             // Masukkan ke dalam input form
             document.getElementById('edit_id').value = id;
@@ -486,6 +500,25 @@ $progressDetails = $certEligibility['details'];
             document.getElementById('edit_email').value = email;
             // document.getElementById('edit_password').value = password;
             document.getElementById('edit_ringkasan').value = deskripsi;
+            document.getElementById('edit_token').value = token;
+        });
+
+        // Copy Token Button
+        document.getElementById('btnCopyToken')?.addEventListener('click', function() {
+            const tokenInput = document.getElementById('edit_token');
+            if (tokenInput.value) {
+                navigator.clipboard.writeText(tokenInput.value).then(() => {
+                    const originalHtml = this.innerHTML;
+                    this.innerHTML = '<i class="mdi mdi-check"></i>';
+                    this.classList.add('btn-success');
+                    this.classList.remove('btn-outline-secondary');
+                    setTimeout(() => {
+                        this.innerHTML = originalHtml;
+                        this.classList.remove('btn-success');
+                        this.classList.add('btn-outline-secondary');
+                    }, 1500);
+                });
+            }
         });
 
         // Handle Submit Form Edit Profile
