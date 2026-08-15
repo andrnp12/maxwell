@@ -157,7 +157,7 @@ $dataMateri = $materi->getAllMateri();
                         </div>
                         <div class="mb-3">
                             <label for="no_urut_tambah" class="form-label">No Urut</label>
-                            <input class="form-control" name="no_urut" id="no_urut_tambah" type="number" min="1" required>
+                            <input class="form-control" name="no_urut" id="no_urut_tambah" type="number" min="1">
                         </div>
                         <div class="mb-3">
                             <label for="file_materi_tambah" class="form-label">File Materi (PDF, maks 10MB)</label>

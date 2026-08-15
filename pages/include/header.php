@@ -7,10 +7,10 @@
       Dashboard | Admin &amp; Dashboard Template
    </title>
    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-   <meta content="Premium Multipurpose Admin &amp; Dashboard Template" name="description">
-   <meta content="admintem.com" name="author" />
+   <meta content="Remaja Tumbuh &amp;" name="description">
+   <meta content="" name="author" />
    <!-- App favicon -->
-   <link href="/assets/images/favicon.ico" rel="shortcut icon" />
+   <link href="/assets/images/logos/logo.webp" rel="shortcut icon" />
    <!-- plugin css -->
    <link href="../../assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css">
    <!-- DataTables -->

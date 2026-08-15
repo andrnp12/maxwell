@@ -157,6 +157,70 @@ $komunitas = $dataKomunitas->getAllKomunitas((int) $_SESSION['id']);
     </div>
     <!-- JAVASCRIPT -->
     <?php include '../include/script.php'; ?>
+
+    <script>
+        document.querySelectorAll(".btn-join").forEach(button => {
+
+            button.addEventListener("click", async function(e) {
+
+                e.preventDefault();
+
+                const btn = e.currentTarget;
+                const idKomunitas = btn.dataset.id;
+
+                btn.disabled = true;
+                btn.innerHTML = "Menggabungkan...";
+
+                const formData = new FormData();
+
+                formData.append("action", "join_group");
+                formData.append("id_komunitas", idKomunitas);
+
+                try {
+
+                    const response = await fetch(
+                        "/src/actions/proses_komunitas.php", {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+                    const result = await response.json();
+
+                    if (result.status === "success") {
+
+                        btn.outerHTML = `
+                    <a href="chat.php?id=${idKomunitas}&type=group"
+                       class="btn btn-primary">
+                        <i class="uil uil-comments me-1"></i>
+                        Buka Chat
+                    </a>
+                `;
+
+                    } else {
+
+                        alert(result.message);
+
+                        btn.disabled = false;
+                        btn.innerHTML = "Gabung Komunitas";
+
+                    }
+
+                } catch (err) {
+
+                    console.error(err);
+
+                    btn.disabled = false;
+                    btn.innerHTML = "Gabung Komunitas";
+
+                }
+
+            });
+
+        });
+    </script>
 </body>
+
+
 
 </html>

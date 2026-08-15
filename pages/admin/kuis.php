@@ -532,7 +532,7 @@ $dataMateri = $materi->getMateriNonKuis();
         // --- Fungsi untuk toggle required pada materi berdasarkan jenis kuis ---
         function toggleMateriRequired(jenisKuisSelect, materiSelect) {
             const jenisKuis = jenisKuisSelect.value;
-            const isOptional = ['pretest', 'posttest'].includes(jenisKuis);
+            const isOptional = ['pre', 'post'].includes(jenisKuis);
             
             if (isOptional) {
                 materiSelect.removeAttribute('required');
@@ -577,7 +577,7 @@ $dataMateri = $materi->getMateriNonKuis();
                     
                     // Check if materi is optional based on jenis kuis
                     const jenisKuis = jenisKuisSelect ? jenisKuisSelect.value : 'tryout';
-                    const isOptional = ['pretest', 'posttest'].includes(jenisKuis);
+                    const isOptional = ['pre', 'post'].includes(jenisKuis);
                     
                     if (isOptional) {
                         selectElement.innerHTML = '<option value="" disabled>-- Pilih Materi (Opsional) --</option>';

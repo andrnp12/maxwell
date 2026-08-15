@@ -66,7 +66,7 @@ $nextMateri = $data->getNextMateri((int)$_GET['id']);
                                                 <p>
                                                     <?= $dataMateri['deskripsi']; ?> </p>
                                                 <div class="mt-3 mb-4">
-                                                    <iframe src="../../assets/ViewerJS/index.html?zoom=page-width#../pdf/C4.pdf"
+                                                    <iframe src="/assets/ViewerJS/index.html?zoom=page-width#/uploads/materi/<?= htmlspecialchars($dataMateri['file']) ?>"
                                                         title="Pratinjau PDF"
                                                         class="w-100 rounded border"
                                                         style="min-height: 500px; border: 1px solid #dee2e6;">
@@ -113,7 +113,7 @@ $nextMateri = $data->getNextMateri((int)$_GET['id']);
                             <!-- end card -->
                         </div>
                         <!-- end col -->
-                        <div class="col-lg-4">
+                        <!-- <div class="col-lg-4">
                             <div class="card">
                                 <div class="card-body">
                                     <div>
@@ -169,7 +169,7 @@ $nextMateri = $data->getNextMateri((int)$_GET['id']);
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <!-- end card -->
                         </div>
                     </div>

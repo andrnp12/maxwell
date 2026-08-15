@@ -76,10 +76,10 @@ $komunitasData = $komunitasModel->getAllKomunitasAdmin();
                                                 <tr id="row-<?= $komunitas['id'] ?>">
                                                     <td><?= $no++ ?></td>
                                                     <td>
-                                                        <img src="../../uploads/komunitas/<?= htmlspecialchars($komunitas['foto']) ?>"
-                                                             alt="Foto Komunitas"
-                                                             class="avatar-sm rounded-circle"
-                                                             onerror="this.src='../../assets/images/users/avatar-1.jpg'">
+                                                        <img
+                                                            src="<?= !empty($komunitas['foto']) ? '/uploads/komunitas/' . htmlspecialchars($komunitas['foto']) : '/uploads/komunitas/default.webp' ?>"
+                                                            alt="Foto Komunitas"
+                                                            class="avatar-sm rounded-circle">
                                                     </td>
                                                     <td><?= htmlspecialchars($komunitas['nama_komunitas']) ?></td>
                                                     <td>
@@ -98,11 +98,6 @@ $komunitasData = $komunitasModel->getAllKomunitasAdmin();
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                            <?php if (empty($komunitasData)): ?>
-                                                <tr>
-                                                    <td colspan="5" class="text-center">Tidak ada data komunitas.</td>
-                                                </tr>
-                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -251,9 +246,12 @@ $komunitasData = $komunitasModel->getAllKomunitasAdmin();
         const elemenToastNotif = elemenModalNotif ? elemenModalNotif.querySelector('.toast') : null;
         const datatableElement = document.getElementById('datatable');
 
-        const dataTable = window.jQuery && window.jQuery.fn && window.jQuery.fn.dataTable && window.jQuery.fn.dataTable.isDataTable('#datatable') ?
-            window.jQuery('#datatable').DataTable() :
-            null;
+        // Function to get the DataTable instance (initialized by datatables.init.js in document.ready)
+        function getDataTable() {
+            return (window.jQuery && window.jQuery.fn && window.jQuery.fn.dataTable && window.jQuery.fn.dataTable.isDataTable('#datatable')) ?
+                window.jQuery('#datatable').DataTable() :
+                null;
+        }
 
         let modalNotifInstance = null;
         let komunitasIdToDelete = null;
@@ -313,8 +311,9 @@ $komunitasData = $komunitasModel->getAllKomunitasAdmin();
 
         // --- Renumber all rows in the table ---
         function renumberRows() {
-            if (dataTable) {
-                dataTable.rows().every(function(rowIdx, tableLoop, rowLoop) {
+            const dt = getDataTable();
+            if (dt) {
+                dt.rows().every(function(rowIdx, tableLoop, rowLoop) {
                     this.node().querySelector('td:first-child').textContent = rowIdx + 1;
                 });
             } else {
@@ -390,8 +389,9 @@ $komunitasData = $komunitasModel->getAllKomunitasAdmin();
                 const result = await response.json();
 
                 if (result.status === 'success' && result.data) {
-                    if (dataTable) {
-                        dataTable.clear().draw();
+                    const dt = getDataTable();
+                    if (dt) {
+                        dt.clear().draw();
                         result.data.forEach((komunitas, index) => {
                             const rowData = [
                                 index + 1,
@@ -400,7 +400,7 @@ $komunitasData = $komunitasModel->getAllKomunitasAdmin();
                                 `<div>${escapeHtml(komunitas.deskripsi)}</div>`,
                                 buildActions(komunitas.id, komunitas.nama_komunitas, komunitas.deskripsi, komunitas.foto)
                             ];
-                            const row = dataTable.row.add(rowData).draw(false).node();
+                            const row = dt.row.add(rowData).draw(false).node();
                             if (row) row.id = 'row-' + komunitas.id;
                         });
                     } else {

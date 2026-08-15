@@ -12,6 +12,34 @@ class Konsultan
         $this->conn = $this->db->conn;
     }
 
+    /**
+     * Generate a unique 6-character alphanumeric token
+     * Loops until a unique token is found (handles race conditions)
+     */
+    private function generateUniqueToken(): string
+    {
+        $characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Exclude confusing chars: I, O, 1, 0
+        $maxAttempts = 10;
+
+        for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
+            $token = '';
+            for ($i = 0; $i < 6; $i++) {
+                $token .= $characters[random_int(0, strlen($characters) - 1)];
+            }
+
+            // Check if token already exists
+            $stmt = $this->conn->prepare("SELECT id FROM users WHERE token = ?");
+            $stmt->bind_param("s", $token);
+            $stmt->execute();
+            if ($stmt->get_result()->num_rows === 0) {
+                return $token; // Unique token found
+            }
+        }
+
+        // Fallback: add timestamp-based uniqueness (very unlikely to reach here)
+        return substr(md5(uniqid((string)random_int(100000, 999999), true)), 0, 6);
+    }
+
     public function addKonsultan(?array $file, string $username, string $nama, string $nomor, string $email, string $ringkasan, string $password): array
     {
         $namaFileTersimpan = null;
@@ -49,11 +77,14 @@ class Konsultan
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = $this->conn->prepare("INSERT INTO users (`foto`, `username`, `name`, `nomor`, `email`, `deskripsi`, `password`, `role`) VALUES (?, ?, ?, ?, ?, ?, ?, 'konsultan')");
+        // Generate unique 6-character token for konsultan
+        $token = $this->generateUniqueToken();
+
+        $stmt = $this->conn->prepare("INSERT INTO users (`foto`, `username`, `name`, `nomor`, `email`, `deskripsi`, `password`, `role`, `token`) VALUES (?, ?, ?, ?, ?, ?, ?, 'konsultan', ?)");
         if (!$stmt) {
             die("Error query insert konsultan: " . $this->conn->error);
         }
-        $stmt->bind_param("sssssss", $namaFileTersimpan, $username, $nama, $nomor, $email, $ringkasan, $hashedPassword);
+        $stmt->bind_param("ssssssss", $namaFileTersimpan, $username, $nama, $nomor, $email, $ringkasan, $hashedPassword, $token);
 
         if ($stmt->execute()) {
             return [

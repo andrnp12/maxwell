@@ -12,6 +12,9 @@ $total = count($dataMateri);
 
 $selesai = 0;
 
+// Set true di awal agar materi pertama (index 0) selalu bisa diakses
+$previousFinished = true;
+
 foreach ($dataMateri as $materi) {
 
     if ($materi['material_selesai']) {
@@ -100,9 +103,18 @@ $persen = $total > 0
                             </p>
                         </div>
                         <?php foreach ($dataMateri as $index => $materi) : ?>
-                            <?php $canAccess = ($index === 0 || $materi['material_selesai'] == 1); ?>
-                            <a class="col-12 col-xl-6 col-md-6" href="<?= $canAccess ? 'skill-detail.php?id=' . $materi['id'] : '#' ?>"
+                            <?php
+                            // LOGIKA BARU: 
+                            // Bisa akses jika: materi sebelumnya selesai OR materi ini sendiri sudah selesai
+                            $canAccess = ($previousFinished || $materi['material_selesai'] == 1);
+
+                            // Update status untuk materi berikutnya di loop selanjutnya
+                            $previousFinished = ($materi['material_selesai'] == 1);
+                            ?>
+
+                            <a class="col-12 col-xl-6 col-md-6" href="<?= $canAccess ? 'detail-materi.php?id=' . $materi['id'] : '#' ?>"
                                 <?= !$canAccess ? 'data-bs-toggle="modal" data-bs-target="#peringatanModal"' : '' ?>>
+
                                 <div class="card mb-3 border border-success">
                                     <div class="row g-0 align-items-center">
                                         <div class="col-3 text-center">
@@ -120,22 +132,21 @@ $persen = $total > 0
                                                         <?= $materi['deskripsi'] ?>
                                                     </small>
                                                 </p>
-                                                <?php if ($index === 0 && !$materi['material_selesai']) : ?>
 
-                                                    <small class="badge bg-primary text-white px-2 py-1 rounded-pill">
-                                                        <i class="mdi mdi-play-circle"></i>
-                                                        Mulai Belajar
-                                                    </small>
-
-                                                <?php elseif ($materi['material_selesai']) : ?>
-
+                                                <?php if ($materi['material_selesai']) : ?>
+                                                    <!-- Jika sudah selesai -->
                                                     <small class="badge bg-success text-white px-2 py-1 rounded-pill">
                                                         <i class="mdi mdi-check-circle"></i>
                                                         Telah Dipelajari
                                                     </small>
-
+                                                <?php elseif ($canAccess) : ?>
+                                                    <!-- Jika bisa diakses tapi belum selesai (Materi saat ini yang harus dipelajari) -->
+                                                    <small class="badge bg-primary text-white px-2 py-1 rounded-pill">
+                                                        <i class="mdi mdi-play-circle"></i>
+                                                        <?= ($index === 0) ? 'Mulai Belajar' : 'Lanjutkan Belajar' ?>
+                                                    </small>
                                                 <?php else : ?>
-
+                                                    <!-- Jika benar-benar terkunci -->
                                                     <small class="badge bg-secondary text-white px-2 py-1 rounded-pill">
                                                         <i class="mdi mdi-lock"></i>
                                                         Kunci
