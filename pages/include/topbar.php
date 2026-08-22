@@ -48,12 +48,12 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
          </button>
       </div>
       <div class="d-flex">
-         <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin'): ?>
-         <div class="d-sm-inline-block ms-2">
-            <a href="chat.php" class="btn header-item d-flex align-items-center justify-content-center">
-               <i class="icon-lg" data-feather="message-square"></i>
-            </a>
-         </div>
+         <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin' && $_SESSION['role'] !== 'ortu'): ?>
+            <div class="d-sm-inline-block ms-2">
+               <a href="chat.php" class="btn header-item d-flex align-items-center justify-content-center">
+                  <i class="icon-lg" data-feather="message-square"></i>
+               </a>
+            </div>
          <?php endif; ?>
          <div class="dropdown d-inline-block me-2">
             <button aria-expanded="false" aria-haspopup="true" class="btn header-item noti-icon position-relative" data-bs-toggle="dropdown" id="page-header-notifications-dropdown" type="button">
@@ -102,7 +102,11 @@ $dataProfile = $profile->getProfile($_SESSION['id']);
          </div>
          <div class="dropdown">
             <button aria-expanded="false" aria-haspopup="true" class="btn header-item bg-light-subtle border-start border-end page-header-user-dropdown" data-bs-toggle="dropdown" id="page-header-user-dropdown" type="button">
-               <img alt="Header Avatar" class="rounded-circle header-profile-user" src="/uploads/profile/<?= (!empty($dataProfile['data']['foto'])) ? $dataProfile['data']['foto'] : 'default.webp'; ?>" />
+               <img
+                  alt=""
+                  class="rounded-circle header-profile-user"
+                  src="<?= !empty($dataProfile['data']['foto']) ? '/uploads/profile/' . htmlspecialchars($dataProfile['data']['foto']) : '/uploads/profile/default.webp' ?>"
+                  onerror="this.onerror=null; this.src='/uploads/profile/default.webp';">
                <span class="d-none d-xl-inline-block ms-1 fw-medium">
                   <?php echo $dataProfile['data']['name']; ?>
                </span>

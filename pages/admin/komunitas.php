@@ -33,7 +33,7 @@ $komunitasData = $komunitasModel->getAllKomunitasAdmin();
                     <div class="row">
                         <div class="col-12 d-sm-flex align-items-center justify-content-between mb-2">
                             <div class="row">
-                                <h4 class="mb-sm-0 font-weight-bold mb-1">
+                                <h4 class="mb-sm-0 fw-bold mb-1">
                                     Lihat Semua Komunitas
                                 </h4>
                                 <p class="text-muted">
@@ -53,7 +53,7 @@ $komunitasData = $komunitasModel->getAllKomunitasAdmin();
                     <!-- end page title -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="card">
+                            <div class="card shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
                                 <div class="card-header">
                                     <h4 class="card-title">
                                         Daftar Komunitas
@@ -77,9 +77,10 @@ $komunitasData = $komunitasModel->getAllKomunitasAdmin();
                                                     <td><?= $no++ ?></td>
                                                     <td>
                                                         <img
-                                                            src="<?= !empty($komunitas['foto']) ? '/uploads/komunitas/' . htmlspecialchars($komunitas['foto']) : '/uploads/komunitas/default.webp' ?>"
-                                                            alt="Foto Komunitas"
-                                                            class="avatar-sm rounded-circle">
+                                                            alt=""
+                                                            class="rounded-circle avatar-sm"
+                                                            src="<?= !empty($komunitas['foto']) ? '/uploads/komunitas/' . htmlspecialchars($komunitas['foto']) : '/uploads/profile/default.webp' ?>"
+                                                            onerror="this.onerror=null; this.src='/uploads/profile/default.webp';">
                                                     </td>
                                                     <td><?= htmlspecialchars($komunitas['nama_komunitas']) ?></td>
                                                     <td>

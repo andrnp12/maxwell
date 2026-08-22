@@ -56,7 +56,7 @@ $persen = $total > 0
                     <!-- end row -->
                     <div class="row">
                         <!-- end card header -->
-                        <div class="col-12">
+                        <!-- <div class="col-12">
                             <div class="carousel slide pointer-event" data-bs-ride="carousel" id="carouselExampleCaption">
                                 <div class="carousel-inner" role="listbox">
                                     <div class="carousel-item">
@@ -111,14 +111,13 @@ $persen = $total > 0
                                     </span>
                                 </a>
                             </div>
-                            <!-- end carousel -->
-                        </div>
+                        </div> -->
                         <div class="col-12">
-                            <div class="page-title-box d-flex align-items-center justify-content-between py-4">
+                            <!-- <div class="page-title-box d-flex align-items-center justify-content-between py-4">
                                 <h5 class="mb-sm-0">
                                     Daftar Skill Tes
                                 </h5>
-                                <!-- <div class="page-title-right">
+                                <div class="page-title-right">
                                     <div class="btn-group">
                                         <button aria-expanded="false" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" type="button">
                                             Filter Skill
@@ -142,8 +141,8 @@ $persen = $total > 0
                                             </a>
                                         </div>
                                     </div>
-                                </div> -->
-                            </div>
+                                </div>
+                            </div> -->
                             <div class="progress mb-3" style="height:8px;">
                                 <div
                                     class="progress-bar"
@@ -156,7 +155,7 @@ $persen = $total > 0
                                 <strong><?= $persen ?>%</strong>
                             </p>
                         </div>
-                        <?php foreach ($dataKuis as $kuis): ?>
+                        <?php foreach ($dataKuis as $index => $kuis): ?>
                             <?php
                             $canAccess = $kuis['material_selesai'] == 1;
                             ?>
@@ -164,46 +163,69 @@ $persen = $total > 0
                                 class="col-12 col-xl-6 col-md-6 text-decoration-none"
                                 href="<?= $canAccess ? 'skill-detail.php?id=' . $kuis['id_kuis'] : '#' ?>"
                                 <?= !$canAccess ? 'data-bs-toggle="modal" data-bs-target="#peringatanModal"' : '' ?>>
-                                <div class="card mb-3 border border-success">
-                                    <div class="row g-0 align-items-center">
-                                        <div class="col-3 text-center">
-                                            <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                                <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
+
+                                <?php if ($kuis['quizz_selesai']) : ?>
+                                    <!-- Jika sudah selesai: background success, text white, tanpa border-success -->
+                                    <div class="card mb-3 text-white border-white shadow-lg" style="border-radius: 1.25rem; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-3 text-center">
+                                                <div style="width: 56px; height: 56px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items: center; justify-content: center;">
+                                                    <img src="/assets/icon/book.webp" alt="icon" style="width: 32px; height: 32px;" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="card-body">
-                                                <h5 class="card-title mb-0 font-weight-bold">
-                                                    <?= htmlspecialchars($kuis['judul_kuis']) ?>
-                                                </h5>
-                                                <p class="card-text">
-                                                    <?php if (!$kuis['material_selesai']) : ?>
-
-                                                        <small class="badge bg-secondary">
-                                                            <i class="mdi mdi-lock"></i>
-                                                            Kunci
-                                                        </small>
-
-                                                    <?php elseif (!$kuis['quizz_selesai']) : ?>
-
-                                                        <small class="badge bg-warning text-dark">
-                                                            <i class="mdi mdi-pencil"></i>
-                                                            Belum Dikerjakan
-                                                        </small>
-
-                                                    <?php else : ?>
-
-                                                        <small class="badge bg-success">
-                                                            <i class="mdi mdi-check-circle"></i>
-                                                            Telah Lulus
-                                                        </small>
-
-                                                    <?php endif; ?>
-                                                </p>
+                                            <div class="col-9">
+                                                <div class="card-body" style="padding-left: 0px;">
+                                                    <h5 class="card-title mb-0 font-weight-bold">
+                                                        <?= htmlspecialchars($kuis['judul_kuis']) ?>
+                                                    </h5>
+                                                    <!-- Jika sudah selesai -->
+                                                    <small class="badge text-white px-2 py-1 rounded-pill" style="background-color: rgba(233, 236, 239, 0.5);">
+                                                        KKM : <?= $kuis['passing_grade'] ?>
+                                                    </small>
+                                                    <small class="badge text-white px-2 py-1 rounded-pill" style="background-color: rgba(233, 236, 239, 0.5);">
+                                                        <i class="mdi mdi-check-circle"></i>
+                                                        Telah Lulus
+                                                    </small>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                <?php else : ?>
+                                    <!-- Jika belum selesai: background putih, border biasa -->
+                                    <div class="card mb-3 border shadow-sm" style="border-radius: 1.25rem;">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-3 text-center">
+                                                <!-- Icon circle untuk belum selesai: background abu-abu -->
+                                                <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
+                                                    <img src="/assets/icon/book.webp" alt="icon" style="width: 32px; height: 32px;" />
+                                                </div>
+                                            </div>
+                                            <div class="col-9">
+                                                <div class="card-body" style="padding-left: 0px;">
+                                                    <h5 class="card-title mb-0 font-weight-bold">
+                                                        <?= htmlspecialchars($kuis['judul_kuis']) ?>
+                                                    </h5>
+                                                    <?php if (!$kuis['material_selesai']) : ?>
+                                                        <!-- Jika terkunci -->
+                                                        <small class="badge bg-secondary text-white px-2 py-1 rounded-pill">
+                                                            <i class="mdi mdi-lock"></i>
+                                                            Kunci
+                                                        </small>
+                                                    <?php else : ?>
+                                                        <!-- Jika bisa diakses tapi belum selesai -->
+                                                        <small class="badge bg-primary text-white px-2 py-1 rounded-pill">
+                                                            KKM : <?= $kuis['passing_grade'] ?>
+                                                        </small>
+                                                        <small class="badge bg-primary text-white px-2 py-1 rounded-pill">
+                                                            <i class="mdi mdi-pencil"></i>
+                                                            Belum Dikerjakan
+                                                        </small>
+                                                    <?php endif ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </a>
                         <?php endforeach; ?>
                         <!-- end col -->

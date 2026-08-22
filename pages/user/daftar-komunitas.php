@@ -59,10 +59,10 @@ $komunitas = $dataKomunitas->getAllKomunitas((int) $_SESSION['id']);
                     <!-- end row -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="page-title-box d-flex align-items-center justify-content-between pb-4">
-                                <h5 class="mb-sm-0">
+                            <div class="page-title-box d-flex align-items-center justify-content-between pb-0">
+                                <!-- <h5 class="mb-sm-0">
                                     Daftar Komunitas
-                                </h5>
+                                </h5> -->
                                 <!-- <div class="page-title-right">
                                     <div class="btn-group">
                                         <button aria-expanded="false" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" type="button">
@@ -90,51 +90,75 @@ $komunitas = $dataKomunitas->getAllKomunitas((int) $_SESSION['id']);
                                 </div> -->
                             </div>
                         </div>
-                        <?php foreach ($komunitas as $kom) : ?>
+                        <?php foreach ($komunitas as $index => $kom) : ?>
                             <div class="col-12 col-xl-6 col-md-6">
-                                <div class="card mb-3">
-                                    <div class="row g-0 align-items-center">
-                                        <div class="col-3 text-center">
-                                            <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                                <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
+                                <?php if ($kom['is_member']) : ?>
+                                    <!-- Jika sudah anggota: background success gradient, text white -->
+                                    <a class="text-decoration-none" href="chat.php?id=<?= $kom['id'] ?>&type=group">
+                                        <div class="card mb-3 text-white border-white shadow-lg" style="border-radius: 1.25rem; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(0,0,70,1) 0.3%, rgba(28,181,224,1) 90.2% );">
+                                            <div class="row g-0 align-items-center">
+                                                <div class="col-3 text-center">
+                                                    <div style="width: 56px; height: 56px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items: center; justify-content: center;">
+                                                        <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 32px; height: 32px;" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-5">
+                                                    <div class="card-body" style="padding-left: 0px;">
+                                                        <h5 class="card-title mb-0 font-weight-bold">
+                                                            <?= $kom['nama_komunitas'] ?>
+                                                        </h5>
+                                                        <p class="card-text mb-0">
+                                                            <small class="text-truncate d-block" style="max-width: 100%; color: rgba(255,255,255,0.8);">
+                                                                <?= $kom['deskripsi'] ?>
+                                                            </small>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <button
+                                                        class="btn btn-light btn-join px-2 py-1"
+                                                        style="border-radius: 1.25rem;"
+                                                        data-id="<?= $kom['id'] ?>">
+                                                        Buka Chat
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-9">
-                                            <div class="card-body">
-                                                <h5 class="card-title mb-0 font-weight-bold">
-                                                    <?= $kom['nama_komunitas'] ?>
-                                                </h5>
-                                                <p class="card-text">
-                                                    <small class="text-muted">
-                                                        <?= $kom['deskripsi'] ?>
-                                                    </small>
-                                                </p>
+                                    </a>
+                                <?php else : ?>
+                                    <!-- Jika belum anggota: background putih, border biasa -->
+                                    <div class="card mb-3 border shadow-sm" style="border-radius: 1.25rem;">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-3 text-center">
+                                                <!-- Icon circle untuk belum anggota: background abu-abu -->
+                                                <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
+                                                    <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 32px; height: 32px;" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="btn-group" role="group">
-
-                                            <?php if ($kom['is_member']) : ?>
-
-                                                <a href="chat.php?id=<?= $kom['id'] ?>&type=group"
-                                                    class="btn btn-primary">
-                                                    <i class="uil uil-comments me-1"></i>
-                                                    Buka Chat
-                                                </a>
-
-                                            <?php else : ?>
-
+                                            <div class="flex col-5">
+                                                <div class="card-body" style="padding-left: 0px;">
+                                                    <h5 class="card-title mb-0 font-weight-bold">
+                                                        <?= $kom['nama_komunitas'] ?>
+                                                    </h5>
+                                                    <p class="card-text mb-0">
+                                                        <small class="text-muted text-truncate d-block" style="max-width: 100%;">
+                                                            <?= $kom['deskripsi'] ?>
+                                                        </small>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <!-- Tombol Gabung -->
+                                            <div class="col-4">
                                                 <button
-                                                    class="btn btn-success btn-join"
+                                                    class="btn btn-info btn-join px-2 py-1"
+                                                    style="border-radius: 1.25rem; margin-left: 15px;"
                                                     data-id="<?= $kom['id'] ?>">
-                                                    <i class="uil uil-users-alt me-1"></i>
-                                                    Gabung Komunitas
+                                                    Gabung
                                                 </button>
-
-                                            <?php endif; ?>
-
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                         <!-- end col -->
@@ -169,52 +193,27 @@ $komunitas = $dataKomunitas->getAllKomunitas((int) $_SESSION['id']);
                 const idKomunitas = btn.dataset.id;
 
                 btn.disabled = true;
-                btn.innerHTML = "Menggabungkan...";
+                btn.innerHTML = "Gabung";
 
                 const formData = new FormData();
 
                 formData.append("action", "join_group");
                 formData.append("id_komunitas", idKomunitas);
 
-                try {
-
-                    const response = await fetch(
-                        "/src/actions/proses_komunitas.php", {
-                            method: "POST",
-                            body: formData
-                        }
-                    );
-
-                    const result = await response.json();
-
-                    if (result.status === "success") {
-
-                        btn.outerHTML = `
-                    <a href="chat.php?id=${idKomunitas}&type=group"
-                       class="btn btn-primary">
-                        <i class="uil uil-comments me-1"></i>
-                        Buka Chat
-                    </a>
-                `;
-
-                    } else {
-
-                        alert(result.message);
-
-                        btn.disabled = false;
-                        btn.innerHTML = "Gabung Komunitas";
-
+                const response = await fetch(
+                    "/src/actions/proses_komunitas.php", {
+                        method: "POST",
+                        body: formData
                     }
+                );
 
-                } catch (err) {
+                const result = await response.json();
 
-                    console.error(err);
-
-                    btn.disabled = false;
-                    btn.innerHTML = "Gabung Komunitas";
-
+                if (result.status != "success") {
+                    alert(result.message);
+                } else {
+                    location.href = `chat.php?id=${idKomunitas}&type=group`;
                 }
-
             });
 
         });

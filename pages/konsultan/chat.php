@@ -110,7 +110,7 @@ if ($id_lawan > 0) {
                </div> -->
                     <!-- end page title -->
                     <div class="d-lg-flex">
-                        <div id="chatSidebar" class="chat-leftsidebar card">
+                        <div id="chatSidebar" class="chat-leftsidebar card shadow-sm" style="border-radius: 1.25rem;">
                             <div class="p-3 px-4 border-bottom">
                                 <div class="d-flex align-items-start">
                                     <!-- <div class="flex-shrink-0 me-3 align-self-center">
@@ -152,13 +152,13 @@ if ($id_lawan > 0) {
                                     </div> -->
                                 </div>
                             </div>
-                            <div class="p-3">
+                            <!-- <div class="p-3">
                                 <div class="search-box position-relative">
                                     <input class="form-control rounded border" placeholder="Search..." type="text" />
                                     <i class="bx bx-search search-icon">
                                     </i>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="chat-leftsidebar-nav">
                                 <!-- <ul class="nav nav-pills nav-justified bg-light-subtle p-1">
                                     <li class="nav-item">
@@ -274,7 +274,7 @@ if ($id_lawan > 0) {
                         <!-- end chat-leftsidebar -->
                         <div id="userChat" class="w-100 user-chat mt-sm-0 ms-lg-1">
 
-                            <div class="card h-100">
+                            <div class="card h-100 shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
 
                                 <div id="chatHeader">
 
@@ -658,7 +658,7 @@ id="messageInput"
 
 name="message"
 
-class="form-control"
+class="form-control rounded-pill"
 
 placeholder="Tulis pesan">
 
@@ -670,7 +670,7 @@ placeholder="Tulis pesan">
 
 id="btnKirim"
 
-class="btn btn-primary">
+class="btn btn-primary btn-rounded">
 
 Send
 

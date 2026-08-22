@@ -33,7 +33,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                     <div class="row">
                         <div class="col-12 d-sm-flex align-items-center justify-content-between mb-2">
                             <div class="row">
-                                <h4 class="mb-sm-0 font-weight-bold mb-1">
+                                <h4 class="mb-sm-0 fw-bold mb-1">
                                     Lihat Semua Konselor
                                 </h4>
                                 <p class="text-muted">
@@ -53,7 +53,7 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                     <!-- end page title -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="card">
+                            <div class="card shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
                                 <div class="card-header">
                                     <h4 class="card-title">
                                         Daftar Konselor
@@ -77,7 +77,12 @@ $dataKonsultan = $konsultan->getAllKonsultan();
                                             foreach ($dataKonsultan as $konsultan) : ?>
                                                 <tr id="row-<?= $konsultan['id'] ?>">
                                                     <td><?= $no++ ?></td>
-                                                    <td><img src="<?= !empty($konsultan['foto']) ? '/uploads/profile/' . htmlspecialchars($konsultan['foto']) : '/uploads/profile/default.webp' ?>" alt="icon" class="avatar-sm rounded-circle" /></td>
+                                                    <td> <img
+                                                            alt=""
+                                                            class="rounded-circle avatar-sm"
+                                                            src="<?= !empty($konsultan['foto']) ? '/uploads/profile/' . htmlspecialchars($konsultan['foto']) : '/uploads/profile/default.webp' ?>"
+                                                            onerror="this.onerror=null; this.src='/uploads/profile/default.webp';">
+                                                    </td>
                                                     <td><?= htmlspecialchars($konsultan['name']) ?></td>
                                                     <td><?= htmlspecialchars($konsultan['nomor']) ?></td>
                                                     <td><?= htmlspecialchars($konsultan['email']) ?></td>

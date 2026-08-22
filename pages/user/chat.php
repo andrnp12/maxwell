@@ -97,7 +97,7 @@ if ($id_lawan > 0) {
                     <!-- start page title -->
                     <!-- end page title -->
                     <div class="d-lg-flex">
-                        <div id="chatSidebar" class="chat-leftsidebar card">
+                        <div id="chatSidebar" class="chat-leftsidebar card shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
                             <div class="p-3 px-4 border-bottom">
                                 <div class="d-flex align-items-start">
                                     <!-- <div class="flex-shrink-0 me-3 align-self-center">
@@ -139,13 +139,13 @@ if ($id_lawan > 0) {
                                     </div> -->
                                 </div>
                             </div>
-                            <div class="p-3">
+                            <!-- <div class="p-3">
                                 <div class="search-box position-relative">
                                     <input class="form-control rounded border" placeholder="Search..." type="text" />
                                     <i class="bx bx-search search-icon">
                                     </i>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="chat-leftsidebar-nav">
                                 <ul class="nav nav-pills nav-justified bg-light-subtle p-1">
                                     <li class="nav-item">
@@ -170,7 +170,7 @@ if ($id_lawan > 0) {
                                 <div class="tab-content">
                                     <!-- tab Chat personel -->
                                     <div class="tab-pane show active" id="chat">
-                                        <div class="chat-message-list" data-simplebar="">
+                                        <div class="chat-message-list-user" data-simplebar="">
                                             <div class="pt-3">
                                                 <div class="px-3">
                                                     <h5 class="font-size-14 mb-3">
@@ -189,7 +189,11 @@ if ($id_lawan > 0) {
                                                                 data-type="personal">
                                                                 <div class="d-flex align-items-start">
                                                                     <div class="flex-shrink-0 user-img online align-self-center me-3">
-                                                                        <img alt="" class="rounded-circle avatar-sm" src="/uploads/profile/<?= (!empty($list['foto_lawan'])) ? $list['foto_lawan'] : 'default.webp'; ?>" />
+                                                                        <img
+                                                                            alt=""
+                                                                            class="rounded-circle avatar-sm"
+                                                                            src="<?= !empty($list['foto_lawan']) ? '/uploads/profile/' . htmlspecialchars($list['foto_lawan']) : '/uploads/profile/default.webp' ?>"
+                                                                            onerror="this.onerror=null; this.src='/uploads/profile/default.webp';">
                                                                         <span class="user-status">
                                                                         </span>
                                                                     </div>
@@ -234,7 +238,11 @@ if ($id_lawan > 0) {
                                                                 <div class="d-flex align-items-center">
                                                                     <div class="flex-shrink-0 avatar-sm me-3">
                                                                         <?php ($group['foto']) ?>
-                                                                        <img alt="" class="avatar-sm rounded-circle" src="/uploads/profile/<?= (!empty($group['foto'])) ? $group['foto'] : 'default.webp'; ?>" />
+                                                                        <img
+                                                                            alt=""
+                                                                            class="rounded-circle avatar-sm"
+                                                                            src="<?= !empty($group['foto']) ? '/uploads/profile/' . htmlspecialchars($group['foto']) : '/uploads/profile/default.webp' ?>"
+                                                                            onerror="this.onerror=null; this.src='/uploads/profile/default.webp';">
                                                                         <?php ?>
                                                                     </div>
                                                                     <div class="flex-grow-1">
@@ -256,7 +264,7 @@ if ($id_lawan > 0) {
                         <!-- end chat-leftsidebar -->
                         <div id="userChat" class="w-100 user-chat mt-sm-0 ms-lg-1">
 
-                            <div class="card h-100">
+                            <div class="card h-100 shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
 
                                 <div id="chatHeader">
 
@@ -639,7 +647,7 @@ id="messageInput"
 
 name="message"
 
-class="form-control"
+class="form-control rounded-pill"
 
 placeholder="Tulis pesan">
 
@@ -651,7 +659,7 @@ placeholder="Tulis pesan">
 
 id="btnKirim"
 
-class="btn btn-primary">
+class="btn btn-primary btn-rounded">
 
 Send
 

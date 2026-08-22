@@ -1,9 +1,16 @@
 <?php
-// Redirect jika sudah login
+// Redirect jika sudah login - use auth class to check session properly
+require_once '../src/classes/auth.php';
+$auth = new auth();
+
+// Configure session cookie BEFORE session_start (for remember_me)
 if (session_status() === PHP_SESSION_NONE) {
+    $rememberMe = isset($_COOKIE['remember_token']); // Cookie name constant
+    $auth->configureSessionCookie($rememberMe);
     session_start();
 }
 
+// If already logged in, redirect to appropriate dashboard
 if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
     $role = $_SESSION['role'] ?? '';
     $allowedRoles = ['admin', 'user', 'konsultan', 'ortu'];
@@ -12,7 +19,6 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
         header("Location: {$role}/index.php");
         exit;
     }
-
     header('Location: ../index.php');
     exit;
 }

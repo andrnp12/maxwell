@@ -128,9 +128,9 @@ if (!$user) {
                     <div class="row align-items-stretch">
                         <!-- User Detail Card -->
                         <div class="col-lg-7">
-                            <div class="card h-100">
-                                <div class="card-header d-flex align-items-center justify-content-between">
-                                    <h5 class="card-title mb-0">Detail Pengguna</h5>
+                            <div class="card h-100 shadow-sm" style="border-radius: 1.25rem; overflow: hidden; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(226,240,254,1) 0%, rgba(255,247,228,1) 90% );">
+                                <div class="card-header d-flex align-items-center bg-transparent border-0 justify-content-between">
+                                    <h5 class="card-title mb-0 fw-bold">Detail Pengguna</h5>
                                     <span class="badge <?= $userStatusClass ?>"><?= $userStatus ?></span>
                                 </div>
                                 <div class="card-body d-flex flex-column">
@@ -142,7 +142,7 @@ if (!$user) {
                                                 style="width: 120px; height: 120px; object-fit: cover;" />
                                         </div>
                                         <div>
-                                            <h4 class="mb-1"><?= htmlspecialchars($user['name'] ?? '-') ?></h4>
+                                            <h4 class="mb-1 fw-bold"><?= htmlspecialchars($user['name'] ?? '-') ?></h4>
                                             <p class="text-muted small mb-0"><?= htmlspecialchars($user['email'] ?? '-') ?></p>
                                         </div>
                                     </div>
@@ -160,12 +160,15 @@ if (!$user) {
 
                         <!-- Progress Chart Card -->
                         <div class="col-lg-5 mt-4 mt-lg-0">
-                            <div class="card h-100">
-                                <div class="card-header">
-                                    <h5 class="card-title mb-0">Progres Belajar</h5>
-                                </div>
-                                <div class="card-body d-flex flex-column">
-                                    <div class="row">
+                            <div class="card card-h-100 border-white shadow-lg" id="progress-belajar-card" style="border-radius: 1.25rem; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
+                                <!-- card body -->
+                                <div class="card-body text-white">
+                                    <div class="d-flex flex-wrap align-items-center mb-4">
+                                        <h4 class="card-title me-2">
+                                            Progres Belajar
+                                        </h4>
+                                    </div>
+                                    <div class="row align-items-center">
                                         <div class="col-12">
                                             <div class="apex-charts w-100" id="learning-progress-chart">
                                             </div>
@@ -182,7 +185,7 @@ if (!$user) {
                     <!-- Row 2: Riwayat Pengguna Card -->
                     <div class="row mt-4">
                         <div class="col-lg-12">
-                            <div class="card">
+                            <div class="card shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
                                 <div class="card-header">
                                     <h5 class="card-title mb-0">
                                         Riwayat Pengguna
@@ -201,16 +204,16 @@ if (!$user) {
                                             <h6 class="mb-0 text-muted">
                                                 Materi terakhir yang dipelajari
                                             </h6>
-                                            <div class="card mt-2">
+                                            <div class="card mt-2 shadow-sm border-white" style="border-radius: 1.25rem; overflow: hidden; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
                                                 <div class="row g-0 align-items-center">
                                                     <div class="col-3 text-center">
-                                                        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items:center; justify-content: center;">
-                                                            <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;">
+                                                        <div style="width: 52px; height: 52px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items:center; justify-content: center;">
+                                                            <img src="/assets/icon/book.webp" alt="icon" style="width: 32px; height: 32px;" />
                                                         </div>
                                                     </div>
                                                     <div class="col-9">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title mb-0 font-weight-bold">
+                                                        <div class="card-body" style="padding-left: 0px;">
+                                                            <h5 class="card-title mb-0 text-white font-weight-bold">
                                                                 <?php
                                                                 $lastStudied = null;
                                                                 if (!empty($materialProgress['progress'])) {
@@ -227,7 +230,7 @@ if (!$user) {
                                                                 ?>
                                                             </h5>
                                                             <p class="card-text">
-                                                                <small class="text-muted">
+                                                                <small class="text-white-50">
                                                                     <?php if ($lastStudied): ?>
                                                                         Status: <span class="badge bg-<?= $lastStudied['status_class'] ?>"><?= $lastStudied['status_label'] ?></span>
                                                                     <?php else: ?>
@@ -251,16 +254,16 @@ if (!$user) {
                                             <h6 class="mb-0 text-muted">
                                                 Kuis terakhir yang dikerjakan
                                             </h6>
-                                            <div class="card mt-2">
+                                            <div class="card mt-2" style="border-radius: 1.25rem; overflow: hidden; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
                                                 <div class="row g-0 align-items-center">
                                                     <div class="col-3 text-center">
-                                                        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items:center; justify-content: center;">
-                                                            <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;">
+                                                        <div style="width: 52px; height: 52px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items:center; justify-content: center;">
+                                                            <img src="/assets/icon/book.webp" alt="icon" style="width: 32px; height: 32px;" />
                                                         </div>
                                                     </div>
                                                     <div class="col-9">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title mb-0 font-weight-bold">
+                                                        <div class="card-body" style="padding-left: 0px;">
+                                                            <h5 class="card-title text-white mb-0 font-weight-bold">
                                                                 <?php if (!empty($quizDetail['kuis'])): ?>
                                                                     <?= htmlspecialchars($quizDetail['kuis'][0]['kuis_judul'] ?? 'Kuis') ?>
                                                                 <?php else: ?>
@@ -268,7 +271,7 @@ if (!$user) {
                                                                 <?php endif; ?>
                                                             </h5>
                                                             <p class="card-text">
-                                                                <small class="text-muted">
+                                                                <small class="text-white-50">
                                                                     <?php if (!empty($quizDetail['kuis'])): ?>
                                                                         <?php
                                                                         $firstKuis = $quizDetail['kuis'][0];
@@ -363,7 +366,7 @@ if (!$user) {
                     <!-- Row 3: Daftar Nilai Card -->
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="card">
+                            <div class="card" style="border-radius: 1.25rem; overflow: hidden;">
                                 <div class="card-header align-items-center d-flex">
                                     <h4 class="card-title mb-0 flex-grow-1">
                                         Daftar Nilai
@@ -661,8 +664,53 @@ if (!$user) {
                 // Shows single 0-100% progress from completion rate
                 // ============================================
 
-                // Determine color based on progress
-                var progressColor = combinedProgress >= 80 ? '#34c38f' : (combinedProgress >= 60 ? '#f1b44c' : (combinedProgress >= 40 ? '#f46a6a' : '#5156be'));
+                // High-contrast color palette for gradient backgrounds (WCAG AA 4.5:1)
+                // Bright Amber, Vivid Teal, Hot Pink, Electric Lime
+                var VIBRANT_COLORS = {
+                    amber: '#FFB300',
+                    teal: '#45FFCA',
+                    pink: '#FFD93D',
+                    lime: '#E4FF30',
+                    // Darker variants for text on light backgrounds
+                    amberDark: '#CC8F00',
+                    tealDark: '#00B8A0',
+                    pinkDark: '#b39418',
+                    limeDark: '#A3CC00'
+                };
+
+                // Detect if we're in dark mode (CSS prefers-color-scheme or data-theme)
+                function isDarkMode() {
+                    return window.matchMedia('(prefers-color-scheme: dark)').matches ||
+                        document.documentElement.getAttribute('data-theme') === 'dark' ||
+                        document.body.classList.contains('dark-mode');
+                }
+
+                var darkMode = isDarkMode();
+
+                // Select progress color based on completion percentage with high contrast
+                // Use amber for low, teal for medium, pink for high, lime for excellent
+                var progressColor;
+                var progressColorDark;
+                if (combinedProgress >= 80) {
+                    progressColor = VIBRANT_COLORS.lime;
+                    progressColorDark = VIBRANT_COLORS.limeDark;
+                } else if (combinedProgress >= 60) {
+                    progressColor = VIBRANT_COLORS.pink;
+                    progressColorDark = VIBRANT_COLORS.pinkDark;
+                } else if (combinedProgress >= 40) {
+                    progressColor = VIBRANT_COLORS.teal;
+                    progressColorDark = VIBRANT_COLORS.tealDark;
+                } else {
+                    progressColor = VIBRANT_COLORS.amber;
+                    progressColorDark = VIBRANT_COLORS.amberDark;
+                }
+
+                // Use white for all text to be neutral against gradient background
+                var chartColor = darkMode ? progressColor : progressColorDark;
+                var trackBg = darkMode ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)';
+                var labelColor = '#FFFFFF';
+                var mutedColor = 'rgba(255, 255, 255, 0.7)';
+                var valueColor = '#FFFFFF';
 
                 var chartOptions = {
                     series: [combinedProgress],
@@ -672,7 +720,8 @@ if (!$user) {
                         offsetY: -10,
                         sparkline: {
                             enabled: false
-                        }
+                        },
+                        background: 'transparent'
                     },
                     plotOptions: {
                         radialBar: {
@@ -690,12 +739,13 @@ if (!$user) {
                                     enabled: true,
                                     top: 3,
                                     left: 0,
-                                    blur: 4,
-                                    opacity: 0.24
+                                    blur: 8,
+                                    opacity: darkMode ? 0.4 : 0.3,
+                                    color: chartColor
                                 }
                             },
                             track: {
-                                background: '#e8e8e8',
+                                background: trackBg,
                                 strokeWidth: '97%',
                                 margin: 5,
                                 dropShadow: {
@@ -711,15 +761,15 @@ if (!$user) {
                                 name: {
                                     offsetY: -15,
                                     show: true,
-                                    color: '#888',
+                                    color: mutedColor,
                                     fontSize: '14px',
-                                    fontWeight: 500
+                                    fontWeight: 600
                                 },
                                 value: {
                                     formatter: function(val) {
                                         return val.toFixed(1) + '%';
                                     },
-                                    color: '#333',
+                                    color: valueColor,
                                     fontSize: '36px',
                                     show: true,
                                     fontWeight: 'bold',
@@ -734,17 +784,17 @@ if (!$user) {
                     fill: {
                         type: 'gradient',
                         gradient: {
-                            shade: 'dark',
+                            shade: darkMode ? 'light' : 'dark',
                             type: 'horizontal',
-                            shadeIntensity: 0.5,
-                            gradientToColors: [progressColor],
-                            inverseColors: true,
+                            shadeIntensity: 0.4,
+                            gradientToColors: [chartColor],
+                            inverseColors: !darkMode,
                             opacityFrom: 1,
                             opacityTo: 1,
                             stops: [0, 100]
                         }
                     },
-                    colors: [progressColor],
+                    colors: [chartColor],
                     stroke: {
                         lineCap: 'round'
                     },
@@ -780,40 +830,50 @@ if (!$user) {
                 var chart = new ApexCharts(document.querySelector("#learning-progress-chart"), chartOptions);
                 chart.render();
 
+                // Re-render chart on theme change
+                var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                mediaQuery.addEventListener('change', function(e) {
+                    location.reload(); // Simple reload to apply new theme colors
+                });
+
                 // Add detail breakdown below chart after render
                 setTimeout(function() {
                     var detailContainer = document.querySelector("#learning-progress-detail");
                     if (detailContainer) {
+                        // Use white for all text to be neutral against gradient background
+                        var whiteColor = '#FFFFFF';
+                        var mutedWhite = 'rgba(255, 255, 255, 0.7)';
+
                         var detailHtml = `
-                    <div class="mt-3 pt-3 border-top" style="font-size: 11px;">
-                        <div class="row text-center">
-                            <div class="col-3">
-                                <div class="fw-bold text-primary"><?= $pretestCompletion ?>%</div>
-                                <div class="text-muted">Pre-Test</div>
-                                <div class="text-muted small"><?= $completedPretest ?>/<?= $totalPretest ?></div>
-                            </div>
-                            <div class="col-3">
-                                <div class="fw-bold text-info"><?= $kuisCompletion ?>%</div>
-                                <div class="text-muted">Kuis</div>
-                                <div class="text-muted small"><?= $completedKuis ?>/<?= $totalKuis ?></div>
-                            </div>
-                            <div class="col-3">
-                                <div class="fw-bold text-warning"><?= $posttestCompletion ?>%</div>
-                                <div class="text-muted">Post-Test</div>
-                                <div class="text-muted small"><?= $completedPosttest ?>/<?= $totalPosttest ?></div>
-                            </div>
-                            <div class="col-3">
-                                <div class="fw-bold text-success"><?= $materiCompletion ?>%</div>
-                                <div class="text-muted">Materi</div>
-                                <div class="text-muted small"><?= $completedMateri ?>/<?= $totalMateri ?></div>
-                            </div>
-                        </div>
-                        <div class="text-center mt-2 text-muted small">
-                            <i class="mdi mdi-information-outline"></i> 
-                            Total: <strong><?= $completedActivities ?>/<?= $totalActivities ?></strong> aktivitas (<strong><?= $combinedProgress ?>%</strong>)
-                        </div>
-                    </div>
-                `;
+                     <div class="mt-3 pt-3 border-top" style="font-size: 11px; border-color: rgba(255,255,255,0.2);">
+                         <div class="row text-center">
+                             <div class="col-3">
+                                 <div class="fw-bold" style="color: ` + whiteColor + `;"><?= $pretestCompletion ?>%</div>
+                                 <div style="color: ` + mutedWhite + `;">Pre-Test</div>
+                                 <div class="small" style="color: ` + mutedWhite + `;"><?= $completedPretest ?>/<?= $totalPretest ?></div>
+                             </div>
+                             <div class="col-3">
+                                 <div class="fw-bold" style="color: ` + whiteColor + `;"><?= $kuisCompletion ?>%</div>
+                                 <div style="color: ` + mutedWhite + `;">Kuis</div>
+                                 <div class="small" style="color: ` + mutedWhite + `;"><?= $completedKuis ?>/<?= $totalKuis ?></div>
+                             </div>
+                             <div class="col-3">
+                                 <div class="fw-bold" style="color: ` + whiteColor + `;"><?= $materiCompletion ?>%</div>
+                                 <div style="color: ` + mutedWhite + `;">Materi</div>
+                                 <div class="small" style="color: ` + mutedWhite + `;"><?= $completedMateri ?>/<?= $totalMateri ?></div>
+                             </div>
+                             <div class="col-3">
+                                 <div class="fw-bold" style="color: ` + whiteColor + `;"><?= $posttestCompletion ?>%</div>
+                                 <div style="color: ` + mutedWhite + `;">Post-Test</div>
+                                 <div class="small" style="color: ` + mutedWhite + `;"><?= $completedPosttest ?>/<?= $totalPosttest ?></div>
+                             </div>
+                         </div>
+                         <div class="text-center mt-2 small" style="color: ` + mutedWhite + `;">
+                             <i class="mdi mdi-information-outline"></i>
+                             Total: <strong style="color: ` + whiteColor + `;"><?= $completedActivities ?>/<?= $totalActivities ?></strong> aktivitas (<strong style="color: ` + whiteColor + `;"><?= $combinedProgress ?>%</strong>)
+                         </div>
+                     </div>
+                 `;
                         detailContainer.innerHTML = detailHtml;
                     }
                 }, 500);

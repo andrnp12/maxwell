@@ -46,7 +46,7 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
                                     Kembali
                                 </a>
                                 <div class="row align-items-center mb-2">
-                                    <h4 class="mb-0 font-weight-bold">
+                                    <h4 class="mb-0 fw-bold">
                                         Daftar Pertanyaan
                                     </h4>
                                     <p class="text-muted mb-0">
@@ -67,7 +67,7 @@ $dataPertanyaanKuis = $pertanyaanKuis->getAllPertanyaanKuis((int)$kuisId);
                     <!-- end page title -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="card">
+                            <div class="card shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
                                 <div class="card-header">
                                     <h4 class="card-title">
                                         Daftar Kuis
