@@ -7,7 +7,7 @@
   top: 0;
   right: 0;
   left: 0;
-  z-index: 1;
+  z-index: 1030; /* Higher than card content to prevent overlap on scroll */
   background-color: var(--bs-header-bg);
   border-bottom: 1px solid var(--bs-border-color);
 }
@@ -118,6 +118,7 @@ body[data-bs-theme="dark"] .layout-mode-light {
   }
 }
 .page-content {
+  /* background-color: #EEEEEE; */
   padding: calc(70px + 1.5rem) calc(1.5rem * 0.75) 60px calc(1.5rem * 0.75);
 }
 .header-item {
@@ -3781,7 +3782,7 @@ div.dataTables_wrapper div.dataTables_info {
 }
 .apex-charts text {
   font-family: var(--bs-font-sans-serif) !important;
-  fill: var(--bs-gray-500);
+  fill: var(--bs-white);
 }
 .apex-charts .apexcharts-canvas {
   margin: 0 auto;
@@ -3817,9 +3818,9 @@ div.dataTables_wrapper div.dataTables_info {
   pointer-events: none;
   stroke: var(--bs-apex-grid-color);
 }
-.apexcharts-radialbar-track.apexcharts-track path {
-  stroke: var(--bs-gray-300);
-}
+/* .apexcharts-radialbar-track.apexcharts-track path {
+  stroke: rgba(233, 236, 239, 0.5);
+} */
 .apexcharts-legend-text {
   color: var(--bs-gray-500) !important;
   font-family: var(--bs-font-sans-serif) !important;
@@ -4250,13 +4251,13 @@ div.dataTables_wrapper div.dataTables_info {
 @media (min-width: 992px) {
   .chat-leftsidebar {
     min-width: 260px;
-    /* height: calc(100vh - 180px); */
+    height: calc(100vh - 180px);
   }
 }
 @media (min-width: 1200px) {
   .chat-leftsidebar {
     min-width: 380px;
-    /* height: calc(100vh - 180px); */
+    height: calc(100vh - 180px);
   }
 }
 .chat-leftsidebar .chat-leftsidebar-nav .nav .nav-link.active {
@@ -4302,11 +4303,19 @@ div.dataTables_wrapper div.dataTables_info {
   border-color: transparent;
 }
 .chat-message-list {
-  height: calc(100vh - 380px);
+  height: calc(100vh - 256px);
 }
 @media (min-width: 992px) {
   .chat-message-list {
-    height: calc(100vh - 375px);
+    height: calc(100vh - 305px);
+  }
+}
+.chat-message-list-user {
+  height: calc(100vh - 302px);
+}
+@media (min-width: 992px) {
+  .chat-message-list-user {
+    height: calc(100vh - 305px);
   }
 }
 .chat-list {
@@ -4978,7 +4987,6 @@ body[data-layout="horizontal"] .chat-conversation {
   font-weight: 500;
   font-size: 0.875rem;
   padding: 0.625rem 1rem;
-  border-radius: 0.5rem;
   transition: all 0.2s ease;
   border: none;
 }
@@ -5035,3 +5043,4 @@ body[data-layout="horizontal"] .chat-conversation {
 }
 
 /*# sourceMappingURL=app.min.css.map */
+

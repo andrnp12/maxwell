@@ -56,7 +56,7 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
                                 </a>
                                 <div class="row align-items-center mb-2">
                                     <h4 class="mb-0 font-weight-bold">
-                                        Detail Pelatihan Skill
+                                        Detail Kuis Skill
                                     </h4>
                                 </div>
                             </div>
@@ -65,25 +65,25 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
                     <!-- end page title -->
                     <div class="row">
                         <div class="col-xl-12">
-                            <div class="card">
+                            <div class="card border-white shadow-sm" style="border-radius: 1.25rem; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-sm mb-4">
-                                            <div class="d-flex align-items-center mt-3 mt-sm-0">
+                                        <div class="col-sm">
+                                            <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
-                                                    <div class="avatar-xl me-3">
-                                                        <img alt="" class="img-fluid" src="/assets/icon/focus-group.webp" />
+                                                    <div class="avatar-xl me-3" style="width: 72px; height: 72px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items: center; justify-content: center;">
+                                                        <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <div>
-                                                        <h5 class="mb-1">
+                                                        <h5 class="mb-1 text-white">
                                                             <?= $dataKuis['judul'] ?>
                                                         </h5>
-                                                        <p class="badge bg-light text-dark rounded-pill mb-0">
+                                                        <p class="badge rounded-pill mb-0" style="background-color: rgba(255,255,255,0.2);">
                                                             passing grade: <?= $dataKuis['passing_grade'] ?>
                                                         </p>
-                                                        <p class="badge bg-light text-dark rounded-pill mb-0">
+                                                        <p class="badge rounded-pill mb-0" style="background-color: rgba(255,255,255,0.2);">
                                                             <?= $total ?> Soal pilihan ganda
                                                         </p>
                                                     </div>
@@ -105,17 +105,12 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
                                             value="<?= (int)$dataKuis['id'] ?>">
                                         <input type="hidden" name="jenis" value="kuis">
 
-                                        <div class="d-flex flex-column-reverse flex-md-row gap-3 gap-md-4">
+                                        <div class="d-flex flex-column-reverse flex-md-row">
                                             <!-- Soal -->
 
                                             <div class="col-lg-9">
 
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <h4 class="card-title mb-0">
-                                                            Soal Pertanyaan
-                                                        </h4>
-                                                    </div>
+                                                <div class="card" style="border-radius: 1.25rem;">
 
                                                     <div class="card-body">
 
@@ -179,11 +174,11 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
 
                                                         <?php endforeach; ?>
 
-                                                        <div class="d-flex justify-content-between mb-3">
+                                                        <div class="d-flex justify-content-between">
 
                                                             <button
                                                                 type="button"
-                                                                class="btn btn-secondary"
+                                                                class="btn btn-secondary btn-rounded"
                                                                 id="btnPrev">
 
                                                                 Prev
@@ -192,7 +187,7 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
 
                                                             <button
                                                                 type="button"
-                                                                class="btn btn-primary"
+                                                                class="btn btn-primary btn-rounded"
                                                                 id="btnNext">
 
                                                                 Next
@@ -201,7 +196,7 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
 
                                                             <button
                                                                 type="button"
-                                                                class="btn btn-success d-none"
+                                                                class="btn btn-success btn-rounded d-none"
                                                                 id="btnFinishQuiz">
 
                                                                 Selesai
@@ -219,15 +214,13 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
                                             <!-- Nomor soal -->
                                             <div class="col-lg-3">
 
-                                                <div class="card">
-
-                                                    <div class="card-header">
-
-                                                        Nomor Soal
-
-                                                    </div>
+                                                <div class="card mb-4" style="border-radius: 1.25rem; background-color: #fff;">
 
                                                     <div class="card-body">
+
+                                                        <h5 class="mb-3">
+                                                            Nomor Soal
+                                                        </h5>
 
                                                         <div
                                                             class="d-grid"
@@ -254,7 +247,7 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
                                                         <button
                                                             type="button"
                                                             id="btnFinish"
-                                                            class="btn btn-success w-100">
+                                                            class="btn btn-success btn-rounded w-100">
                                                             Selesai
                                                         </button>
 

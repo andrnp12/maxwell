@@ -72,7 +72,10 @@ if ($jenis === 'kuis') {
         $hasil['persentase'] >= $dataKuis['passing_grade']
     );
 } else {
-    $lulus = 1;
+    // For pre/post tests, also check passing grade
+    $lulus = (
+        $hasil['persentase'] >= $dataKuis['passing_grade']
+    );
 }
 
 $resultId = $hasilKuis->saveResult(

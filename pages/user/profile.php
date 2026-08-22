@@ -166,25 +166,29 @@ $progressDetails = $certEligibility['details'];
                     <!-- end page title -->
                     <div class="row">
                         <div class="col-xl-9 col-lg-8">
-                            <div class="card">
+                            <div class="card border-white shadow-lg" style="background-image: linear-gradient( 181deg,  rgba(2,0,97,1) 15%, rgba(97,149,219,1) 158.5% ); border-radius: 1.25rem">
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-sm order-2 order-sm-1">
                                             <div class="d-flex align-items-center mt-3 mt-sm-0">
                                                 <div class="flex-shrink-0">
                                                     <div class="avatar-xl me-3">
-                                                        <img alt="" class="h-100 w-100 object-fit-cover rounded-circle" src="/uploads/profile/<?= (!empty($dataProfile['data']['foto'])) ? $dataProfile['data']['foto'] : 'default.webp'; ?>" />
+                                                        <img
+                                                            alt=""
+                                                            class="h-100 w-100 object-fit-cover rounded-circle border border-white"
+                                                            src="<?= !empty($dataProfile['data']['foto']) ? '/uploads/profile/' . htmlspecialchars($dataProfile['data']['foto']) : '/uploads/profile/default.webp' ?>"
+                                                            onerror="this.onerror=null; this.src='/uploads/profile/default.webp';">
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <div>
-                                                        <h5 class="mb-1">
+                                                        <h5 class="mb-1 text-white">
                                                             <?= $dataProfile['data']['name']; ?>
                                                         </h5>
-                                                        <p class="text-muted mb-0">
+                                                        <p class="text-white-50 mb-0">
                                                             <?= $dataProfile['data']['email']; ?>
                                                         </p>
-                                                        <p class="text-muted mb-0">
+                                                        <p class="text-white-50 mb-0">
                                                             <?= $dataProfile['data']['nomor']; ?>
                                                         </p>
                                                     </div>
@@ -205,7 +209,7 @@ $progressDetails = $certEligibility['details'];
                                                         data-token="<?= htmlspecialchars($dataProfile['data']['token'] ?? '', ENT_QUOTES) ?>"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#modalEditProfile"
-                                                        class="mdi mdi-pencil-box-outline text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">Edit</a>
+                                                        class="mdi mdi-pencil-box-outline text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">Edit</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -214,53 +218,47 @@ $progressDetails = $certEligibility['details'];
                                 <!-- end card body -->
                             </div>
                             <!-- end card -->
-                            <div class="tab-content">
-                                <div>
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h5 class="card-title mb-0">
-                                                Tentang Saya
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <div>
-                                                <div class="pb-3">
-                                                    <div class="row">
-                                                        <div class="col-xl">
-                                                            <div class="text-muted">
-                                                                <p class="mb-2">
-                                                                    <?= $dataProfile['data']['deskripsi']; ?>
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                            <div class="card shadow-sm" style="background-color: #fff; border-radius: 1.25rem">
+                                <div class="card-body">
+                                    <div>
+                                        <div class="row">
+                                            <div class="col-xl-3">
+                                                <div class="text-muted">
+                                                    <h5 class="mb-2">
+                                                        Ringkasan Pengguna
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl">
+                                                <div class="text-muted">
+                                                    <p class="mb-2">
+                                                        <?= $dataProfile['data']['deskripsi']; ?>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- end card body -->
                                     </div>
-                                    <!-- end card -->
                                 </div>
-                                <!-- end tab pane -->
+                                <!-- end card body -->
                             </div>
-                            <!-- end tab content -->
+                            <!-- end card -->
                         </div>
                         <!-- end col -->
                         <div class="col-xl-3 col-lg-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="card-title mb-0">
-                                        Pengaturan Akun
-                                    </h5>
-                                </div>
+                            <div class="card shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
                                 <ul class="list-group list-group-flush">
+                                    <li class="list-group-item pb-3">
+                                        <h5 class="mb-0">
+                                            Pengaturan Akun
+                                        </h5>
+                                    </li>
                                     <!-- Certificate Download Button -->
                                     <li class="list-group-item">
                                         <a class="pb-2 d-block text-muted" href="#"><i class="mdi mdi-download text-primary me-1"></i>Unduh Sertifikat</a>
                                         <?php if ($isEligible): ?>
                                             <!-- STATE: ELIGIBLE (100%) -->
                                             <a href="profile.php?action=download_certificate"
-                                                class="btn btn-certificate btn-success w-100 d-flex align-items-center justify-content-center gap-2"
+                                                class="btn btn-certificate btn-rounded btn-success w-100 d-flex align-items-center justify-content-center gap-2"
                                                 id="btnDownloadCertificate">
                                                 <!-- <i class="mdi mdi-download"></i> -->
                                                 <span>Unduh Sekarang</span>
@@ -268,7 +266,7 @@ $progressDetails = $certEligibility['details'];
                                         <?php else: ?>
                                             <!-- STATE: LOCKED (< 100%) -->
                                             <button type="button"
-                                                class="btn btn-certificate btn-certificate--locked w-100 d-flex align-items-center justify-content-center gap-2"
+                                                class="btn btn-certificate btn-rounded btn-certificate--locked w-100 d-flex align-items-center justify-content-center gap-2"
                                                 id="btnCertificateLocked"
                                                 disabled
                                                 data-bs-toggle="tooltip"

@@ -1,0 +1,352 @@
+/* ==========================================================================
+   PROGRESS BELAJAR - Gradient Background System
+   ========================================================================== */
+
+/* --- CSS Custom Properties for Theming --- */
+:root {
+  /* ---- Light Mode Gradients ---- */
+  --progress-gradient-subtle: linear-gradient(
+    135deg,
+    #e8f0fe 0%,
+    #d6e4f0 50%,
+    #c9daf8 100%
+  );
+  --progress-gradient-vibrant: linear-gradient(
+    135deg,
+    #667eea 0%,
+    #764ba2 50%,
+    #f093fb 100%
+  );
+  --progress-gradient-brand: linear-gradient(135deg, #163f8c 0%, #5489EB 100%);
+  --progress-gradient-sunset: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --progress-gradient-ocean: linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%);
+  --progress-gradient-forest: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+
+  /* ---- Fallback Solid Colors (Light Mode) ---- */
+  --progress-fallback-subtle: #e8f0fe;
+  --progress-fallback-vibrant: #667eea;
+  --progress-fallback-brand: #163f8c;
+  --progress-fallback-sunset: #fa709a;
+  --progress-fallback-ocean: #00c9ff;
+  --progress-fallback-forest: #134e5e;
+
+  /* ---- Text Colors for Light Mode ---- */
+  --progress-text-primary: #1a1a2e;
+  --progress-text-secondary: #4a4a6a;
+  --progress-text-muted: #6b6b8a;
+  --progress-card-border: rgba(255, 255, 255, 0.2);
+  --progress-card-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode Variables */
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --progress-gradient-subtle: linear-gradient(
+      135deg,
+      #1a1a2e 0%,
+      #16213e 50%,
+      #0f3460 100%
+    );
+    --progress-gradient-vibrant: linear-gradient(
+      135deg,
+      #434343 0%,
+      #000000 100%
+    );
+    --progress-gradient-brand: linear-gradient(
+      135deg,
+      #0f172a 0%,
+      #1e293b 50%,
+      #334155 100%
+    );
+    --progress-gradient-sunset: linear-gradient(
+      135deg,
+      #2d1b2e 0%,
+      #3d2b1f 100%
+    );
+    --progress-gradient-ocean: linear-gradient(
+      135deg,
+      #0c1d2b 0%,
+      #1a3a4a 100%
+    );
+    --progress-gradient-forest: linear-gradient(
+      135deg,
+      #0a1f1a 0%,
+      #1a3a2e 100%
+    );
+
+    --progress-fallback-subtle: #1a1a2e;
+    --progress-fallback-vibrant: #2d2d2d;
+    --progress-fallback-brand: #0f172a;
+    --progress-fallback-sunset: #2d1b2e;
+    --progress-fallback-ocean: #0c1d2b;
+    --progress-fallback-forest: #0a1f1a;
+
+    --progress-text-primary: #f1f1f3;
+    --progress-text-secondary: #b0b0c0;
+    --progress-text-muted: #8a8a9a;
+    --progress-card-border: rgba(255, 255, 255, 0.1);
+    --progress-card-shadow: rgba(0, 0, 0, 0.3);
+  }
+} */
+
+/* Explicit dark mode class support (for manual toggle) */
+/* [data-theme="dark"] {
+  --progress-gradient-subtle: linear-gradient(
+    135deg,
+    #1a1a2e 0%,
+    #16213e 50%,
+    #0f3460 100%
+  );
+  --progress-gradient-vibrant: linear-gradient(
+    135deg,
+    #434343 0%,
+    #000000 100%
+  );
+  --progress-gradient-brand: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e293b 50%,
+    #334155 100%
+  );
+  --progress-gradient-sunset: linear-gradient(135deg, #2d1b2e 0%, #3d2b1f 100%);
+  --progress-gradient-ocean: linear-gradient(135deg, #0c1d2b 0%, #1a3a4a 100%);
+  --progress-gradient-forest: linear-gradient(135deg, #0a1f1a 0%, #1a3a2e 100%);
+
+  --progress-fallback-subtle: #1a1a2e;
+  --progress-fallback-vibrant: #2d2d2d;
+  --progress-fallback-brand: #0f172a;
+  --progress-fallback-sunset: #2d1b2e;
+  --progress-fallback-ocean: #0c1d2b;
+  --progress-fallback-forest: #0a1f1a;
+
+  --progress-text-primary: #f1f1f3;
+  --progress-text-secondary: #b0b0c0;
+  --progress-text-muted: #8a8a9a;
+  --progress-card-border: rgba(255, 255, 255, 0.1);
+  --progress-card-shadow: rgba(0, 0, 0, 0.3);
+} */
+
+/* --- Main Progress Card Styles --- */
+#progress-belajar-card {
+  border: 1px solid var(--progress-card-border);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow:
+    0 4px 6px -1px var(--progress-card-shadow),
+    0 2px 4px -2px var(--progress-card-shadow);
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
+}
+
+#progress-belajar-card:hover {
+  box-shadow:
+    0 10px 15px -3px var(--progress-card-shadow),
+    0 4px 6px -4px var(--progress-card-shadow);
+  transform: translateY(-2px);
+}
+
+/* --- Gradient Background (Primary Implementation) --- */
+#progress-belajar-card .card-body {
+  /* Fallback for older browsers */
+  background-color: var(--progress-fallback-brand);
+
+  /* Modern gradient - using background-image for performance */
+  background-image: var(--progress-gradient-brand);
+
+  background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(37,145,251,0.98) 0.1%, rgba(0,7,128,1) 99.8% );
+  /* background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(2,0,67,1) 2.2%, rgba(79,8,225,1) 90% ); */
+  /* background-image: radial-gradient( circle farthest-corner at 17.6% 50.7%,  rgba(25,0,184,1) 0%, rgba(0,0,0,1) 90% ); */
+
+  /* Vendor prefixes for older browser support */
+  /* background-image: -webkit-linear-gradient(135deg, #163f8c 0%, #5489EB 100%);
+  background-image: -moz-linear-gradient(135deg, #163f8c 0%, #5489EB 100%);
+  background-image: -o-linear-gradient(135deg, #163f8c 0%, #5489EB 100%);
+  background-image: -ms-linear-gradient(135deg, #163f8c 0%, #5489EB 100%);
+  background-image: linear-gradient(135deg, #163f8c 0%, #5489EB 100%); */
+
+  /* Performance: Use background-image (not background) to avoid repaints */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: scroll; /* Changed from fixed for mobile performance */
+
+  /* Text colors */
+  color: var(--progress-text-primary);
+  min-height: 280px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure text readability on gradient */
+#progress-belajar-card .card-title {
+  color: var(--progress-fallback-subtle) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#progress-belajar-card .text-muted {
+  color: var(--progress-text-muted) !important;
+}
+
+/* Subtle overlay for better text contrast (optional) */
+#progress-belajar-card .card-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.03) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
+  border-radius: inherit;
+}
+
+/* --- Theme Variants (Apply via modifier class) --- */
+.progress-theme-subtle .card-body {
+  background-color: var(--progress-fallback-subtle);
+  background-image: var(--progress-gradient-subtle);
+  background-image: -webkit-linear-gradient(
+    135deg,
+    #e8f0fe 0%,
+    #d6e4f0 50%,
+    #c9daf8 100%
+  );
+  background-image: linear-gradient(
+    135deg,
+    #e8f0fe 0%,
+    #d6e4f0 50%,
+    #c9daf8 100%
+  );
+  color: var(--progress-text-primary);
+}
+
+.progress-theme-vibrant .card-body {
+  background-color: var(--progress-fallback-vibrant);
+  background-image: var(--progress-gradient-vibrant);
+  background-image: -webkit-linear-gradient(
+    135deg,
+    #667eea 0%,
+    #764ba2 50%,
+    #f093fb 100%
+  );
+  background-image: linear-gradient(
+    135deg,
+    #667eea 0%,
+    #764ba2 50%,
+    #f093fb 100%
+  );
+  color: #fff;
+}
+
+.progress-theme-sunset .card-body {
+  background-color: var(--progress-fallback-sunset);
+  background-image: var(--progress-gradient-sunset);
+  background-image: -webkit-linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  background-image: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: #fff;
+}
+
+.progress-theme-ocean .card-body {
+  background-color: var(--progress-fallback-ocean);
+  background-image: var(--progress-gradient-ocean);
+  background-image: -webkit-linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%);
+  background-image: linear-gradient(135deg, #00c9ff 0%, #92fe9d 100%);
+  color: #fff;
+}
+
+.progress-theme-forest .card-body {
+  background-color: var(--progress-fallback-forest);
+  background-image: var(--progress-gradient-forest);
+  background-image: -webkit-linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+  background-image: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+  color: #fff;
+}
+
+/* Override text colors for light themes */
+.progress-theme-subtle .card-title,
+.progress-theme-vibrant .card-title,
+.progress-theme-sunset .card-title,
+.progress-theme-ocean .card-title,
+.progress-theme-forest .card-title {
+  color: inherit !important;
+}
+
+.progress-theme-subtle .text-muted,
+.progress-theme-vibrant .text-muted,
+.progress-theme-sunset .text-muted,
+.progress-theme-ocean .text-muted,
+.progress-theme-forest .text-muted {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.progress-theme-subtle .text-muted {
+  color: var(--progress-text-muted) !important;
+}
+
+/* --- Responsive Considerations --- */
+@media (max-width: 768px) {
+  #progress-belajar-card .card-body {
+    /* Disable background-attachment: fixed on mobile for performance */
+    background-attachment: scroll;
+    min-height: 240px;
+    padding: 1.5rem 1rem;
+  }
+
+  #progress-belajar-card {
+    border-radius: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #progress-belajar-card .card-body {
+    min-height: 220px;
+    padding: 1.25rem 0.75rem;
+  }
+
+  #progress-belajar-card .card-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* --- High Contrast Mode Support --- */
+@media (prefers-contrast: high) {
+  #progress-belajar-card .card-body {
+    background-image: none !important;
+    background-color: var(--progress-fallback-brand) !important;
+    border: 2px solid currentColor;
+  }
+
+  #progress-belajar-card .card-body::before {
+    display: none;
+  }
+}
+
+/* --- Reduced Motion Support --- */
+@media (prefers-reduced-motion: reduce) {
+  #progress-belajar-card {
+    transition: none;
+  }
+
+  #progress-belajar-card:hover {
+    transform: none;
+  }
+}
+
+/* --- Print Styles --- */
+@media print {
+  #progress-belajar-card .card-body {
+    background: none !important;
+    background-color: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc;
+    min-height: auto;
+  }
+
+  #progress-belajar-card .card-body::before {
+    display: none;
+  }
+}

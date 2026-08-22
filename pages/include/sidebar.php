@@ -36,13 +36,31 @@ global $sudahPreTest, $sudahPostTest;
                </a>
             </li>
             <li>
-               <a href="komunitas.php">
+               <a class="has-arrow" href="javascript: void(0);">
                   <i data-feather="users">
                   </i>
-                  <span data-key="t-komunitas">
+                  <span data-key="t-apps">
                      Forum
                   </span>
                </a>
+               <ul aria-expanded="false" class="sub-menu">
+                  <li>
+                     <a href="daftar-komunitas.php">
+                        <i data-feather="users"></i>
+                        <span data-key="t-subtopik">
+                           Daftar Komunitas
+                        </span>
+                     </a>
+                  </li>
+                  <li>
+                     <a href="daftar-konseling.php">
+                        <i data-feather="users"></i>
+                        <span data-key="t-materi">
+                           Daftar Konselor
+                        </span>
+                     </a>
+                  </li>
+               </ul>
             </li>
             <li>
                <a href="profile.php">

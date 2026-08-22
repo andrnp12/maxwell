@@ -60,11 +60,11 @@ $persen = $total > 0
                     <!-- end row -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="page-title-box d-flex align-items-center justify-content-between pb-4">
+                            <!-- <div class="page-title-box d-flex align-items-center justify-content-between pb-4">
                                 <h5 class="mb-sm-0">
                                     Kategori Belajar
                                 </h5>
-                                <!-- <div class="page-title-right">
+                                <div class="page-title-right">
                                     <div class="btn-group">
                                         <button aria-expanded="false" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light dropdown-toggle" data-bs-toggle="dropdown" type="button">
                                             Filter Kategori
@@ -88,8 +88,8 @@ $persen = $total > 0
                                             </a>
                                         </div>
                                     </div>
-                                </div> -->
-                            </div>
+                                </div>
+                            </div> -->
                             <div class="progress mb-3" style="height:8px;">
                                 <div
                                     class="progress-bar"
@@ -115,47 +115,73 @@ $persen = $total > 0
                             <a class="col-12 col-xl-6 col-md-6" href="<?= $canAccess ? 'detail-materi.php?id=' . $materi['id'] : '#' ?>"
                                 <?= !$canAccess ? 'data-bs-toggle="modal" data-bs-target="#peringatanModal"' : '' ?>>
 
-                                <div class="card mb-3 border border-success">
-                                    <div class="row g-0 align-items-center">
-                                        <div class="col-3 text-center">
-                                            <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                                <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
-                                            </div>
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="card-body">
-                                                <h5 class="card-title mb-0 font-weight-bold">
-                                                    <?= $materi['judul'] ?>
-                                                </h5>
-                                                <p class="card-text mb-0">
-                                                    <small class="text-muted text-truncate d-block" style="max-width: 100%;">
-                                                        <?= $materi['deskripsi'] ?>
-                                                    </small>
-                                                </p>
+                                <?php if ($materi['material_selesai']) : ?>
+                                    <!-- Jika sudah selesai: background success, text white, tanpa border-success -->
+                                    <div class="card mb-3 text-white border-white shadow-lg" style="border-radius: 1.25rem; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-3 text-center">
+                                                <div style="width: 56px; height: 56px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items: center; justify-content: center;">
+                                                    <img src="/assets/icon/book.webp" alt="icon" style="width: 32px; height: 32px;" />
+                                                </div>
 
-                                                <?php if ($materi['material_selesai']) : ?>
+                                            </div>
+                                            <div class="col-9">
+                                                <div class="card-body" style="padding-left: 0px;">
+                                                    <h5 class="card-title mb-0 font-weight-bold">
+                                                        <?= $materi['judul'] ?>
+                                                    </h5>
+                                                    <p class="card-text mb-0">
+                                                        <small class="text-truncate d-block" style="max-width: 100%; color: rgba(255,255,255,0.8);">
+                                                            <?= $materi['deskripsi'] ?>
+                                                        </small>
+                                                    </p>
                                                     <!-- Jika sudah selesai -->
-                                                    <small class="badge bg-success text-white px-2 py-1 rounded-pill">
+                                                    <small class="badge text-white px-2 py-1 rounded-pill" style="background-color: rgba(233, 236, 239, 0.5);">
                                                         <i class="mdi mdi-check-circle"></i>
                                                         Telah Dipelajari
                                                     </small>
-                                                <?php elseif ($canAccess) : ?>
-                                                    <!-- Jika bisa diakses tapi belum selesai (Materi saat ini yang harus dipelajari) -->
-                                                    <small class="badge bg-primary text-white px-2 py-1 rounded-pill">
-                                                        <i class="mdi mdi-play-circle"></i>
-                                                        <?= ($index === 0) ? 'Mulai Belajar' : 'Lanjutkan Belajar' ?>
-                                                    </small>
-                                                <?php else : ?>
-                                                    <!-- Jika benar-benar terkunci -->
-                                                    <small class="badge bg-secondary text-white px-2 py-1 rounded-pill">
-                                                        <i class="mdi mdi-lock"></i>
-                                                        Kunci
-                                                    </small>
-                                                <?php endif ?>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                <?php else : ?>
+                                    <!-- Jika belum selesai: background putih, border biasa -->
+                                    <div class="card mb-3 border shadow-sm" style="border-radius: 1.25rem;">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col-3 text-center">
+                                                <!-- Icon circle untuk belum selesai: background abu-abu -->
+                                                <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
+                                                    <img src="/assets/icon/book.webp" alt="icon" style="width: 32px; height: 32px;" />
+                                                </div>
+                                            </div>
+                                            <div class="col-9">
+                                                <div class="card-body" style="padding-left: 0px;">
+                                                    <h5 class="card-title mb-0 font-weight-bold">
+                                                        <?= $materi['judul'] ?>
+                                                    </h5>
+                                                    <p class="card-text mb-0">
+                                                        <small class="text-muted text-truncate d-block" style="max-width: 100%;">
+                                                            <?= $materi['deskripsi'] ?>
+                                                        </small>
+                                                    </p>
+                                                    <?php if ($canAccess) : ?>
+                                                        <!-- Jika bisa diakses tapi belum selesai (Materi saat ini yang harus dipelajari) -->
+                                                        <small class="badge bg-primary text-white px-2 py-1 rounded-pill">
+                                                            <i class="mdi mdi-play-circle"></i>
+                                                            <?= ($index === 0) ? 'Mulai Belajar' : 'Lanjutkan Belajar' ?>
+                                                        </small>
+                                                    <?php else : ?>
+                                                        <!-- Jika benar-benar terkunci -->
+                                                        <small class="badge bg-secondary text-white px-2 py-1 rounded-pill">
+                                                            <i class="mdi mdi-lock"></i>
+                                                            Kunci
+                                                        </small>
+                                                    <?php endif ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </a>
                         <?php endforeach; ?>
                         <!-- end col -->

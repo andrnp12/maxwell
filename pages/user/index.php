@@ -168,10 +168,10 @@ $bolehPostTest = (
                <div class="row">
                   <div class="col-xl-12">
                      <!-- card -->
-                     <div class="card card-h-100">
+                     <div class="card card-h-100" id="progress-belajar-card">
                         <!-- card body -->
                         <div class="card-body">
-                           <div class="d-flex flex-wrap align-items-center mb-4">
+                           <div class="d-flex flex-wrap align-items-center">
                               <h4 class="card-title me-2">
                                  Progress Belajar
                               </h4>
@@ -200,7 +200,7 @@ $bolehPostTest = (
                   </div>
                   <div class="col-6 col-xl-3 col-md-6">
                      <!-- card -->
-                     <div class="card card-h-100">
+                     <div class="card card-h-100 shadow-sm" style="border-radius: 1.25rem;">
                         <!-- card body -->
                         <a class="card-body" href="belajar.php">
                            <div class="row align-items-center">
@@ -221,7 +221,7 @@ $bolehPostTest = (
                   <!-- end col -->
                   <div class="col-6 col-xl-3 col-md-6">
                      <!-- card -->
-                     <div class="card card-h-100">
+                     <div class="card card-h-100 shadow-sm" style="border-radius: 1.25rem;">
                         <!-- card body -->
                         <a class="card-body" href="skill.php">
                            <div class="row align-items-center">
@@ -242,7 +242,7 @@ $bolehPostTest = (
                   <!-- end col -->
                   <div class="col-6 col-xl-3 col-md-6">
                      <!-- card -->
-                     <div class="card card-h-100">
+                     <div class="card card-h-100 shadow-sm" style="border-radius: 1.25rem;">
                         <!-- card body -->
                         <a class="card-body" href="daftar-komunitas.php">
                            <div class="row align-items-center">
@@ -263,7 +263,7 @@ $bolehPostTest = (
                   <!-- end col -->
                   <div class="col-6 col-xl-3 col-md-6">
                      <!-- card -->
-                     <div class="card card-h-100">
+                     <div class="card card-h-100 shadow-sm" style="border-radius: 1.25rem;">
                         <!-- card body -->
                         <a class="card-body" href="daftar-konseling.php">
                            <div class="row align-items-center">
@@ -284,17 +284,21 @@ $bolehPostTest = (
                   <!-- end col -->
                   <!-- end col -->
                   <div class="col-12">
-                     <div class="card card-h-100">
+                     <div class="card card-h-100 shadow-sm" style="border-radius: 1.25rem;">
                         <div class="card-body">
                            <div class="row align-items-center">
-                              <div class="col-12">
+                              <div class="col-5">
                                  <h4 class="mb-3">
                                     <img
                                        src="/assets/icon/notes.webp"
                                        alt="icon"
                                        style="width: 40px; height: 40px;" />
                                  </h4>
-
+                                 <p class="text-muted lh-1 d-block text-truncate">
+                                    Post-Test
+                                 </p>
+                              </div>
+                              <div class="col-7 text-end">
                                  <?php if (!$sudahPreTest): ?>
 
                                     <span class="text-secondary">
@@ -317,18 +321,18 @@ $bolehPostTest = (
 
                                     <a
                                        href="preposttest.php?type=post"
-                                       class="btn btn-primary btn-sm">
+                                       class="btn btn-primary btn-rounded">
                                        Mulai Post-Test
                                     </a>
 
                                  <?php else: ?>
 
                                     <span class="text-success">
-                                       ✔ Nilai Resmi Tersimpan
+                                       <i class="mdi mdi-checkbox-marked-circle-outline"></i>
+                                       Nilai Post-Test Tersimpan
                                     </span>
 
                                  <?php endif; ?>
-
                               </div>
                            </div>
                         </div>
@@ -381,8 +385,53 @@ $bolehPostTest = (
          // Shows single 0-100% progress from completion rate
          // ============================================
 
-         // Determine color based on progress
-         var progressColor = combinedProgress >= 80 ? '#34c38f' : (combinedProgress >= 60 ? '#f1b44c' : (combinedProgress >= 40 ? '#f46a6a' : '#5156be'));
+         // High-contrast color palette for gradient backgrounds (WCAG AA 4.5:1)
+         // Bright Amber, Vivid Teal, Hot Pink, Electric Lime
+         var VIBRANT_COLORS = {
+            amber: '#FFB300',
+            teal: '#45FFCA',
+            pink: '#FFD93D',
+            lime: '#E4FF30',
+            // Darker variants for text on light backgrounds
+            amberDark: '#CC8F00',
+            tealDark: '#00B8A0',
+            pinkDark: '#b39418',
+            limeDark: '#A3CC00'
+         };
+
+         // Detect if we're in dark mode (CSS prefers-color-scheme or data-theme)
+         function isDarkMode() {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ||
+               document.documentElement.getAttribute('data-theme') === 'dark' ||
+               document.body.classList.contains('dark-mode');
+         }
+
+         var darkMode = isDarkMode();
+
+         // Select progress color based on completion percentage with high contrast
+         // Use amber for low, teal for medium, pink for high, lime for excellent
+         var progressColor;
+         var progressColorDark;
+         if (combinedProgress >= 80) {
+            progressColor = VIBRANT_COLORS.lime;
+            progressColorDark = VIBRANT_COLORS.limeDark;
+         } else if (combinedProgress >= 60) {
+            progressColor = VIBRANT_COLORS.pink;
+            progressColorDark = VIBRANT_COLORS.pinkDark;
+         } else if (combinedProgress >= 40) {
+            progressColor = VIBRANT_COLORS.teal;
+            progressColorDark = VIBRANT_COLORS.tealDark;
+         } else {
+            progressColor = VIBRANT_COLORS.amber;
+            progressColorDark = VIBRANT_COLORS.amberDark;
+         }
+
+         // Use white for all text to be neutral against gradient background
+         var chartColor = darkMode ? progressColor : progressColorDark;
+         var trackBg = darkMode ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)';
+         var labelColor = '#FFFFFF';
+         var mutedColor = 'rgba(255, 255, 255, 0.7)';
+         var valueColor = '#FFFFFF';
 
          var chartOptions = {
             series: [combinedProgress],
@@ -392,7 +441,8 @@ $bolehPostTest = (
                offsetY: -10,
                sparkline: {
                   enabled: false
-               }
+               },
+               background: 'transparent'
             },
             plotOptions: {
                radialBar: {
@@ -410,12 +460,13 @@ $bolehPostTest = (
                         enabled: true,
                         top: 3,
                         left: 0,
-                        blur: 4,
-                        opacity: 0.24
+                        blur: 8,
+                        opacity: darkMode ? 0.4 : 0.3,
+                        color: chartColor
                      }
                   },
                   track: {
-                     background: '#e8e8e8',
+                     background: trackBg,
                      strokeWidth: '97%',
                      margin: 5,
                      dropShadow: {
@@ -431,15 +482,15 @@ $bolehPostTest = (
                      name: {
                         offsetY: -15,
                         show: true,
-                        color: '#888',
+                        color: mutedColor,
                         fontSize: '14px',
-                        fontWeight: 500
+                        fontWeight: 600
                      },
                      value: {
                         formatter: function(val) {
                            return val.toFixed(1) + '%';
                         },
-                        color: '#333',
+                        color: valueColor,
                         fontSize: '36px',
                         show: true,
                         fontWeight: 'bold',
@@ -454,17 +505,17 @@ $bolehPostTest = (
             fill: {
                type: 'gradient',
                gradient: {
-                  shade: 'dark',
+                  shade: darkMode ? 'light' : 'dark',
                   type: 'horizontal',
-                  shadeIntensity: 0.5,
-                  gradientToColors: [progressColor],
-                  inverseColors: true,
+                  shadeIntensity: 0.4,
+                  gradientToColors: [chartColor],
+                  inverseColors: !darkMode,
                   opacityFrom: 1,
                   opacityTo: 1,
                   stops: [0, 100]
                }
             },
-            colors: [progressColor],
+            colors: [chartColor],
             stroke: {
                lineCap: 'round'
             },
@@ -500,37 +551,47 @@ $bolehPostTest = (
          var chart = new ApexCharts(document.querySelector("#learning-progress-chart"), chartOptions);
          chart.render();
 
+         // Re-render chart on theme change
+         var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+         mediaQuery.addEventListener('change', function(e) {
+            location.reload(); // Simple reload to apply new theme colors
+         });
+
          // Add detail breakdown below chart after render
          setTimeout(function() {
             var detailContainer = document.querySelector("#learning-progress-detail");
             if (detailContainer) {
+               // Use white for all text to be neutral against gradient background
+               var whiteColor = '#FFFFFF';
+               var mutedWhite = 'rgba(255, 255, 255, 0.7)';
+
                var detailHtml = `
-               <div class="mt-3 pt-3 border-top" style="font-size: 11px;">
+               <div class="mt-3 pt-3 border-top" style="font-size: 11px; border-color: rgba(255,255,255,0.2);">
                    <div class="row text-center">
                        <div class="col-3">
-                           <div class="fw-bold text-primary"><?= $pretestCompletion ?>%</div>
-                           <div class="text-muted">Pre-Test</div>
-                           <div class="text-muted small"><?= $completedPretest ?>/<?= $totalPretest ?></div>
+                           <div class="fw-bold" style="color: ` + whiteColor + `;"><?= $pretestCompletion ?>%</div>
+                           <div style="color: ` + mutedWhite + `;">Pre-Test</div>
+                           <div class="small" style="color: ` + mutedWhite + `;"><?= $completedPretest ?>/<?= $totalPretest ?></div>
                        </div>
                        <div class="col-3">
-                           <div class="fw-bold text-info"><?= $kuisCompletion ?>%</div>
-                           <div class="text-muted">Kuis</div>
-                           <div class="text-muted small"><?= $completedKuis ?>/<?= $totalKuis ?></div>
+                           <div class="fw-bold" style="color: ` + whiteColor + `;"><?= $kuisCompletion ?>%</div>
+                           <div style="color: ` + mutedWhite + `;">Kuis</div>
+                           <div class="small" style="color: ` + mutedWhite + `;"><?= $completedKuis ?>/<?= $totalKuis ?></div>
                        </div>
                        <div class="col-3">
-                           <div class="fw-bold text-success"><?= $materiCompletion ?>%</div>
-                           <div class="text-muted">Materi</div>
-                           <div class="text-muted small"><?= $completedMateri ?>/<?= $totalMateri ?></div>
+                           <div class="fw-bold" style="color: ` + whiteColor + `;"><?= $materiCompletion ?>%</div>
+                           <div style="color: ` + mutedWhite + `;">Materi</div>
+                           <div class="small" style="color: ` + mutedWhite + `;"><?= $completedMateri ?>/<?= $totalMateri ?></div>
                        </div>
                        <div class="col-3">
-                           <div class="fw-bold text-warning"><?= $posttestCompletion ?>%</div>
-                           <div class="text-muted">Post-Test</div>
-                           <div class="text-muted small"><?= $completedPosttest ?>/<?= $totalPosttest ?></div>
+                           <div class="fw-bold" style="color: ` + whiteColor + `;"><?= $posttestCompletion ?>%</div>
+                           <div style="color: ` + mutedWhite + `;">Post-Test</div>
+                           <div class="small" style="color: ` + mutedWhite + `;"><?= $completedPosttest ?>/<?= $totalPosttest ?></div>
                        </div>
                    </div>
-                   <div class="text-center mt-2 text-muted small">
-                       <i class="mdi mdi-information-outline"></i> 
-                       Total: <strong><?= $completedActivities ?>/<?= $totalActivities ?></strong> aktivitas (<strong><?= $combinedProgress ?>%</strong>)
+                   <div class="text-center mt-2 small" style="color: ` + mutedWhite + `;">
+                       <i class="mdi mdi-information-outline"></i>
+                       Total: <strong style="color: ` + whiteColor + `;"><?= $completedActivities ?>/<?= $totalActivities ?></strong> aktivitas (<strong style="color: ` + whiteColor + `;"><?= $combinedProgress ?>%</strong>)
                    </div>
                </div>
            `;

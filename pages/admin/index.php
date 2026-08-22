@@ -79,7 +79,7 @@ $activities = $unifiedActivity['data'] ?? [];
                         <div class="col-12">
                             <div class="row d-sm-flex justify-content-between">
                                 <div>
-                                    <h4 class="mb-sm-0 font-weight-bold mb-1">
+                                    <h4 class="mb-sm-0 fw-bold mb-1">
                                         Dashboard Administrator
                                     </h4>
                                     <p class="text-muted">
@@ -102,7 +102,7 @@ $activities = $unifiedActivity['data'] ?? [];
                     <div class="row g-lg-4">
                         <!-- Total Pengguna -->
                         <div class="col-xl-3 col-md-6">
-                            <div class="card card-h-100">
+                            <div class="card card-h-100 border-white shadow-sm" style="border-radius: 1.25rem; background-image: linear-gradient( 109.6deg,  rgba(245,239,249,1) 30.1%, rgba(207,211,236,1) 100.2% );">
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col-7">
@@ -127,7 +127,7 @@ $activities = $unifiedActivity['data'] ?? [];
 
                         <!-- Materi & Konten -->
                         <div class="col-xl-3 col-md-6">
-                            <div class="card card-h-100">
+                            <div class="card card-h-100 border-white shadow-sm" style="border-radius: 1.25rem; background-image: linear-gradient( 174.2deg,  rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% );">
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col-7">
@@ -155,7 +155,7 @@ $activities = $unifiedActivity['data'] ?? [];
 
                         <!-- Konselor & Komunitas -->
                         <div class="col-xl-3 col-md-6">
-                            <div class="card card-h-100">
+                            <div class="card card-h-100 border-white shadow-sm" style="border-radius: 1.25rem; background-image: radial-gradient( circle 476px at 54.8% 51.5%,  rgba(168,229,253,1) 0%, rgba(244,244,254,1) 42.3%, rgba(244,244,254,1) 100.2% );">
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col-7">
@@ -181,7 +181,7 @@ $activities = $unifiedActivity['data'] ?? [];
 
                         <!-- Course Completion Rate (replaces Progress Materi) -->
                         <div class="col-xl-3 col-md-6">
-                            <div class="card card-h-100">
+                            <div class="card card-h-100 border-white shadow-sm" style="border-radius: 1.25rem; background-image: linear-gradient( 109.6deg,  rgba(223,234,247,1) 11.2%, rgba(244,248,252,1) 91.1% );">
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col-7">
@@ -214,9 +214,9 @@ $activities = $unifiedActivity['data'] ?? [];
                     <div class="row g-4">
                         <!-- Score Distribution Chart -->
                         <div class="col-xl-8">
-                            <div class="card h-100">
+                            <div class="card h-100 shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
                                 <div class="card-header">
-                                    <h4 class="card-title mb-0">Distribusi Nilai Pengguna</h4>
+                                    <h4 class="card-title mb-0 fw-bold">Distribusi Nilai Pengguna</h4>
                                     <p class="card-title-desc">Perbandingan nilai Pretest, Kuis Rata-rata, dan Posttest</p>
                                 </div>
                                 <div class="card-body d-flex flex-column">
@@ -229,17 +229,17 @@ $activities = $unifiedActivity['data'] ?? [];
                                     </div>
                                     <div class="row text-center mt-auto g-2">
                                         <div class="col-12 col-md-4">
-                                            <div class="badge bg-primary p-2 w-100" style="font-size: 0.8rem;">
+                                            <div class="badge bg-primary rounded-pill p-2 w-100" style="font-size: 0.8rem;">
                                                 <i class="mdi mdi-chart-bar"></i> Pretest (Rata-rata: <?= $stats['avg_pretest'] ?? 0 ?>)
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
-                                            <div class="badge bg-success p-2 w-100" style="font-size: 0.8rem;">
+                                            <div class="badge bg-success rounded-pill p-2 w-100" style="font-size: 0.8rem;">
                                                 <i class="mdi mdi-chart-line"></i> Kuis Rata-rata (Rata-rata: <?= $stats['avg_kuis'] ?? 0 ?>)
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-4">
-                                            <div class="badge bg-info p-2 w-100" style="font-size: 0.8rem;">
+                                            <div class="badge bg-info rounded-pill p-2 w-100" style="font-size: 0.8rem;">
                                                 <i class="mdi mdi-chart-areaspline"></i> Posttest (Rata-rata: <?= $stats['avg_posttest'] ?? 0 ?>)
                                             </div>
                                         </div>
@@ -251,9 +251,9 @@ $activities = $unifiedActivity['data'] ?? [];
 
                         <!-- Learning Funnel -->
                         <div class="col-xl-4">
-                            <div class="card h-100">
+                            <div class="card h-100 shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
                                 <div class="card-header">
-                                    <h4 class="card-title mb-0">Jalur Pembelajaran (Funnel)</h4>
+                                    <h4 class="card-title mb-0 fw-bold">Jalur Pembelajaran (Funnel)</h4>
                                     <p class="card-title-desc">Progres pengguna dari daftar hingga posttest</p>
                                 </div>
                                 <div class="card-body">
@@ -329,10 +329,10 @@ $activities = $unifiedActivity['data'] ?? [];
                     <div class="row mt-1 g-4">
                         <!-- Recent Activity Feed -->
                         <div class="col-xl-8 mb-4">
-                            <div class="card h-100">
+                            <div class="card h-100 shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
                                 <div class="card-header d-flex align-items-center justify-content-between sticky-top bg-white border-bottom" style="z-index: 1;">
                                     <h4 class="card-title mb-0">Aktivitas Terbaru</h4>
-                                    <a href="user.php" class="btn btn-sm btn-outline-primary">Lihat Semua</a>
+                                    <a href="user.php" class="btn btn-sm btn-rounded btn-outline-primary">Lihat Semua</a>
                                 </div>
                                 <div class="card-body p-0 d-flex flex-column">
                                     <div class="activity-list flex-grow-1 overflow-auto" style="max-height: 50vh;">
@@ -407,7 +407,7 @@ $activities = $unifiedActivity['data'] ?? [];
                         <div class="col-xl-4">
                             <div class="d-flex flex-column h-100 gap-1">
                                 <!-- Chat Statistics Card -->
-                                <div class="card flex-grow-1">
+                                <div class="card flex-grow-1 shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
                                     <div class="card-header">
                                         <h4 class="card-title mb-0">Statistik Chat</h4>
                                     </div>
@@ -475,7 +475,7 @@ $activities = $unifiedActivity['data'] ?? [];
                                 }
                                 ?>
                                 <?php if (!empty($alerts)): ?>
-                                    <div class="card flex-grow-1 border-0 shadow-sm">
+                                    <div class="card flex-grow-1 shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
                                         <div class="card-header bg-light">
                                             <h4 class="card-title mb-0"><i class="mdi mdi-bell-ring text-warning me-2"></i>Peringatan & Saran</h4>
                                         </div>

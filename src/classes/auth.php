@@ -53,7 +53,7 @@ class auth
      * Configure session cookie parameters with security flags.
      * Must be called BEFORE session_start().
      */
-    private function configureSessionCookie(bool $rememberMe): void
+    public function configureSessionCookie(bool $rememberMe): void
     {
         $lifetime = $rememberMe ? self::REMEMBER_TOKEN_LIFETIME : 0; // 30 days or session cookie
         $secure = $this->isHttps();
@@ -317,7 +317,8 @@ class auth
         // authenticated - checking session_status() beforehand tells us
         // nothing, since session_start() hasn't run yet either way.
         if (session_status() === PHP_SESSION_NONE) {
-            $this->configureSessionCookie(isset($_COOKIE[self::REMEMBER_TOKEN_NAME]));
+            $rememberMe = isset($_COOKIE[self::REMEMBER_TOKEN_NAME]);
+            $this->configureSessionCookie($rememberMe);
             session_start();
         }
 
