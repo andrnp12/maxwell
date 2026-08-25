@@ -426,7 +426,7 @@ $dataMateri = $materi->getMateriNonKuis();
                    data-bs-target="#modalEditKuis"
                    class="btn btn-sm btn-warning btn-edit">Edit</a>
                 <button type="button" data-id="${id}" class="btn btn-delete btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHapus">Hapus</button>
-                <a href="list-kuis.php" class="btn btn-sm btn-info">Lihat</a>
+                <a href="list-kuis.php?id=${encodeURIComponent(id)}" class="btn btn-sm btn-info">Lihat</a>
             `;
         }
 
@@ -533,7 +533,7 @@ $dataMateri = $materi->getMateriNonKuis();
         function toggleMateriRequired(jenisKuisSelect, materiSelect) {
             const jenisKuis = jenisKuisSelect.value;
             const isOptional = ['pre', 'post'].includes(jenisKuis);
-            
+
             if (isOptional) {
                 materiSelect.removeAttribute('required');
                 // Add empty option for optional selection
@@ -574,11 +574,11 @@ $dataMateri = $materi->getMateriNonKuis();
 
                 if (result.status === 'success') {
                     selectElement.innerHTML = '';
-                    
+
                     // Check if materi is optional based on jenis kuis
                     const jenisKuis = jenisKuisSelect ? jenisKuisSelect.value : 'tryout';
                     const isOptional = ['pre', 'post'].includes(jenisKuis);
-                    
+
                     if (isOptional) {
                         selectElement.innerHTML = '<option value="" disabled>-- Pilih Materi (Opsional) --</option>';
                     } else {
@@ -594,7 +594,7 @@ $dataMateri = $materi->getMateriNonKuis();
                     if (selectedMaterialId) {
                         selectElement.value = selectedMaterialId;
                     }
-                    
+
                     // Update required attribute
                     if (jenisKuisSelect) {
                         toggleMateriRequired(jenisKuisSelect, selectElement);

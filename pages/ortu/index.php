@@ -1,7 +1,12 @@
 <?php
 require_once '../../src/classes/auth.php';
+require_once '../../src/classes/profile.php';
 $auth = new auth();
 $auth->authOrNot();
+
+$user = new Profile();
+$user = $user->getProfile($_SESSION['id']);
+
 ?>
 
 <!--header start-->
@@ -29,7 +34,7 @@ $auth->authOrNot();
                   <div class="col-12">
                      <div class="row d-sm-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0 font-weight-bold mb-1">
-                           Halo, Davied Indra!
+                           Halo, <?= htmlspecialchars($user['data']['name'] ?? 'Ortu') ?>!
                         </h4>
                         <p class="text-muted">
                            Siap untuk belajar lagi hari ini? Ayo mulai!
