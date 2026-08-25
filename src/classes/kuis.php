@@ -30,16 +30,20 @@ class Kuis
         }
 
         if ($stmt->execute()) {
-            return [
+            $id = $stmt->insert_id;
+            echo json_encode([
                 'status' => 'success',
-                'message' => 'Kuis berhasil ditambahkan.'
-            ];
+                'message' => 'Kuis berhasil ditambahkan.',
+                'id' => $id
+            ]);
+            exit;
         } else {
-            return [
+            echo json_encode([
                 'status' => 'error',
-                'message' => 'Kuis gagal ditambahkan: ' . $stmt->error
-            ];
-        };
+                'message' => 'Gagal menambahkan kuis.'
+            ]);
+            exit;
+        }
     }
 
     public function updateKuis(int $id, ?int $id_materi, string $judul, int $passingGrade, string $jenis_kuis = 'kuis'): array

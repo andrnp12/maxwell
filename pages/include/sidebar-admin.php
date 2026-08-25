@@ -43,6 +43,15 @@
                         </span>
                     </a>
                 </li>
+                <li>
+                    <a href="informasi.php">
+                        <i data-feather="trello">
+                        </i>
+                        <span data-key="t-skill">
+                            Informasi
+                        </span>
+                    </a>
+                </li>
                 <!-- <li>
                     <a class="has-arrow" href="javascript: void(0);">
                         <i data-feather="book">

@@ -312,76 +312,69 @@ class auth
 
     public function authOrNot(): void
     {
-        // Start (or resume) whatever session currently exists. This must
-        // happen BEFORE we can know whether the session is actually
-        // authenticated - checking session_status() beforehand tells us
-        // nothing, since session_start() hasn't run yet either way.
         if (session_status() === PHP_SESSION_NONE) {
             $rememberMe = isset($_COOKIE[self::REMEMBER_TOKEN_NAME]);
             $this->configureSessionCookie($rememberMe);
             session_start();
         }
 
-        // If the resumed session isn't authenticated - whether because the
-        // user never logged in, or because the session file was lost to GC,
-        // a server restart, etc. - try to rebuild it from the remember_token
-        // cookie before giving up. This is the fallback that root-cause #1
-        // was silently skipping.
+        // Kalau session belum login, coba restore dari Remember Me
         if (empty($_SESSION['is_logged_in'])) {
             $this->tryRestoreSessionFromToken();
         }
 
-        // 1. CEK APAKAH USER SUDAH LOGIN
+        // Setelah restore, kalau tetap belum login
         if (empty($_SESSION['is_logged_in'])) {
             header('Location: /pages/login.php');
             exit;
         }
 
-        // 2. AMBIL ROLE DARI SESSION
+        // Validasi role
         $userRole = $_SESSION['role'] ?? '';
         $allowedRoles = ['admin', 'user', 'konsultan', 'ortu'];
 
         if (!in_array($userRole, $allowedRoles, true)) {
-            $this->logout();
+
+            // Jangan panggil logout()
+            // karena logout() mencabut Remember Me.
+
+            session_unset();
+            session_destroy();
+
             header('Location: /pages/login.php');
             exit;
         }
 
-        // 3. PROTEKSI FOLDER (ROLE-BASED ACCESS CONTROL)
+        // Proteksi folder berdasarkan role
         $currentUri = $_SERVER['REQUEST_URI'];
 
         if (strpos($currentUri, '/pages/') !== false) {
+
             $parts = explode('/', trim($currentUri, '/'));
+
             $pagesIndex = array_search('pages', $parts);
+
             $accessedRoleFolder = $parts[$pagesIndex + 1] ?? '';
 
-            if (in_array($accessedRoleFolder, $allowedRoles) && $accessedRoleFolder !== $userRole) {
-                header("Location: /pages/{$userRole}/index.php");
+            if (
+                in_array($accessedRoleFolder, $allowedRoles, true) &&
+                $accessedRoleFolder !== $userRole
+            ) {
+                header(
+                    "Location: /pages/{$userRole}/index.php"
+                );
                 exit;
             }
         }
     }
 
-    /**
-     * Attempt to rebuild an authenticated session from the remember_token
-     * cookie. Safe to call any time the current session is not already
-     * authenticated - it is a no-op if there's no cookie.
-     *
-     * Deliberately does NOT mutate/rotate the token on success (no
-     * delete-and-reissue, no cookie rewrite). Browsers and WebViews
-     * routinely fire several requests in parallel using the SAME cookie
-     * value before any response's Set-Cookie has been applied; if this
-     * function mutated the token on every call, concurrent restores would
-     * race and could overwrite each other's Set-Cookie response, wiping
-     * out a perfectly valid remember-me cookie. Pure validation (SELECT +
-     * password_verify) is idempotent and safe to run from any number of
-     * concurrent requests.
-     */
     private function tryRestoreSessionFromToken(): void
     {
+
         $cookieValue = $this->getRememberTokenFromCookie();
+
         if (!$cookieValue) {
-            return; // No token cookie present
+            return;
         }
 
         $this->cleanupExpiredTokens();
@@ -389,47 +382,45 @@ class auth
         $validation = $this->validateRememberToken($cookieValue);
 
         if ($validation['status'] === 'mismatch') {
-            // Selector matched but validator didn't: possible token theft
-            // (a rotated/superseded token being replayed, or a guessed
-            // selector). Fail safe: nuke every token for this user so a
-            // stolen cookie stops working everywhere, and force re-login.
+
             $this->revokeAllUserTokens($validation['user_id']);
             $this->clearRememberTokenCookie();
+
             return;
         }
 
         if ($validation['status'] !== 'ok') {
-            // Not found / genuinely expired / malformed. We leave the
-            // cookie as-is rather than actively clearing it: this request
-            // simply falls through to the login redirect, and a stale
-            // cookie gets naturally overwritten on the next successful
-            // login anyway. No mutation here keeps this function fully
-            // read-only and safe under concurrent requests.
             return;
         }
 
         $userId = $validation['user_id'];
 
-        $stmt = $this->conn->prepare("SELECT id, role, name FROM users WHERE id = ?");
+        $stmt = $this->conn->prepare("
+        SELECT id, role, name
+        FROM users
+        WHERE id = ?
+    ");
+
         if (!$stmt) {
+            $this->conn->error;
             return;
         }
+
         $stmt->bind_param("i", $userId);
         $stmt->execute();
+
         $result = $stmt->get_result();
 
         if ($result->num_rows !== 1) {
-            // User no longer exists - clean up the orphaned token.
+
             $this->revokeAllUserTokens($userId);
             $this->clearRememberTokenCookie();
+
             return;
         }
 
         $user = $result->fetch_assoc();
 
-        // Reconfigure cookie params for the extended remember-me lifetime
-        // and restart the session cleanly under a regenerated ID.
-        $this->configureSessionCookie(true);
         session_regenerate_id(true);
 
         $_SESSION['id'] = $user['id'];

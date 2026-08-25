@@ -1,6 +1,7 @@
 <?php
 
 require_once '../../src/classes/auth.php';
+require_once '../../src/classes/profile.php';
 
 $auth = new auth();
 $auth->authOrNot();
@@ -23,9 +24,15 @@ $completedPosttest = 0;
 $totalPosttest = 0;
 $completedActivities = 0;
 $totalActivities = 0;
+
 $user = ['name' => 'Orang Tua']; // Placeholder, will use session name
+$user = new Profile();
+$user = $user->getProfile($_SESSION['id']);
 
 ?>
+
+
+
 <!--header start-->
 <?php include('../include/header.php'); ?>
 <!--headere end-->
@@ -51,7 +58,7 @@ $user = ['name' => 'Orang Tua']; // Placeholder, will use session name
                   <div class="col-12">
                      <div class="row d-sm-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0 font-weight-bold mb-1">
-                           Halo, <?= htmlspecialchars($_SESSION['name'] ?? 'Orang Tua') ?>!
+                           Halo, Davied Indra!
                         </h4>
                         <p class="text-muted">
                            Pantau progres belajar anak Anda.
