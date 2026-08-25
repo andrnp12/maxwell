@@ -313,8 +313,10 @@ class auth
     public function authOrNot(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
-            $rememberMe = isset($_COOKIE[self::REMEMBER_TOKEN_NAME]);
-            $this->configureSessionCookie($rememberMe);
+            $this->configureSessionCookie(
+                isset($_COOKIE[self::REMEMBER_TOKEN_NAME])
+            );
+
             session_start();
         }
 

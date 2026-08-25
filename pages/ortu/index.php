@@ -181,7 +181,7 @@ unset($child);
                   <div class="col-12">
                      <div class="row d-sm-flex align-items-center justify-content-between">
                         <h4 class="mb-sm-0 font-weight-bold mb-1">
-                           Halo, Davied Indra!
+                           Halo, <?= htmlspecialchars($user['data']['name'] ?? 'Ortu') ?>!
                         </h4>
                         <p class="text-muted">
                            Pantau progres belajar anak Anda.
