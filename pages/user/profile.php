@@ -202,10 +202,16 @@ $progressDetails = $certEligibility['details'];
                                                         data-id="<?= $dataProfile['data']['id']; ?>"
                                                         data-username="<?= htmlspecialchars($dataProfile['data']['username'], ENT_QUOTES) ?>"
                                                         data-nama="<?= htmlspecialchars($dataProfile['data']['name'], ENT_QUOTES) ?>"
-                                                        data-nomor="<?= htmlspecialchars($dataProfile['data']['nomor'], ENT_QUOTES) ?>"
-                                                        data-email="<?= htmlspecialchars($dataProfile['data']['email'], ENT_QUOTES) ?>"
-                                                        data-deskripsi="<?= htmlspecialchars($dataProfile['data']['deskripsi'], ENT_QUOTES) ?>"
+                                                        data-no-kk="<?= htmlspecialchars($dataProfile['data']['no_kk'], ENT_QUOTES) ?>"
+                                                        data-nomor="<?= htmlspecialchars($dataProfile['data']['nomor'] ?? "", ENT_QUOTES) ?>"
+                                                        data-email="<?= htmlspecialchars($dataProfile['data']['email'] ?? "", ENT_QUOTES) ?>"
+                                                        data-deskripsi="<?= htmlspecialchars($dataProfile['data']['deskripsi'] ?? "", ENT_QUOTES) ?>"
                                                         data-foto="<?= htmlspecialchars($dataProfile['data']['foto'], ENT_QUOTES) ?>"
+                                                        data-nik="<?= htmlspecialchars($dataProfile['data']['nik'] ?? "", ENT_QUOTES) ?>"
+                                                        data-alamat="<?= htmlspecialchars($dataProfile['data']['alamat'] ?? "", ENT_QUOTES) ?>"
+                                                        data-usia="<?= htmlspecialchars($dataProfile['data']['usia'] ?? "", ENT_QUOTES) ?>"
+                                                        data-pendidikan="<?= htmlspecialchars($dataProfile['data']['pendidikan'], ENT_QUOTES) ?>"
+                                                        data-status="<?= htmlspecialchars($dataProfile['data']['status'], ENT_QUOTES) ?>"
                                                         data-token="<?= htmlspecialchars($dataProfile['data']['token'] ?? '', ENT_QUOTES) ?>"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#modalEditProfile"
@@ -285,10 +291,17 @@ $progressDetails = $certEligibility['details'];
                                             data-id="<?= $dataProfile['data']['id']; ?>"
                                             data-username="<?= htmlspecialchars($dataProfile['data']['username'], ENT_QUOTES) ?>"
                                             data-nama="<?= htmlspecialchars($dataProfile['data']['name'], ENT_QUOTES) ?>"
-                                            data-nomor="<?= htmlspecialchars($dataProfile['data']['nomor'], ENT_QUOTES) ?>"
-                                            data-email="<?= htmlspecialchars($dataProfile['data']['email'], ENT_QUOTES) ?>"
-                                            data-deskripsi="<?= htmlspecialchars($dataProfile['data']['deskripsi'], ENT_QUOTES) ?>"
+                                            data-no-kk="<?= htmlspecialchars($dataProfile['data']['no_kk'], ENT_QUOTES) ?>"
+                                            data-nomor="<?= htmlspecialchars($dataProfile['data']['nomor'] ?? "", ENT_QUOTES) ?>"
+                                            data-email="<?= htmlspecialchars($dataProfile['data']['email'] ?? "", ENT_QUOTES) ?>"
+                                            data-deskripsi="<?= htmlspecialchars($dataProfile['data']['deskripsi'] ?? "", ENT_QUOTES) ?>"
                                             data-foto="<?= htmlspecialchars($dataProfile['data']['foto'], ENT_QUOTES) ?>"
+                                            data-nik="<?= htmlspecialchars($dataProfile['data']['nik'] ?? "", ENT_QUOTES) ?>"
+                                            data-alamat="<?= htmlspecialchars($dataProfile['data']['alamat'] ?? "", ENT_QUOTES) ?>"
+                                            data-usia="<?= htmlspecialchars($dataProfile['data']['usia'] ?? "", ENT_QUOTES) ?>"
+                                            data-pendidikan="<?= htmlspecialchars($dataProfile['data']['pendidikan'], ENT_QUOTES) ?>"
+                                            data-status="<?= htmlspecialchars($dataProfile['data']['status'], ENT_QUOTES) ?>"
+                                            data-token="<?= htmlspecialchars($dataProfile['data']['token'] ?? '', ENT_QUOTES) ?>"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modalEditProfile"
                                             class="pb-2 d-block text-muted" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
@@ -372,6 +385,71 @@ $progressDetails = $certEligibility['details'];
                                     Email Pengguna
                                 </label>
                                 <input class="form-control" id="edit_email" name="email" type="text" value="">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="edit_no_kk">
+                                    No. Kartu Keluarga Pengguna
+                                </label>
+                                <input class="form-control" id="edit_no_kk" name="no_kk" type="text"
+                                    maxlength="16"
+                                    minlength="16"
+                                    pattern="[0-9]{16}"
+                                    inputmode="numeric"
+                                    title="Nomor KK harus berupa 16 digit angka"
+                                    value="">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="edit_nik">
+                                    NIK Pengguna
+                                </label>
+                                <input class="form-control" id="edit_nik" name="nik" type="int"
+                                    maxlength="16"
+                                    minlength="16"
+                                    pattern="[0-9]{16}"
+                                    inputmode="numeric"
+                                    title="Nomor KK harus berupa 16 digit angka" value="">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="edit_alamat">
+                                    Alamat Pengguna
+                                </label>
+                                <input class="form-control" id="edit_alamat" name="alamat" type="text" value="">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="edit_usia">
+                                    Usia Pengguna
+                                </label>
+                                <input class="form-control" id="edit_usia" name="usia" type="number" min="0" max="100" value="">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="edit_pendidikan">
+                                    Pendidikan Terakhir Pengguna
+                                </label>
+                                <select class="form-select" id="edit_pendidikan" name="pendidikan">
+                                    <!-- Opsi default agar user memilih -->
+                                    <option value="" disabled selected>-- Pilih Pendidikan --</option>
+
+                                    <!-- Opsi yang Anda minta -->
+                                    <option value="sd">SD</option>
+                                    <option value="smp">SMP</option>
+                                    <option value="sma">SMK/SMA</option>
+                                    <option value="D3">Diploma</option>
+                                    <option value="S1">Sarjana</option>
+                                    <option value="S2">Magister</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="edit_status">
+                                    Status Pengguna
+                                </label>
+                                <select class="form-select" id="edit_status" name="status">
+                                    <!-- Opsi default agar user memilih -->
+                                    <option value="" disabled selected>-- Pilih Status --</option>
+
+                                    <!-- Opsi yang Anda minta -->
+                                    <option value="Pekerja">Pekerja</option>
+                                    <option value="Mahasiswa/Pelajar">Mahasiswa/Pelajar</option>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="edit_token">
@@ -482,11 +560,17 @@ $progressDetails = $certEligibility['details'];
             const id = button.getAttribute('data-id');
             const username = button.getAttribute('data-username') || '';
             const nama = button.getAttribute('data-nama') || '';
+            const no_kk = button.getAttribute('data-no-kk') || '';
             const nomor = button.getAttribute('data-nomor') || '';
             const email = button.getAttribute('data-email') || '';
             const deskripsi = button.getAttribute('data-deskripsi') || '';
             // const password = button.getAttribute('data-password') || '';
             const foto = button.getAttribute('data-foto') || '';
+            const nik = button.getAttribute('data-nik') || '';
+            const alamat = button.getAttribute('data-alamat') || '';
+            const usia = button.getAttribute('data-usia') || '';
+            const pendidikan = button.getAttribute('data-pendidikan') || '';
+            const status = button.getAttribute('data-status') || '';
             const token = button.getAttribute('data-token') || '';
 
             // Masukkan ke dalam input form
@@ -494,10 +578,16 @@ $progressDetails = $certEligibility['details'];
             document.getElementById('edit_existing_foto').value = foto;
             document.getElementById('edit_username').value = username;
             document.getElementById('edit_name').value = nama;
+            document.getElementById('edit_no_kk').value = no_kk;
             document.getElementById('edit_nomor').value = nomor;
             document.getElementById('edit_email').value = email;
             // document.getElementById('edit_password').value = password;
             document.getElementById('edit_ringkasan').value = deskripsi;
+            document.getElementById('edit_nik').value = nik;
+            document.getElementById('edit_alamat').value = alamat;
+            document.getElementById('edit_usia').value = usia;
+            document.getElementById('edit_pendidikan').value = pendidikan;
+            document.getElementById('edit_status').value = status;
             document.getElementById('edit_token').value = token;
         });
 
@@ -529,32 +619,72 @@ $progressDetails = $certEligibility['details'];
             const formData = new FormData(formEditProfile);
             formData.append('action', 'update_profile'); // Sesuai dengan logika backend Anda
 
+            // try {
+            //     // Sesuaikan path file proses dengan backend Anda (contoh: proses_profile.php)
+            //     const response = await fetch('/../src/actions/proses_profile.php', {
+            //         method: 'POST',
+            //         body: formData
+            //     });
+
+            //     const result = await response.json();
+
+            //     if (result.status === 'success') {
+            //         bootstrap.Modal.getOrCreateInstance(modalEditProfile).hide();
+            //         tampilkanNotif('Berhasil', result.message, 'success');
+
+            //         // Reload halaman untuk melihat perubahan data
+            //         setTimeout(() => {
+            //             location.reload();
+            //         }, 1000);
+            //     } else {
+            //         tampilkanNotif('Gagal', result.message, 'error');
+            //     }
+            // } catch (error) {
+            //     tampilkanNotif('Koneksi Gagal', 'Terjadi kesalahan koneksi jaringan.', 'error');
+            //     console.error(error);
+            // } finally {
+            //     btnEdit.disabled = false;
+            //     btnEdit.innerText = 'Simpan Perubahan';
+            // }
+
             try {
-                // Sesuaikan path file proses dengan backend Anda (contoh: proses_profile.php)
                 const response = await fetch('/../src/actions/proses_profile.php', {
                     method: 'POST',
                     body: formData
                 });
 
-                const result = await response.json();
+                const text = await response.text();
+
+                console.log("Response dari PHP:", text);
+
+                let result;
+
+                try {
+                    result = JSON.parse(text);
+                } catch (error) {
+                    console.error("PHP tidak mengembalikan JSON:", text);
+                    throw error;
+                }
 
                 if (result.status === 'success') {
                     bootstrap.Modal.getOrCreateInstance(modalEditProfile).hide();
                     tampilkanNotif('Berhasil', result.message, 'success');
 
-                    // Reload halaman untuk melihat perubahan data
                     setTimeout(() => {
                         location.reload();
                     }, 1000);
                 } else {
                     tampilkanNotif('Gagal', result.message, 'error');
                 }
+
             } catch (error) {
-                tampilkanNotif('Koneksi Gagal', 'Terjadi kesalahan koneksi jaringan.', 'error');
+                tampilkanNotif(
+                    'Koneksi Gagal',
+                    'Terjadi kesalahan koneksi jaringan.',
+                    'error'
+                );
+
                 console.error(error);
-            } finally {
-                btnEdit.disabled = false;
-                btnEdit.innerText = 'Simpan Perubahan';
             }
         });
 

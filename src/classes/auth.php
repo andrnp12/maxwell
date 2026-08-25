@@ -482,7 +482,7 @@ class auth
     }
 
     // Fungsi untuk melakukan registrasi perlu di revisi untuk bagian role nya, jadi agar saat register tidak otomatis jadi user
-    public function register(string $foto, string $username, string $name, string $nomor, string $email, string $password, string $deskripsi, string $role): array
+    public function register(string $foto, string $username, string $no_kk, string $name, string $email, string $password, string $deskripsi, string $role): array
     {
         $checkSql = "SELECT id FROM users WHERE username = ?";
         $stmtCheck = $this->conn->prepare($checkSql);
@@ -496,12 +496,12 @@ class auth
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $token = $this->generateUniqueToken();
 
-        $stmt = $this->conn->prepare("INSERT INTO users (foto, username, name, nomor, email, password, deskripsi, role, token) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO users (foto, username, no_kk, name, email, password, deskripsi, role, token) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         if (!$stmt) {
             return ['success' => false, 'token' => null, 'message' => 'Database error: ' . $this->conn->error];
         }
 
-        $stmt->bind_param("sssssssss", $foto, $username, $name, $nomor, $email, $hashedPassword, $deskripsi, $role, $token);
+        $stmt->bind_param("sssssssss", $foto, $username, $no_kk, $name, $email, $hashedPassword, $deskripsi, $role, $token);
         $executed = $stmt->execute();
 
         if ($executed) {

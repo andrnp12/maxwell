@@ -83,6 +83,24 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                                             <input class="form-control" id="username" name="username" placeholder="Masukkan username anda" type="text" required />
                                         </div>
                                         <div class="mb-3">
+                                            <label class="form-label" for="no_kk">
+                                                Masukkan No. Kartu Keluarga Anda
+                                            </label>
+                                            <!-- Tambahkan minlength, pattern, dan inputmode -->
+                                            <input
+                                                class="form-control"
+                                                id="no_kk"
+                                                name="no_kk"
+                                                placeholder="Masukkan 16 digit No. KK"
+                                                type="text"
+                                                maxlength="16"
+                                                minlength="16"
+                                                pattern="[0-9]{16}"
+                                                inputmode="numeric"
+                                                title="Nomor KK harus berupa 16 digit angka"
+                                                required />
+                                        </div>
+                                        <div class="mb-3">
                                             <label class="form-label" for="role">
                                                 Pilih Kriteria Anda
                                             </label>
@@ -192,18 +210,26 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(result => {
-                    if (result.status === 'success') {
-                        alert("Sukses: " + result.message);
-                        window.location.href = result.redirect;
-                    } else {
-                        alert("Error: " + result.message);
+                    console.log("Response dari PHP:", result);
+
+                    try {
+                        const data = JSON.parse(result);
+
+                        if (data.status === 'success') {
+                            alert("Sukses: " + data.message);
+                            window.location.href = data.redirect;
+                        } else {
+                            alert("Error: " + data.message);
+                        }
+                    } catch (error) {
+                        console.error("Response bukan JSON:", result);
+                        alert("mohon maaf, terjadi kesalahan");
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan saat memproses pendaftaran. Silakan coba lagi.');
+                    console.error('Fetch error:', error);
                 });
         });
     </script>
