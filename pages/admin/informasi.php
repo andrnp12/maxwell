@@ -72,6 +72,9 @@ $dataKategori = $informasi->getAllKategori();
                                                     Judul Kategori
                                                 </th>
                                                 <th>
+                                                    Jumlah Informasi
+                                                </th>
+                                                <th>
                                                     Aksi
                                                 </th>
 
@@ -86,6 +89,9 @@ $dataKategori = $informasi->getAllKategori();
                                                     </td>
                                                     <td>
                                                         <?= htmlspecialchars($kategori['judul_kategori']) ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= htmlspecialchars($kategori['jumlah_informasi']) ?>
                                                     </td>
                                                     <td>
                                                         <a href="#"

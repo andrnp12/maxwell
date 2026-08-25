@@ -21,9 +21,17 @@ class Informasi
     public function getAllKategori(): array
     {
         $sql = "
-            SELECT id, judul_kategori
-            FROM categories
-            ORDER BY id DESC
+            SELECT 
+            categories.id,
+            categories.judul_kategori,
+            COUNT(contents.id) AS jumlah_informasi
+        FROM categories
+        LEFT JOIN contents 
+            ON contents.category_id = categories.id
+        GROUP BY 
+            categories.id,
+            categories.judul_kategori
+        ORDER BY categories.id ASC
         ";
 
         $result = $this->conn->query($sql);

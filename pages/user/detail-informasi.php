@@ -1,0 +1,132 @@
+<?php
+session_start();
+require_once '../../src/classes/auth.php';
+require_once '../../src/classes/informasi.php';
+
+$auth = new auth();
+$auth->authOrNot();
+
+$informasi = new Informasi();
+$contentId = (int) ($_GET['id'] ?? 0);
+$detail = $informasi->getContentById($contentId);
+// $jumlahIformasi = $informasi->countContent();
+
+?>
+
+<!--header start-->
+<?php include('../include/header.php'); ?>
+<!--headere end-->
+<style>
+    .category-card {
+        transition: all 0.25s ease;
+        cursor: pointer;
+    }
+
+    .category-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .category-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.20);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .category-badge {
+        background: rgba(255, 255, 255, 0.18);
+        font-weight: 500;
+    }
+</style>
+
+<body>
+    <!-- <body data-layout="horizontal"> -->
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+        <?php include("../include/topbar.php"); ?>
+        <!-- ========== Left Sidebar Start ========== -->
+        <?php include '../include/sidebar-ortu.php'; ?>
+        <!-- Left Sidebar End -->
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-4">
+                                <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="detail-kat-info.php?id=<?= $detail['category_id'] ?>">
+                                    <span>
+                                        <i class="fas fa-angle-left"></i>
+                                    </span>
+                                    Kembali
+                                </a>
+                                <div class="row align-items-center mb-2">
+                                    <h4 class="mb-0 font-weight-bold">
+                                        Detail Informasi
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title -->
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <? foreach ($detail as $detail) : ?>
+                                        <div class="">
+                                            <div class="mb-3">
+                                                <h2 class="fw-bold ">
+                                                    <?= $detail['judul']; ?>
+                                                </h2>
+                                            </div>
+                                            <div class="mb-4">
+                                                <img alt="" class="img-thumbnail mx-auto d-block" src="/uploads/contents/<?= $detail['foto']; ?>" />
+                                            </div>
+                                            <div class="mt-4">
+                                                <div class="text-muted font-size-14">
+                                                    <p class="fs-6">
+                                                        <?= $detail['deskripsi']; ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                        </div>
+                                    <? endforeach; ?>
+                                </div>
+                                <!-- end card body -->
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                        <!-- end card -->
+                    </div>
+                </div>
+                <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+            <?php include '../include/footer.php'; ?>
+        </div>
+        <!-- end main content-->
+    </div>
+    <!-- END layout-wrapper -->
+    <!-- Right Sidebar -->
+    <?php include '../include/right-sidebar.php'; ?>
+    <!-- /Right-bar -->
+    <!-- Right bar overlay-->
+    <div class="rightbar-overlay">
+    </div>
+    <!-- JAVASCRIPT -->
+    <?php include '../include/script.php'; ?>
+    </div>
+</body>
+
+</html>

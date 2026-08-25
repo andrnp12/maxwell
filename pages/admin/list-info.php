@@ -49,8 +49,8 @@ $dataContents = $informasi->getContentsByKategori($categoryId);
                                         Daftar Informasi
                                     </h4>
                                     <p class="text-muted mb-0">
-                                        Lihat daftar Informasi dari kategori.
-                                        <strong><?= htmlspecialchars($kategori['nama'] ?? 'Tidak diketahui') ?></strong>.
+                                        Lihat daftar Informasi dari kategori
+                                        <strong><?= htmlspecialchars($kategori['judul_kategori'] ?? 'Tidak diketahui') ?></strong>.
                                     </p>
                                 </div>
                             </div>
@@ -461,7 +461,7 @@ $dataContents = $informasi->getContentsByKategori($categoryId);
             window.jQuery.fn.dataTable.isDataTable('#datatable') ?
             window.jQuery('#datatable').DataTable() :
             null;
-                                                            
+
 
         const elemenModalNotif =
             document.getElementById('modalNotifikasi');
