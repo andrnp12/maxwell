@@ -14,6 +14,7 @@ $selesai = 0;
 
 // Set true di awal agar materi pertama (index 0) selalu bisa diakses
 $previousFinished = true;
+$previousQuizFinished = true;
 
 foreach ($dataMateri as $materi) {
 
@@ -104,12 +105,18 @@ $persen = $total > 0
                         </div>
                         <?php foreach ($dataMateri as $index => $materi) : ?>
                             <?php
-                            // LOGIKA BARU: 
-                            // Bisa akses jika: materi sebelumnya selesai OR materi ini sendiri sudah selesai
-                            $canAccess = ($previousFinished || $materi['material_selesai'] == 1);
+                            // LOGIKA BARU:
+                            // Bisa akses jika: (materi sebelumnya selesai DAN kuis sebelumnya selesai) OR materi ini sendiri sudah selesai
+                            // Materi pertama (index 0) selalu bisa diakses
+                            if ($index === 0) {
+                                $canAccess = true;
+                            } else {
+                                $canAccess = ($previousFinished && $previousQuizFinished) || $materi['material_selesai'] == 1;
+                            }
 
                             // Update status untuk materi berikutnya di loop selanjutnya
                             $previousFinished = ($materi['material_selesai'] == 1);
+                            $previousQuizFinished = ($materi['quizz_selesai'] == 1);
                             ?>
 
                             <a class="col-12 col-xl-6 col-md-6" href="<?= $canAccess ? 'detail-materi.php?id=' . $materi['id'] : '#' ?>"

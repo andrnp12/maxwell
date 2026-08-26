@@ -45,20 +45,20 @@ $dataMateri = $data->getAllMateri();
                         <div class="col-12">
                             <?php foreach ($dataMateri as $materi) : ?>
                                 <a class="col-12 col-xl-6 col-md-6" href="detail-materi.php?id=<?= $materi['id'] ?>">
-                                    <div class="card mb-3 border shadow-sm" style="border-radius: 1.25rem;">
+                                    <div class="card mb-3 border-white shadow-lg" style="border-radius: 1.25rem; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
                                         <div class="row g-0 align-items-center">
                                             <div class="col-3 text-center">
-                                                <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
+                                                <div style="width: 56px; height: 56px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items: center; justify-content: center;">
                                                     <img src="/assets/icon/book.webp" alt="icon" style="width: 40px; height: 40px;" />
                                                 </div>
                                             </div>
                                             <div class="col-9">
                                                 <div class="card-body" style="padding-left: 0px;">
-                                                    <h5 class="card-title mb-0 font-weight-bold">
+                                                    <h5 class="card-title mb-0 text-white font-weight-bold">
                                                         <?= htmlspecialchars($materi['judul']) ?>
                                                     </h5>
                                                     <p class="card-text mb-0">
-                                                        <small class="text-muted text-truncate d-block" style="max-width: 100%;">
+                                                        <small class="text-white-50 text-truncate d-block" style="max-width: 100%;">
                                                             <?= htmlspecialchars($materi['deskripsi']) ?>
                                                         </small>
                                                     </p>

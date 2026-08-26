@@ -139,7 +139,8 @@ if (!$user) {
                                         <div class="avatar-xxl mb-3">
                                             <img alt="" class="img-fluid rounded-circle d-block"
                                                 src="<?= !empty($user['foto']) ? '/uploads/profile/' . htmlspecialchars($user['foto']) : '/uploads/profile/default.webp' ?>"
-                                                style="width: 120px; height: 120px; object-fit: cover;" />
+                                                style="width: 120px; height: 120px; object-fit: cover;" 
+                                                onerror="this.onerror=null; this.src='/uploads/profile/default.webp';"/>
                                         </div>
                                         <div>
                                             <h4 class="mb-1 fw-bold"><?= htmlspecialchars($user['name'] ?? '-') ?></h4>

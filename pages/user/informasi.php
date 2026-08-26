@@ -14,34 +14,6 @@ $dataKatergori = $informasi->getAllKategori();
 
 <!--header start-->
 <?php include('../include/header.php'); ?>
-<!--headere end-->
-<style>
-    .category-card {
-        transition: all 0.25s ease;
-        cursor: pointer;
-    }
-
-    .category-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15) !important;
-    }
-
-    .category-icon {
-        width: 58px;
-        height: 58px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.20);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-    }
-
-    .category-badge {
-        background: rgba(255, 255, 255, 0.18);
-        font-weight: 500;
-    }
-</style>
 
 <body>
     <!-- <body data-layout="horizontal"> -->
@@ -59,111 +31,100 @@ $dataKatergori = $informasi->getAllKategori();
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
+                    <!-- start page title -->
                     <div class="row">
                         <div class="col-12">
-                            <div class="row d-sm-flex align-items-center justify-content-between mb-2">
-                                <h4 class="mb-sm-0 font-weight-bold mb-1">
-                                    Daftar Informasi
-                                </h4>
-                                <p class="text-muted">
-                                    Dapatkan berbagai macam informasi terbaru
-                                </p>
+                            <div class="mb-4">
+                                <div class="row align-items-center mb-2">
+                                    <h4 class="mb-0 font-weight-bold">
+                                        Daftar Informasi
+                                    </h4>
+                                    <p class="text-muted mb-0">
+                                        Dapatkan berbagai macam informasi terbaru
+                                    </p>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                    <!-- end page title -->
+                    <!-- end row -->
+
+                    <?php
+                    $iconKategori = [
+                        'berita'     => 'fas fa-newspaper',
+                        'loker'      => 'fas fa-briefcase',
+                        'lowongan'   => 'fas fa-briefcase',
+                        'pengumuman' => 'fas fa-bullhorn',
+                        'event'      => 'fas fa-calendar-alt',
+                        'pendidikan' => 'fas fa-graduation-cap',
+                        'artikel'    => 'fas fa-file-alt',
+                    ];
+                    ?>
+
+                    <?php foreach ($dataKatergori as $kategori) : ?>
 
                         <?php
-                        $iconKategori = [
-                            'berita'     => 'fas fa-newspaper',
-                            'loker'      => 'fas fa-briefcase',
-                            'lowongan'   => 'fas fa-briefcase',
-                            'pengumuman' => 'fas fa-bullhorn',
-                            'event'      => 'fas fa-calendar-alt',
-                            'pendidikan' => 'fas fa-graduation-cap',
-                            'artikel'    => 'fas fa-file-alt',
-                        ];
+                        $judul = strtolower($kategori['judul_kategori']);
+                        $icon = 'fas fa-folder';
+
+                        foreach ($iconKategori as $keyword => $value) {
+                            if (str_contains($judul, $keyword)) {
+                                $icon = $value;
+                                break;
+                            }
+                        }
                         ?>
 
-                        <?php foreach ($dataKatergori as $kategori) : ?>
-
-                            <?php
-                            $judul = strtolower($kategori['judul_kategori']);
-                            $icon = 'fas fa-folder';
-
-                            foreach ($iconKategori as $keyword => $value) {
-                                if (str_contains($judul, $keyword)) {
-                                    $icon = $value;
-                                    break;
-                                }
-                            }
-                            ?>
-
-                            <div class="col-12 col-md-6">
-                                <a href="detail-kat-info.php?id=<?= $kategori['id'] ?>"
-                                    class="text-decoration-none">
-
-                                    <div class="card mb-3 text-white border-0 shadow-lg category-card"
-                                        style="
-                    border-radius: 1.25rem;
-                    background-image: radial-gradient(
-                        circle farthest-corner at 10% 20%,
-                        rgba(14,174,87,1) 0%,
-                        rgba(12,116,117,1) 90%
-                    );
-                 ">
-
-                                        <div class="card-body p-4">
-                                            <div class="d-flex align-items-center">
-
-                                                <!-- Icon -->
-                                                <div class="flex-shrink-0">
-                                                    <div class="category-icon">
-                                                        <i class="<?= $icon ?>"></i>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Content -->
-                                                <div class="ms-3 flex-grow-1">
-
-                                                    <h5 class="mb-1 font-weight-bold">
-                                                        <?= $kategori['judul_kategori'] ?>
-                                                    </h5>
-
-                                                    <small class="d-block opacity-75">
+                        <div class="col-12 col-xl-6 col-md-6">
+                            <a href="detail-kat-info.php?id=<?= $kategori['id'] ?>"
+                                class="text-decoration-none">
+                                <div class="card mb-3 text-white shadow-sm"
+                                    style="border-radius: 1.25rem; background-image: radial-gradient( circle 1224px at 10.6% 8.8%,  rgba(255,255,255,1) 0%, rgba(153,202,251,1) 100.2% );">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-3 text-center">
+                                            <div style="width: 56px; height: 56px; border-radius: 50%; background-color: rgba(125, 125, 126, 0.5); display: inline-flex; align-items: center; justify-content: center;">
+                                                <i class="<?= $icon ?? 'fas fa-folder' ?>" style="font-size: 24px;"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="card-body" style="padding-left: 0px;">
+                                                <h5 class="card-title mb-0 font-weight-bold text-black">
+                                                    <?= $kategori['judul_kategori'] ?>
+                                                </h5>
+                                                <p class="card-text mb-0">
+                                                    <small class="text-truncate d-block text-black" style="max-width: 100%;">
                                                         Informasi terbaru terkait
                                                         <?= strtolower($kategori['judul_kategori']) ?>
                                                     </small>
-
-                                                    <div class="mt-3">
-                                                        <span class="badge rounded-pill category-badge">
-                                                            <?= $kategori['jumlah_informasi'] ?>
-                                                        </span>
-                                                    </div>
-
-                                                </div>
-
-                                                <!-- Arrow -->
-                                                <div class="flex-shrink-0">
-                                                    <i class="fas fa-chevron-right"></i>
-                                                </div>
-
+                                                </p>
+                                                <small class="badge text-black px-2 py-1 rounded-pill" style="background-color: rgba(165, 167, 168, 0.5);">
+                                                    <?= $kategori['jumlah_informasi'] ?> info
+                                                </small>
                                             </div>
                                         </div>
-
+                                        <div class="col-3">
+                                            <div class="text-start">
+                                                <button class="btn btn-primary px-2 py-1" style="border-radius: 1.25rem;">
+                                                    Details
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </a>
-                            </div>
+                                </div>
+                            </a>
+                        </div>
 
-                        <?php endforeach; ?>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
-                <!-- container-fluid -->
             </div>
-            <!-- End Page-content -->
-            <!-- Footer Start -->
-            <?php include("../include/footer.php"); ?>
-            <!-- end Footer -->
+            <!-- container-fluid -->
         </div>
-        <!-- end main content-->
+        <!-- End Page-content -->
+        <!-- Footer Start -->
+        <?php include("../include/footer.php"); ?>
+        <!-- end Footer -->
+    </div>
+    <!-- end main content-->
     </div>
     <!-- END layout-wrapper -->
     <!-- Right Sidebar -->

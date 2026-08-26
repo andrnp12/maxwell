@@ -213,10 +213,10 @@ $persen = $total > 0
                                                         </small>
                                                     <?php else : ?>
                                                         <!-- Jika bisa diakses tapi belum selesai -->
-                                                        <small class="badge bg-primary text-white px-2 py-1 rounded-pill">
+                                                        <small class="badge bg-light px-2 py-1 rounded-pill">
                                                             KKM : <?= $kuis['passing_grade'] ?>
                                                         </small>
-                                                        <small class="badge bg-primary text-white px-2 py-1 rounded-pill">
+                                                        <small class="badge bg-light px-2 py-1 rounded-pill">
                                                             <i class="mdi mdi-pencil"></i>
                                                             Belum Dikerjakan
                                                         </small>

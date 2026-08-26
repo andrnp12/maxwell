@@ -1,6 +1,6 @@
 <?php
 require_once 'dbconnect.php';
-require_once 'kuis.php';
+// require_once 'kuis.php';
 
 class User
 {

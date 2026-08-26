@@ -37,12 +37,12 @@ $konsultan = $data->getAllKonsultan();
                     <div class="row">
                         <div class="col-12">
                             <div class="mb-4">
-                                <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="komunitas.php">
+                                <!-- <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="komunitas.php">
                                     <span>
                                         <i class="fas fa-angle-left"></i>
                                     </span>
                                     Kembali
-                                </a>
+                                </a> -->
                                 <div class="row align-items-center mb-2">
                                     <h4 class="mb-0 font-weight-bold">
                                         Daftar Konselor
@@ -118,6 +118,24 @@ $konsultan = $data->getAllKonsultan();
     </div>
     <!-- JAVASCRIPT -->
     <?php include '../include/script.php'; ?>
+
+    <script>
+        document.querySelectorAll(".btn-join").forEach(button => {
+
+            button.addEventListener("click", function(e) {
+
+                e.preventDefault();
+
+                const btn = e.currentTarget;
+                const chatUrl = btn.dataset.id;
+
+                if (chatUrl) {
+                    location.href = chatUrl;
+                }
+            });
+
+        });
+    </script>
 </body>
 
 </html>
