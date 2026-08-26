@@ -11,7 +11,7 @@ $id_lawan  = isset($_GET['id_lawan'])
     ? (int) $_GET['id_lawan']
     : 0;
 
-require_once '../../src/classes/ChatV2.php';
+require_once '../../src/classes/chatV2.php';
 
 $objChat = new ChatV2();
 

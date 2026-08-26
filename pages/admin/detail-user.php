@@ -128,7 +128,7 @@ if (!$user) {
                     <div class="row align-items-stretch">
                         <!-- User Detail Card -->
                         <div class="col-lg-7">
-                            <div class="card h-100 shadow-sm" style="border-radius: 1.25rem; overflow: hidden; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(226,240,254,1) 0%, rgba(255,247,228,1) 90% );">
+                            <div class="card h-100 border-white shadow-sm" style="border-radius: 1.25rem; overflow: hidden; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(226,240,254,1) 0%, rgba(255,247,228,1) 90% );">
                                 <div class="card-header d-flex align-items-center bg-transparent border-0 justify-content-between">
                                     <h5 class="card-title mb-0 fw-bold">Detail Pengguna</h5>
                                     <span class="badge <?= $userStatusClass ?>"><?= $userStatus ?></span>
@@ -164,7 +164,7 @@ if (!$user) {
                             <div class="card card-h-100 border-white shadow-lg" id="progress-belajar-card" style="border-radius: 1.25rem; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
                                 <!-- card body -->
                                 <div class="card-body text-white">
-                                    <div class="d-flex flex-wrap align-items-center mb-4">
+                                    <div class="d-flex flex-wrap align-items-center">
                                         <h4 class="card-title me-2">
                                             Progres Belajar
                                         </h4>
@@ -184,7 +184,7 @@ if (!$user) {
                     </div>
 
                     <!-- Row 2: Riwayat Pengguna Card -->
-                    <div class="row mt-4">
+                    <div class="row">
                         <div class="col-lg-12">
                             <div class="card shadow-sm" style="border-radius: 1.25rem; overflow: hidden;">
                                 <div class="card-header">
@@ -208,7 +208,7 @@ if (!$user) {
                                             <div class="card mt-2 shadow-sm border-white" style="border-radius: 1.25rem; overflow: hidden; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
                                                 <div class="row g-0 align-items-center">
                                                     <div class="col-3 text-center">
-                                                        <div style="width: 52px; height: 52px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items:center; justify-content: center;">
+                                                        <div style="width: 42px; height: 42px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items:center; justify-content: center;">
                                                             <img src="/assets/icon/book.webp" alt="icon" style="width: 32px; height: 32px;" />
                                                         </div>
                                                     </div>
@@ -258,7 +258,7 @@ if (!$user) {
                                             <div class="card mt-2" style="border-radius: 1.25rem; overflow: hidden; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
                                                 <div class="row g-0 align-items-center">
                                                     <div class="col-3 text-center">
-                                                        <div style="width: 52px; height: 52px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items:center; justify-content: center;">
+                                                        <div style="width: 42px; height: 42px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items:center; justify-content: center;">
                                                             <img src="/assets/icon/book.webp" alt="icon" style="width: 32px; height: 32px;" />
                                                         </div>
                                                     </div>

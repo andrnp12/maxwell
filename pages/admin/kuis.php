@@ -105,15 +105,15 @@ $dataMateri = $materi->getMateriNonKuis();
                                                         <?= htmlspecialchars($kuis['jenis'] ?? 'kuis') ?>
                                                     </td>
                                                     <td>
-                                                        <?= htmlspecialchars($kuis['passing_grade']) ?>
+                                                        <?= htmlspecialchars($kuis['passing_grade'] ?? '') ?>
                                                     </td>
                                                     <td>
                                                         <a href="#"
                                                             data-id="<?= $kuis['id_kuis'] ?>"
                                                             data-id_materi="<?= $kuis['material_id'] ?>"
-                                                            data-material_title="<?= htmlspecialchars($kuis['judul_materi']) ?>"
-                                                            data-judul_kuis="<?= htmlspecialchars($kuis['judul_kuis']) ?>"
-                                                            data-passing_grade="<?= htmlspecialchars($kuis['passing_grade']) ?>"
+                                                            data-material_title="<?= htmlspecialchars($kuis['judul_materi'] ?? '') ?>"
+                                                            data-judul_kuis="<?= htmlspecialchars($kuis['judul_kuis'] ?? '') ?>"
+                                                            data-passing_grade="<?= htmlspecialchars($kuis['passing_grade'] ?? '') ?>"
                                                             data-jenis_kuis="<?= htmlspecialchars($kuis['jenis'] ?? 'kuis') ?>"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#modalEditKuis"

@@ -55,7 +55,14 @@ class auth
      */
     public function configureSessionCookie(bool $rememberMe): void
     {
-        $lifetime = $rememberMe ? self::REMEMBER_TOKEN_LIFETIME : 0; // 30 days or session cookie
+        // JIKA SESSION SUDAH AKTIF, LANGSUNG KELUAR.
+        // Ini mencegah Warning "Session cookie parameters cannot be changed..."
+        // yang menyebabkan Error 500.
+        if (session_status() !== PHP_SESSION_NONE) {
+            return;
+        }
+
+        $lifetime = $rememberMe ? self::REMEMBER_TOKEN_LIFETIME : 0;
         $secure = $this->isHttps();
 
         session_set_cookie_params([
@@ -67,20 +74,6 @@ class auth
             'samesite' => 'Lax',
         ]);
 
-        // session.gc_maxlifetime is a process-wide PHP setting, not a
-        // per-cookie one, so ini_set() only protects THIS request unless
-        // it's re-applied on every request. authOrNot() now calls
-        // configureSessionCookie() on every request (not just at login),
-        // so as long as the remember_token cookie is present we keep
-        // re-extending gc_maxlifetime here - this is what actually stops
-        // the session file from being garbage collected mid-lifetime.
-        //
-        // Many hosting defaults set gc_maxlifetime to 1440s (24 min) or
-        // 10800s (3h) - both of which produced exactly the premature-logout
-        // symptoms reported. DB-backed restoration (tryRestoreSessionFromToken)
-        // remains as a safety net for cases this doesn't cover (server
-        // restarts, shared/cleared session storage across multiple app
-        // servers, etc.), but is no longer the primary defense.
         if ($rememberMe) {
             ini_set('session.gc_maxlifetime', (string) self::REMEMBER_TOKEN_LIFETIME);
         }

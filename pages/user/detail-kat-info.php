@@ -64,7 +64,12 @@ $dataContents = $informasi->getContentsByKategori($kategoriId);
                                     style="border-radius: 1.25rem;">
                                     <div class="row g-0 align-items-center">
                                         <div class="col-4 text-center">
-                                            <img src="/uploads/contents/<?= $contents['foto'] ?>" alt="" class="img-fluid rounded" style="width: 56px; height: 56px; object-fit: cover; border-radius: 50%;">
+                                            <img
+                                                class="rounded-circle"
+                                                src="<?= !empty($contents['foto']) ? '/uploads/contents/' . htmlspecialchars($contents['foto']) : '/uploads/profile/default.webp' ?>"
+                                                alt="icon"
+                                                style="width: 56px; height: 56px; object-fit: cover;"
+                                                onerror="this.onerror=null; this.src='/uploads/profile/default.webp';" />
                                         </div>
                                         <div class="col-8">
                                             <div class="card-body" style="padding-left: 0px;">
@@ -77,8 +82,8 @@ $dataContents = $informasi->getContentsByKategori($kategoriId);
                                                     </small>
                                                 </p>
                                                 <small class="badge bg-light px-2 py-1 rounded-pill">
-                                                    <i class="fas fa-calendar-alt"></i>    
-                                                <?= $contents['updated_at'] ?>
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                    <?= $contents['updated_at'] ?>
                                                 </small>
                                             </div>
                                         </div>

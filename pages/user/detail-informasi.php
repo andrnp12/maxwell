@@ -54,25 +54,30 @@ $detail = $informasi->getContentById($contentId);
                         <div class="col-lg-8">
                             <div class="card shadow-sm" style="border-radius: 1.25rem;">
                                 <div class="card-body">
-                                    <? foreach ($detail as $detail) : ?>
+                                    <?php if ($detail): ?>
                                         <div class="">
                                             <div class="mb-3">
                                                 <h2 class="fw-bold ">
-                                                    <?= $detail['judul']; ?>
+                                                    <?= htmlspecialchars($detail['judul'] ?? ''); ?>
                                                 </h2>
                                             </div>
                                             <div class="mb-4">
-                                                <img alt="" class="img-thumbnail mx-auto d-block" src="/uploads/contents/<?= $detail['foto']; ?>" />
+                                                <img alt="" class="img-thumbnail mx-auto d-block" src="/uploads/contents/<?= htmlspecialchars($detail['foto'] ?? ''); ?>" />
                                             </div>
                                             <div class="mt-4">
                                                 <div class="text-muted font-size-14">
                                                     <p class="fs-6">
-                                                        <?= $detail['deskripsi']; ?>
+                                                        <?= htmlspecialchars($detail['deskripsi'] ?? ''); ?>
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
-                                    <? endforeach; ?>
+                                    <?php else: ?>
+                                        <div class="text-center py-4">
+                                            <p class="text-muted">Informasi tidak ditemukan.</p>
+                                            <a href="detail-kat-info.php?id=<?= $detail['category_id'] ?? 0 ?>" class="btn btn-outline-primary">Kembali</a>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                                 <!-- end card body -->
                             </div>

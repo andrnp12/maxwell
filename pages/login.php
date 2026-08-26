@@ -1,16 +1,18 @@
 <?php
-// Redirect jika sudah login - use auth class to check session properly
 require_once '../src/classes/auth.php';
 $auth = new auth();
 
-// Configure session cookie BEFORE session_start (for remember_me)
+// JANGAN panggil session_start() atau configureSessionCookie di sini.
+// Class auth akan menanganinya secara otomatis saat method login() atau authOrNot() dipanggil.
+
+// Cek jika sudah login, redirect ke dashboard
+// Kita gunakan method yang sudah ada di class auth untuk konsistensi
 if (session_status() === PHP_SESSION_NONE) {
-    $rememberMe = isset($_COOKIE['remember_token']); // Cookie name constant
-    $auth->configureSessionCookie($rememberMe);
+    // Kita panggil configureSessionCookie melalui authOrNot 
+    // atau biarkan session_start standar jika hanya ingin cek login
     session_start();
 }
 
-// If already logged in, redirect to appropriate dashboard
 if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
     $role = $_SESSION['role'] ?? '';
     $allowedRoles = ['admin', 'user', 'konsultan', 'ortu'];

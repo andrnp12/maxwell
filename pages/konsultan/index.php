@@ -57,7 +57,7 @@ $totalKonsultasi = $data->totalKonsultasi($id);
                         <!-- Total Pesan Card -->
                         <div class="col-12 col-xl-6 col-md-6">
                            <a class="col-12" href="chat.php">
-                              <div class="card mb-3 border-white shadow-sm" style="border-radius: 1.25rem; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(243,218,216,1) 0%, rgba(255,191,205,1) 36.4%, rgba(248,86,172,1) 90% );">
+                              <div class="card mb-3 border-white shadow-sm" style="border-radius: 1.25rem; background-image: linear-gradient( 174.2deg,  rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% );">
                                  <div class="row g-0 align-items-center">
                                     <div class="col-9">
                                        <div class="card-body">

@@ -1,22 +1,27 @@
 <?php
-// Redirect jika sudah login
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once 'src/classes/auth.php';
+$auth = new auth();
 
-if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
-    $role = $_SESSION['role'] ?? '';
-    $allowedRoles = ['admin', 'user', 'konsultan', 'ortu'];
+// Satu baris ini menggantikan SEMUA logika session,
+// pengecekan login, restore remember-me, dan redirect role.
+$auth->authOrNot();
 
-    if (in_array($role, $allowedRoles, true)) {
-        header("Location: pages/{$role}/index.php");
-        exit;
-    }
+// Jika kode sampai di sini, berarti user sudah terautentikasi dan role-nya valid.
+// Redirect ke dashboard berdasarkan role user
+$userRole = $_SESSION['role'] ?? '';
 
-    header('Location: pages/index.php');
+$dashboardMap = [
+    'admin' => '/pages/admin/index.php',
+    'user' => '/pages/user/index.php',
+    'konsultan' => '/pages/konsultan/index.php',
+    'ortu' => '/pages/ortu/index.php',
+];
+
+if (isset($dashboardMap[$userRole])) {
+    header('Location: ' . $dashboardMap[$userRole]);
     exit;
 }
 
-// Jika belum login, tetap ke halaman login
-header('Location: pages/login.php');
+// Fallback jika role tidak dikenali
+header('Location: /pages/login.php');
 exit;
