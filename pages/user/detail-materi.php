@@ -55,7 +55,7 @@ $nextMateri = $data->getNextMateri((int)$_GET['id']);
                     <!-- end page title -->
                     <div class="row">
                         <div class="col-lg-8">
-                            <div class="card">
+                            <div class="card shadow-sm" style="border-radius: 1.25rem;">
                                 <div class="card-body">
                                     <div class="">
                                         <div class="mb-3">

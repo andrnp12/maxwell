@@ -38,12 +38,12 @@ $komunitas = $dataKomunitas->getAllKomunitas((int) $_SESSION['id']);
                     <div class="row">
                         <div class="col-12">
                             <div class="mb-4">
-                                <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="komunitas.php">
+                                <!-- <a class="btn btn-outline-light btn-rounded btn-sm waves-effect mb-2" href="komunitas.php">
                                     <span>
                                         <i class="fas fa-angle-left"></i>
                                     </span>
                                     Kembali
-                                </a>
+                                </a> -->
                                 <div class="row align-items-center mb-2">
                                     <h4 class="mb-0 font-weight-bold">
                                         Temukan Komunitas Kamu

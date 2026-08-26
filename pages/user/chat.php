@@ -221,7 +221,7 @@ if ($id_lawan > 0) {
                                     </div>
                                     <!-- tab group -->
                                     <div class="tab-pane" id="groups">
-                                        <div class="chat-message-list" data-simplebar="">
+                                        <div class="chat-message-list-user" data-simplebar="">
                                             <div class="pt-3">
                                                 <div class="px-3">
                                                     <h5 class="font-size-14 mb-3">

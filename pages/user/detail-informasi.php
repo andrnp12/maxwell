@@ -16,33 +16,6 @@ $detail = $informasi->getContentById($contentId);
 <!--header start-->
 <?php include('../include/header.php'); ?>
 <!--headere end-->
-<style>
-    .category-card {
-        transition: all 0.25s ease;
-        cursor: pointer;
-    }
-
-    .category-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15) !important;
-    }
-
-    .category-icon {
-        width: 58px;
-        height: 58px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.20);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-    }
-
-    .category-badge {
-        background: rgba(255, 255, 255, 0.18);
-        font-weight: 500;
-    }
-</style>
 
 <body>
     <!-- <body data-layout="horizontal"> -->
@@ -50,7 +23,7 @@ $detail = $informasi->getContentById($contentId);
     <div id="layout-wrapper">
         <?php include("../include/topbar.php"); ?>
         <!-- ========== Left Sidebar Start ========== -->
-        <?php include '../include/sidebar-ortu.php'; ?>
+        <?php include '../include/sidebar.php'; ?>
         <!-- Left Sidebar End -->
         <!-- ============================================================== -->
         <!-- Start right Content here -->
@@ -79,7 +52,7 @@ $detail = $informasi->getContentById($contentId);
                     <!-- end page title -->
                     <div class="row">
                         <div class="col-lg-8">
-                            <div class="card">
+                            <div class="card shadow-sm" style="border-radius: 1.25rem;">
                                 <div class="card-body">
                                     <? foreach ($detail as $detail) : ?>
                                         <div class="">
@@ -98,7 +71,6 @@ $detail = $informasi->getContentById($contentId);
                                                     </p>
                                                 </div>
                                             </div>
-                                            <hr />
                                         </div>
                                     <? endforeach; ?>
                                 </div>

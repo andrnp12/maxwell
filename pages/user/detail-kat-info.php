@@ -16,33 +16,6 @@ $dataContents = $informasi->getContentsByKategori($kategoriId);
 <!--header start-->
 <?php include('../include/header.php'); ?>
 <!--headere end-->
-<style>
-    .category-card {
-        transition: all 0.25s ease;
-        cursor: pointer;
-    }
-
-    .category-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15) !important;
-    }
-
-    .category-icon {
-        width: 58px;
-        height: 58px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.20);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-    }
-
-    .category-badge {
-        background: rgba(255, 255, 255, 0.18);
-        font-weight: 500;
-    }
-</style>
 
 <body>
     <!-- <body data-layout="horizontal"> -->
@@ -60,6 +33,7 @@ $dataContents = $informasi->getContentsByKategori($kategoriId);
         <div class="main-content">
             <div class="page-content">
                 <div class="container-fluid">
+                    <!-- start page title -->
                     <div class="row">
                         <div class="col-12">
                             <div class="mb-4">
@@ -69,80 +43,68 @@ $dataContents = $informasi->getContentsByKategori($kategoriId);
                                     </span>
                                     Kembali
                                 </a>
+                                <div class="row align-items-center mb-2">
+                                    <h4 class="mb-0 font-weight-bold">
+                                        Daftar Informasi
+                                    </h4>
+                                    <p class="text-muted mb-0">
+                                        Dapatkan berbagai macam informasi terbaru
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="row d-sm-flex align-items-center justify-content-between mb-2">
-                                <h4 class="mb-sm-0 font-weight-bold mb-1">
-                                    Daftar Informasi
-                                </h4>
-                                <p class="text-muted">
-                                    Dapatkan berbagai macam informasi terbaru
-                                </p>
-                            </div>
-                        </div>
-                        <?php foreach ($dataContents as $contents) : ?>
-                            <div class="col-12 col-md-6">
-                                <a href="detail-informasi.php?id=<?= $contents['id'] ?>"
-                                    class="text-decoration-none">
-
-                                    <div class="card mb-3 text-white border-0 shadow-lg category-card"
-                                        style="
-                    border-radius: 1.25rem;
-                    background-image: radial-gradient(
-                        circle farthest-corner at 10% 20%,
-                        rgba(14,174,87,1) 0%,
-                        rgba(12,116,117,1) 90%
-                    );
-                 ">
-
-                                        <div class="card-body p-4">
-                                            <div class="col">
-
-                                                <!-- Icon -->
-                                                <div class="row">
-                                                    <div class="">
-                                                        <img src="/uploads/contents/<?= $contents['foto'] ?>" alt="" class="img-fluid rounded">
-                                                    </div>
-                                                </div>
-
-                                                <!-- Content -->
-                                                <div class="row mt-3">
-
-                                                    <h4 class="mb-1 fw-bold">
-                                                        <?= $contents['judul'] ?>
-                                                    </h4>
-
-                                                    <p class="d-block opacity-75 fs-6 text-truncate" style="max-width: 100%;">
+                    <!-- end page title -->
+                    <!-- end row -->
+                    <?php foreach ($dataContents as $contents) : ?>
+                        <div class="col-12 col-xl-6 col-md-6">
+                            <a href="detail-informasi.php?id=<?= $contents['id'] ?>"
+                                class="text-decoration-none">
+                                <div class="card mb-3 text-white shadow-sm"
+                                    style="border-radius: 1.25rem;">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-4 text-center">
+                                            <img src="/uploads/contents/<?= $contents['foto'] ?>" alt="" class="img-fluid rounded" style="width: 56px; height: 56px; object-fit: cover; border-radius: 50%;">
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="card-body" style="padding-left: 0px;">
+                                                <h5 class="card-title mb-0 font-weight-bold text-black">
+                                                    <?= $contents['judul'] ?>
+                                                </h5>
+                                                <p class="card-text mb-0">
+                                                    <small class="text-truncate d-block text-black" style="max-width: 100%;">
                                                         <?= $contents['deskripsi'] ?>
-                                                    </p>
-
-                                                    <small class="d-block opacity-75">
-                                                        <i class="fas fa-calendar-alt">
-                                                            <?= $contents['updated_at'] ?>
-                                                        </i>
                                                     </small>
-                                                </div>
+                                                </p>
+                                                <small class="badge bg-light px-2 py-1 rounded-pill">
+                                                    <i class="fas fa-calendar-alt"></i>    
+                                                <?= $contents['updated_at'] ?>
+                                                </small>
                                             </div>
                                         </div>
-
+                                        <!-- <div class="col-3">
+                                            <div class="text-end">
+                                                <button class="btn btn-light px-2 py-1" style="border-radius: 1.25rem;">
+                                                    Lihat
+                                                </button>
+                                            </div>
+                                        </div> -->
                                     </div>
-                                </a>
-                            </div>
+                                </div>
+                            </a>
+                        </div>
 
-                        <?php endforeach; ?>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
-                <!-- container-fluid -->
             </div>
-            <!-- End Page-content -->
-            <!-- Footer Start -->
-            <?php include("../include/footer.php"); ?>
-            <!-- end Footer -->
+            <!-- container-fluid -->
         </div>
-        <!-- end main content-->
+        <!-- End Page-content -->
+        <!-- Footer Start -->
+        <?php include("../include/footer.php"); ?>
+        <!-- end Footer -->
+    </div>
+    <!-- end main content-->
     </div>
     <!-- END layout-wrapper -->
     <!-- Right Sidebar -->
