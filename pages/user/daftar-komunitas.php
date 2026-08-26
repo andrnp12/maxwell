@@ -99,7 +99,11 @@ $komunitas = $dataKomunitas->getAllKomunitas((int) $_SESSION['id']);
                                             <div class="row g-0 align-items-center">
                                                 <div class="col-3 text-center">
                                                     <div style="width: 56px; height: 56px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items: center; justify-content: center;">
-                                                        <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 32px; height: 32px;" />
+                                                        <img
+                                                            src="<?= !empty($kom['foto']) ? '/uploads/komunitas/' . htmlspecialchars($kom['foto']) : '/uploads/profile/default.webp' ?>"
+                                                            alt="icon"
+                                                            style="width: 42px; height: 42px;"
+                                                            onerror="this.onerror=null; this.src='/uploads/profile/default.webp';" />
                                                     </div>
                                                 </div>
                                                 <div class="col-5">
@@ -132,7 +136,7 @@ $komunitas = $dataKomunitas->getAllKomunitas((int) $_SESSION['id']);
                                             <div class="col-3 text-center">
                                                 <!-- Icon circle untuk belum anggota: background abu-abu -->
                                                 <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                                    <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 32px; height: 32px;" />
+                                                    <img src="/uploads/komunitas/<?= $kom['foto'] ?>" alt="icon" style="width: 32px; height: 32px;" />
                                                 </div>
                                             </div>
                                             <div class="flex col-5">
