@@ -64,6 +64,7 @@ if ($action === 'login') {
 
     $foto = $_POST['foto'] ?? '';
     $username = $_POST['username'] ?? '';
+    $no_kk = $_POST['no_kk'] ?? '';
     $name = $_POST['name'] ?? '';
     $nomor = $_POST['nomor'] ?? '';
     $email = $_POST['email'] ?? '';
@@ -71,16 +72,24 @@ if ($action === 'login') {
     $role = $_POST['role'] ?? '';
     $password = $_POST['password'] ?? '';
 
+    if (!preg_match('/^[0-9]{16}$/', $no_kk)) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Error: Format No. KK tidak valid! Harus 16 digit angka.'
+        ]);
+        exit;
+    }
+
     if (empty($username) || empty($password)) {
         echo json_encode([
             'status' => 'error',
-            'message' => 'name, username, password, dan role harus diisi.'
+            'message' => 'name, username, no.kk, password, dan role harus diisi.'
         ]);
         exit;
     }
 
     $auth = new auth();
-    $registerResult = $auth->register($foto, $username, $name, $nomor, $email, $password, $deskripsi, $role);
+    $registerResult = $auth->register($foto, $username, $no_kk, $name, $email, $password, $deskripsi, $role);
 
     if ($registerResult['success']) {
         echo json_encode([

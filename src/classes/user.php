@@ -1,5 +1,6 @@
 <?php
 require_once 'dbconnect.php';
+require_once 'kuis.php';
 
 class User
 {
@@ -648,6 +649,422 @@ class User
                     'completion_rate' => $completionRate
                 ]
             ]
+        ];
+    }
+
+    public function getLearningProgress(int $userId, int $totalKuis): array
+    {
+        // =========================================================
+        // USER + QUIZ RESULTS
+        // =========================================================
+
+        $userResult = $this->getUserWithQuizResults($userId);
+
+        if (($userResult['status'] ?? '') !== 'success') {
+            return [
+                'status' => 'error',
+                'message' => 'User tidak ditemukan.'
+            ];
+        }
+
+        $user = $userResult['data'];
+
+
+        // =========================================================
+        // DETAIL QUIZ
+        // =========================================================
+
+        $quizDetailResult = $this->getUserQuizResultsDetail($userId);
+
+        $quizDetail = $quizDetailResult['data'] ?? [
+            'pretest' => [],
+            'posttest' => [],
+            'kuis' => []
+        ];
+
+
+        // =========================================================
+        // MATERIAL PROGRESS
+        // =========================================================
+
+        $materialProgressResult = $this->getUserMaterialProgress($userId);
+
+        $materialProgress = $materialProgressResult['data'] ?? [
+            'progress' => [],
+            'summary' => [
+                'total' => 0,
+                'completed' => 0,
+                'in_progress' => 0,
+                'not_started' => 0,
+                'completion_rate' => 0
+            ]
+        ];
+
+
+        // =========================================================
+        // MATERIAL
+        // =========================================================
+
+        $matCompleted = (int) (
+            $materialProgress['summary']['completed'] ?? 0
+        );
+
+        $matInProgress = (int) (
+            $materialProgress['summary']['in_progress'] ?? 0
+        );
+
+        $matTotal = (int) (
+            $materialProgress['summary']['total'] ?? 0
+        );
+
+        $materiCompletion = $matTotal > 0
+            ? (float) $materialProgress['summary']['completion_rate']
+            : 0;
+
+
+        // =========================================================
+        // QUIZ ATTEMPTS
+        // =========================================================
+
+        $pretestAttempts = (int) (
+            $user['pretest_attempts'] ?? 0
+        );
+
+        $kuisAttempts = (int) (
+            $user['kuis_attempts'] ?? 0
+        );
+
+        $posttestAttempts = (int) (
+            $user['posttest_attempts'] ?? 0
+        );
+
+
+        // =========================================================
+        // TOTAL ACTIVITIES
+        // =========================================================
+
+        $totalMateri = $matTotal;
+
+        $totalPretest = 1;
+
+        $totalPosttest = 1;
+
+
+        // =========================================================
+        // COMPLETED ACTIVITIES
+        //
+        // SAMA DENGAN LOGIKA USER ANDA SEKARANG
+        // =========================================================
+
+        $completedMateri =
+            $matCompleted + $matInProgress;
+
+        $completedPretest =
+            $pretestAttempts > 0 ? 1 : 0;
+
+        $completedKuis =
+            count($quizDetail['kuis'] ?? []);
+
+        $completedPosttest =
+            $posttestAttempts > 0 ? 1 : 0;
+
+
+        // =========================================================
+        // COMBINED PROGRESS
+        // =========================================================
+
+        $totalActivities =
+            $totalMateri +
+            $totalPretest +
+            $totalKuis +
+            $totalPosttest;
+
+        $completedActivities =
+            $completedMateri +
+            $completedPretest +
+            $completedKuis +
+            $completedPosttest;
+
+        $combinedProgress = $totalActivities > 0
+            ? round(
+                ($completedActivities / $totalActivities) * 100,
+                1
+            )
+            : 0;
+
+
+        // =========================================================
+        // INDIVIDUAL COMPLETION
+        // =========================================================
+
+        $pretestCompletion =
+            $pretestAttempts > 0 ? 100 : 0;
+
+        $kuisCompletion = $totalKuis > 0
+            ? round(
+                ($completedKuis / $totalKuis) * 100,
+                1
+            )
+            : 0;
+
+        $posttestCompletion =
+            $posttestAttempts > 0 ? 100 : 0;
+
+
+        // =========================================================
+        // RETURN
+        // =========================================================
+
+        return [
+            'status' => 'success',
+
+            'data' => [
+                'user' => $user,
+
+                'combinedProgress' => $combinedProgress,
+
+                'pretestCompletion' => $pretestCompletion,
+                'kuisCompletion' => $kuisCompletion,
+                'materiCompletion' => $materiCompletion,
+                'posttestCompletion' => $posttestCompletion,
+
+                'completedMateri' => $completedMateri,
+                'totalMateri' => $totalMateri,
+
+                'completedKuis' => $completedKuis,
+                'totalKuis' => $totalKuis,
+
+                'completedPretest' => $completedPretest,
+                'totalPretest' => $totalPretest,
+
+                'completedPosttest' => $completedPosttest,
+                'totalPosttest' => $totalPosttest,
+
+                'completedActivities' => $completedActivities,
+                'totalActivities' => $totalActivities,
+
+                'pretestAttempts' => $pretestAttempts,
+                'kuisAttempts' => $kuisAttempts,
+                'posttestAttempts' => $posttestAttempts
+            ]
+        ];
+    }
+
+    public function getUserProgress(int $userId): array
+    {
+        $userResult = $this->getUserWithQuizResults($userId);
+
+        if ($userResult['status'] !== 'success') {
+            return [
+                'status' => 'error',
+                'message' => 'Data user tidak ditemukan.'
+            ];
+        }
+
+        $user = $userResult['data'];
+
+        $quizDetailResult = $this->getUserQuizResultsDetail($userId);
+
+        $quizDetail = $quizDetailResult['data'] ?? [
+            'pretest' => [],
+            'posttest' => [],
+            'kuis' => []
+        ];
+
+        $materialProgressResult = $this->getUserMaterialProgress($userId);
+
+        $materialProgress = $materialProgressResult['data'] ?? [
+            'progress' => [],
+            'summary' => [
+                'total' => 0,
+                'completed' => 0,
+                'in_progress' => 0,
+                'not_started' => 0,
+                'completion_rate' => 0
+            ]
+        ];
+
+        $matCompleted = (int)($materialProgress['summary']['completed'] ?? 0);
+        $matInProgress = (int)($materialProgress['summary']['in_progress'] ?? 0);
+        $matTotal = (int)($materialProgress['summary']['total'] ?? 0);
+
+        $materiCompletion = $matTotal > 0
+            ? round(($matCompleted / $matTotal) * 100, 1)
+            : 0;
+
+        $pretestAttempts = (int)($user['pretest_attempts'] ?? 0);
+        $kuisAttempts = (int)($user['kuis_attempts'] ?? 0);
+        $posttestAttempts = (int)($user['posttest_attempts'] ?? 0);
+
+        /*
+     * Kita membutuhkan jumlah kuis yang tersedia.
+     * Karena method getAllKuisOnly() berada di class Kuis,
+     * untuk sementara kita bisa menghitung dari quiz detail.
+     */
+
+        $completedMateri = $matCompleted + $matInProgress;
+
+        $completedPretest = $pretestAttempts > 0 ? 1 : 0;
+
+        $completedKuis = count($quizDetail['kuis'] ?? []);
+
+        $completedPosttest = $posttestAttempts > 0 ? 1 : 0;
+
+        $totalPretest = 1;
+        $totalPosttest = 1;
+
+        /*
+     * Untuk total kuis, gunakan jumlah kuis unik
+     * yang tersedia di sistem.
+     */
+        $kuisModel = new Kuis();
+
+        $allKuisOnly = $kuisModel->getAllKuisOnly();
+
+        $totalKuis = count($allKuisOnly);
+
+        $totalActivities =
+            $matTotal +
+            $totalPretest +
+            $totalKuis +
+            $totalPosttest;
+
+        $completedActivities =
+            $completedMateri +
+            $completedPretest +
+            $completedKuis +
+            $completedPosttest;
+
+        $combinedProgress = $totalActivities > 0
+            ? round(($completedActivities / $totalActivities) * 100, 1)
+            : 0;
+
+        $pretestCompletion = $pretestAttempts > 0 ? 100 : 0;
+
+        $kuisCompletion = $totalKuis > 0
+            ? round(($completedKuis / $totalKuis) * 100, 1)
+            : 0;
+
+        $posttestCompletion = $posttestAttempts > 0 ? 100 : 0;
+
+        return [
+            'status' => 'success',
+
+            'data' => [
+                'user' => $user,
+
+                'combinedProgress' => $combinedProgress,
+
+                'pretestCompletion' => $pretestCompletion,
+                'kuisCompletion' => $kuisCompletion,
+                'materiCompletion' => $materiCompletion,
+                'posttestCompletion' => $posttestCompletion,
+
+                'completedMateri' => $completedMateri,
+                'totalMateri' => $matTotal,
+
+                'completedKuis' => $completedKuis,
+                'totalKuis' => $totalKuis,
+
+                'completedPretest' => $completedPretest,
+                'totalPretest' => $totalPretest,
+
+                'completedPosttest' => $completedPosttest,
+                'totalPosttest' => $totalPosttest,
+
+                'completedActivities' => $completedActivities,
+                'totalActivities' => $totalActivities,
+
+                'pretestAttempts' => $pretestAttempts,
+                'kuisAttempts' => $kuisAttempts,
+                'posttestAttempts' => $posttestAttempts,
+
+                'materialProgress' => $materialProgress,
+                'quizDetail' => $quizDetail
+            ]
+        ];
+    }
+
+    // koneksi user dan ortu 
+    public function getUsersByNoKK(string $noKK): array
+    {
+        $sql = "
+        SELECT
+            id,
+            username,
+            no_kk,
+            foto,
+            name,
+            nomor,
+            email,
+            deskripsi,
+            role
+        FROM users
+        WHERE no_kk = ?
+          AND role = 'user'
+        ORDER BY name ASC
+    ";
+
+        $stmt = $this->conn->prepare($sql);
+
+        if (!$stmt) {
+            return [
+                'status' => 'error',
+                'message' => 'Gagal menyiapkan query.'
+            ];
+        }
+
+        $stmt->bind_param("s", $noKK);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        $users = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $users[] = $row;
+        }
+
+        return [
+            'status' => 'success',
+            'data' => $users
+        ];
+    }
+
+    public function getUserById(int $userId): array
+    {
+        $sql = "
+        SELECT
+            id,
+            username,
+            no_kk,
+            foto,
+            name,
+            nomor,
+            email,
+            deskripsi,
+            role
+        FROM users
+        WHERE id = ?
+        LIMIT 1
+    ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 0) {
+            return [
+                'status' => 'error',
+                'message' => 'User tidak ditemukan.'
+            ];
+        }
+
+        return [
+            'status' => 'success',
+            'data' => $result->fetch_assoc()
         ];
     }
     /**

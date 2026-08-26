@@ -37,13 +37,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nomor     = $_POST['nomor'] ?? '';
             $email     = $_POST['email'] ?? '';
             $password  = $_POST['password'] ?? '';
+            $no_kk     = $_POST['no_kk'] ?? '';
+            $nik       = $_POST['nik'] ?? '';
+            $alamat    = $_POST['alamat'] ?? '';
+            $usia      = $_POST['usia'] ?? '';
+            $pendidikan = $_POST['pendidikan'] ?? '';
+            $status    = $_POST['status'] ?? '';
             $ringkasan = $_POST['ringkasan'] ?? '';
 
             $file = isset($_FILES['foto']) && $_FILES['foto']['error'] !== UPLOAD_ERR_NO_FILE
                 ? $_FILES['foto']
                 : null;
 
-            $result = $profile->updateProfile($id, $file, $username, $nama, $nomor, $email, $password, $ringkasan);
+            $result = $profile->updateProfile($id, $file, $username, $nama, $nomor, $email, $password, $no_kk, $nik, $alamat, $usia, $pendidikan, $status, $ringkasan);
         }
     } catch (Exception $e) {
         $result = [

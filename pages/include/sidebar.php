@@ -63,6 +63,12 @@ global $sudahPreTest, $sudahPostTest;
                </ul>
             </li>
             <li>
+               <a href="informasi.php">
+                  <i data-feather="info"></i>
+                  <span data-key="t-informasi">Informasi</span>
+               </a>
+            </li>
+            <li>
                <a href="profile.php">
                   <i data-feather="user">
                   </i>
