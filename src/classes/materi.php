@@ -49,7 +49,7 @@ class Materi
         }
     }
 
-    public function addMateri(string $judul, string $deskripsi, string $videoUrl, ?int $noUrut, ?array $file): array
+    public function addMateri(string $judul, string $tema, string $deskripsi, string $tujuan, string $videoUrl, string $kesimpulan, ?int $noUrut, ?array $file): array
     {
         if (empty($noUrut) || $noUrut <= 0) {
             $noUrut = $this->getNextNoUrut();
@@ -91,11 +91,11 @@ class Materi
             }
         }
 
-        $stmt = $this->conn->prepare("INSERT INTO materials (judul, deskripsi, `file`, video_url, no_urut) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $this->conn->prepare("INSERT INTO materials (judul, tema, deskripsi, tujuan, kesimpulan, `file`, video_url, no_urut) VALUES (?, ?, ?, ?, ?)");
         if (!$stmt) {
             die("Error query insert materi: " . $this->conn->error);
         }
-        $stmt->bind_param("ssssi", $judul, $deskripsi, $namaFileTersimpan, $videoUrl, $noUrut);
+        $stmt->bind_param("sssssssi", $judul, $tema, $deskripsi, $tujuan, $kesimpulan, $namaFileTersimpan, $videoUrl, $noUrut);
 
         if ($stmt->execute()) {
             return [
@@ -197,7 +197,7 @@ class Materi
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function updateMateri(int $id, string $judul, string $deskripsi, ?string $videoUrl, ?int $noUrut, ?array $file): array
+    public function updateMateri(int $id, string $judul, string $tema, string $deskripsi, string $tujuan, ?string $videoUrl, string $kesimpulan, ?int $noUrut, ?array $file): array
     {
         $materiLama = $this->getMateriById($id);
         if (!$materiLama) {
@@ -253,8 +253,8 @@ class Materi
             }
         }
 
-        $stmt = $this->conn->prepare("UPDATE materials SET judul = ?, deskripsi = ?, `file` = ?, video_url = ?, no_urut = ? WHERE id = ?");
-        $stmt->bind_param("ssssii", $judul, $deskripsi, $namaFileTersimpan, $videoUrl, $noUrut, $id);
+        $stmt = $this->conn->prepare("UPDATE materials SET judul = ?, tema = ?, deskripsi = ?, tujuan = ?, kesimpulan = ?, `file` = ?, video_url = ?, no_urut = ? WHERE id = ?");
+        $stmt->bind_param("sssssssii", $judul, $tema, $deskripsi, $tujuan, $kesimpulan, $namaFileTersimpan, $videoUrl, $noUrut, $id);
 
         if ($stmt->execute()) {
             return [
