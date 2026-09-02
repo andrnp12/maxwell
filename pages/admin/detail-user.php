@@ -139,8 +139,8 @@ if (!$user) {
                                         <div class="avatar-xxl mb-3">
                                             <img alt="" class="img-fluid rounded-circle d-block"
                                                 src="<?= !empty($user['foto']) ? '/uploads/profile/' . htmlspecialchars($user['foto']) : '/uploads/profile/default.webp' ?>"
-                                                style="width: 120px; height: 120px; object-fit: cover;" 
-                                                onerror="this.onerror=null; this.src='/uploads/profile/default.webp';"/>
+                                                style="width: 120px; height: 120px; object-fit: cover;"
+                                                onerror="this.onerror=null; this.src='/uploads/profile/default.webp';" />
                                         </div>
                                         <div>
                                             <h4 class="mb-1 fw-bold"><?= htmlspecialchars($user['name'] ?? '-') ?></h4>
@@ -205,7 +205,7 @@ if (!$user) {
                                             <h6 class="mb-0 text-muted">
                                                 Materi terakhir yang dipelajari
                                             </h6>
-                                            <div class="card mt-2 shadow-sm border-white" style="border-radius: 1.25rem; overflow: hidden; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
+                                            <div class="card mt-2 shadow-lg border-white" style="border-radius: 1.25rem; overflow: hidden; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
                                                 <div class="row g-0 align-items-center">
                                                     <div class="col-3 text-center">
                                                         <div style="width: 42px; height: 42px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items:center; justify-content: center;">
@@ -233,7 +233,9 @@ if (!$user) {
                                                             <p class="card-text">
                                                                 <small class="text-white-50">
                                                                     <?php if ($lastStudied): ?>
-                                                                        Status: <span class="badge bg-<?= $lastStudied['status_class'] ?>"><?= $lastStudied['status_label'] ?></span>
+                                                                        <span class="badge px-2 py-1 rounded-pill bg-<?= $lastStudied['status_class'] ?>">
+                                                                            <i class="mdi mdi-check-circle"></i><?= $lastStudied['status_label'] ?>
+                                                                        </span>
                                                                     <?php else: ?>
                                                                         Belum ada riwayat materi
                                                                     <?php endif; ?>
@@ -255,46 +257,107 @@ if (!$user) {
                                             <h6 class="mb-0 text-muted">
                                                 Kuis terakhir yang dikerjakan
                                             </h6>
-                                            <div class="card mt-2" style="border-radius: 1.25rem; overflow: hidden; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
-                                                <div class="row g-0 align-items-center">
-                                                    <div class="col-3 text-center">
-                                                        <div style="width: 42px; height: 42px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items:center; justify-content: center;">
-                                                            <img src="/assets/icon/pencil.webp" alt="icon" style="width: 32px; height: 32px;" />
+                                            <?php if (!empty($quizDetail['kuis'])): ?>
+                                                <?php
+                                                // DEBUG: Uncomment to see structure
+                                                // var_dump($quizDetail['kuis']);
+
+                                                // Get the most recent kuis attempt across all quizzes
+                                                // Using attempt id (auto-increment) as proxy for timestamp since no created_at column
+                                                $lastKuis = null;
+                                                $lastAttempt = null;
+                                                $lastAttemptId = 0;
+
+                                                foreach ($quizDetail['kuis'] as $kuis) {
+                                                    if (!empty($kuis['attempts'])) {
+                                                        // attempts are ordered by id DESC (latest first)
+                                                        $attempt = $kuis['attempts'][0];
+                                                        $attemptId = (int)($attempt['id'] ?? 0);
+                                                        if ($attemptId > $lastAttemptId) {
+                                                            $lastAttemptId = $attemptId;
+                                                            $lastKuis = $kuis;
+                                                            $lastAttempt = $attempt;
+                                                        }
+                                                    }
+                                                }
+
+                                                // DEBUG: Check if we found anything
+                                                // echo "<!-- lastKuis: " . ($lastKuis ? $lastKuis['kuis_judul'] : 'NULL') . " -->";
+                                                // echo "<!-- lastAttempt: " . ($lastAttempt ? 'FOUND id='.$lastAttempt['id'] : 'NULL') . " -->";
+
+                                                // FALLBACK: If no lastAttempt found but kuis exist, use first kuis first attempt
+                                                if (!$lastAttempt && !empty($quizDetail['kuis'])) {
+                                                    $lastKuis = $quizDetail['kuis'][0];
+                                                    $lastAttempt = $lastKuis['attempts'][0] ?? null;
+                                                }
+
+                                                if ($lastKuis && $lastAttempt) {
+                                                    $score = $lastAttempt['nilai'] ?? null;
+                                                    $passingGrade = $lastKuis['passing_grade'] ?? 0;
+                                                    $isCompleted = $lastAttempt !== null;
+                                                    $status = User::getAttemptStatus($score, $passingGrade, $isCompleted);
+
+                                                    // Determine card styling based on pass/fail
+                                                    $isPassed = $status['label'] === 'Lulus';
+                                                    $cardBgStyle = $isPassed
+                                                        ? 'background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );'
+                                                        : '';
+                                                    $statusIcon = $isPassed ? 'mdi-check-circle' : 'mdi-close-circle';
+                                                    $badgeTextColor = $isPassed ? 'text-white' : 'text-dark';
+                                                    $badgeClass = $isPassed ? 'bg-success' : 'bg-danger';
+                                                    $badgeBgStyle = $isPassed ? 'background-color: rgba(233, 236, 239, 0.5);' : 'background-color: rgba(239, 233, 233, 0.5);';
+                                                }
+                                                ?>
+                                                <div class="card mt-2 shadow-sm" style="border-radius: 1.25rem; overflow: hidden; <?= $cardBgStyle ?? 'background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );' ?>">
+                                                    <div class="row g-0 align-items-center">
+                                                        <div class="col-3 text-center">
+                                                            <div style="width: 42px; height: 42px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items:center; justify-content: center;">
+                                                                <img src="<?= $iconImg ?? '/assets/icon/pencil.webp' ?>" alt="icon" style="width: 32px; height: 32px;" />
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-9">
-                                                        <div class="card-body" style="padding-left: 0px;">
-                                                            <h5 class="card-title text-white mb-0 font-weight-bold">
-                                                                <?php if (!empty($quizDetail['kuis'])): ?>
-                                                                    <?= htmlspecialchars($quizDetail['kuis'][0]['kuis_judul'] ?? 'Kuis') ?>
-                                                                <?php else: ?>
-                                                                    Belum ada kuis dikerjakan
-                                                                <?php endif; ?>
-                                                            </h5>
-                                                            <p class="card-text">
-                                                                <small class="text-white-50">
-                                                                    <?php if (!empty($quizDetail['kuis'])): ?>
-                                                                        <?php
-                                                                        $firstKuis = $quizDetail['kuis'][0];
-                                                                        $bestAttempt = $firstKuis['attempts'][0] ?? null;
-                                                                        $score = $bestAttempt ? ($bestAttempt['nilai'] ?? null) : null;
-                                                                        $passingGrade = $firstKuis['passing_grade'] ?? 0;
-                                                                        $isCompleted = $bestAttempt !== null;
-                                                                        $status = User::getAttemptStatus($score, $passingGrade, $isCompleted);
-                                                                        ?>
-                                                                        Status: <span class="badge <?= $status['class'] ?>"><?= $status['label'] ?></span>
-                                                                        <?php if ($bestAttempt): ?>
-                                                                            (<?= htmlspecialchars($bestAttempt['nilai'] ?? '-') ?>/100 <?php if ($passingGrade > 0): ?>KKM: <?= $passingGrade ?> <?php endif; ?>)
+                                                        <div class="col-9">
+                                                            <div class="card-body" style="padding-left: 0px;">
+                                                                <h5 class="card-title <?= $badgeTextColor ?> mb-0 font-weight-bold">
+                                                                    <?= htmlspecialchars($lastKuis['kuis_judul'] ?? 'Kuis') ?>
+                                                                </h5>
+                                                                <p class="card-text">
+                                                                    <small>
+                                                                        <?php if ($lastAttempt): ?>
+                                                                            <span class="badge px-2 text-white py-1 rounded-pill <?= $badgeClass ?>">
+                                                                                <i class="mdi <?= $statusIcon ?>"></i> <?= $status['label'] ?>
+                                                                            </span>
+                                                                            <span class="badge <?= $badgeTextColor ?> px-2 py-1 rounded-pill" style="<?= $badgeBgStyle ?> ">
+                                                                                (<?= htmlspecialchars($score ?? '-') ?>/100 <?php if ($passingGrade > 0): ?>KKM: <?= $passingGrade ?> <?php endif; ?>)
+                                                                            </span>
+                                                                            <span class="badge <?= $badgeTextColor ?> px-2 py-1 rounded-pill" style="<?= $badgeBgStyle ?> ?>">
+                                                                                Percobaan ke-<?= $lastAttempt['percobaan'] ?? 1 ?>
+                                                                            </span>
+                                                                        <?php else: ?>
+                                                                            Belum ada riwayat kuis
                                                                         <?php endif; ?>
-                                                                    <?php else: ?>
-                                                                        Belum ada riwayat kuis
-                                                                    <?php endif; ?>
-                                                                </small>
-                                                            </p>
+                                                                    </small>
+                                                                </p>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            <?php else: ?>
+                                                <div class="card mt-2" style="border-radius: 1.25rem; overflow: hidden; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
+                                                    <div class="row g-0 align-items-center">
+                                                        <div class="col-3 text-center">
+                                                            <div style="width: 42px; height: 42px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items:center; justify-content: center;">
+                                                                <img src="/assets/icon/pencil.webp" alt="icon" style="width: 32px; height: 32px;" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <div class="card-body text-white" style="padding-left: 0px;">
+                                                                <h5 class="card-title mb-0 font-weight-bold">Belum ada kuis dikerjakan</h5>
+                                                                <p class="card-text"><small class="text-white-50">Belum ada riwayat kuis</small></p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
                                         </div>
                                         <div class="col-lg-6 flex-wrap mb-4">
                                             <div>

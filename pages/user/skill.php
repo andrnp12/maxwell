@@ -9,12 +9,18 @@ $dataKuis = $data->getAllKuisUser($_SESSION['id']);
 
 $total = count($dataKuis);
 
+// Hitung progress berdasarkan kuis yang LULUS (nilai >= KKM), bukan hanya selesai dikerjakan
 $selesai = 0;
+$belumLulus = 0;
 
 foreach ($dataKuis as $kuis) {
+    $hasAttempted = isset($kuis['nilai']) && $kuis['nilai'] !== null;
+    $hasPassed = isset($kuis['lulus']) && $kuis['lulus'] == 1;
 
-    if ($kuis['quizz_selesai']) {
+    if ($hasPassed) {
         $selesai++;
+    } elseif ($hasAttempted && !$hasPassed) {
+        $belumLulus++;
     }
 }
 
@@ -145,87 +151,140 @@ $persen = $total > 0
                             </div> -->
                             <div class="progress mb-3" style="height:8px;">
                                 <div
-                                    class="progress-bar"
-                                    style="width: <?= $persen ?>%;">
+                                    class="progress-bar bg-success"
+                                    style="width: <?= $persen ?>%;"
+                                    title="Lulus: <?= $selesai ?>">
                                 </div>
+                                <?php if ($belumLulus > 0): ?>
+                                    <?php $persenGagal = $total > 0 ? round(($belumLulus / $total) * 100) : 0; ?>
+                                    <div
+                                        class="progress-bar bg-danger"
+                                        style="width: <?= $persenGagal ?>%;"
+                                        title="Belum Lulus: <?= $belumLulus ?>">
+                                    </div>
+                                <?php endif; ?>
                             </div>
 
                             <p class="text-muted mb-4">
                                 Progress Belajar
                                 <strong><?= $persen ?>%</strong>
+                                <?php if ($belumLulus > 0): ?>
+                                    <span class="text-danger ms-2">
+                                        <i class="mdi mdi-alert-circle"></i> <?= $belumLulus ?> Belum Lulus
+                                    </span>
+                                <?php endif; ?>
                             </p>
                         </div>
                         <?php foreach ($dataKuis as $index => $kuis): ?>
                             <?php
                             $canAccess = $kuis['material_selesai'] == 1;
+
+                            // Determine quiz status
+                            $hasAttempted = isset($kuis['nilai']) && $kuis['nilai'] !== null;
+                            $hasPassed = isset($kuis['lulus']) && $kuis['lulus'] == 1;
+                            $nilai = $hasAttempted ? (float)$kuis['nilai'] : 0;
+                            $kkm = (int)$kuis['passing_grade'];
+                            $percobaan = isset($kuis['percobaan']) ? (int)$kuis['percobaan'] : 0;
+
+                            // Status: 0 = Belum Dikerjakan, 1 = Belum Lulus (Gagal), 2 = Lulus
+                            if (!$hasAttempted) {
+                                $status = 'belum_dikerjakan';
+                                $statusLabel = 'Belum Dikerjakan';
+                                $statusIcon = 'mdi-pencil';
+                                $badgeClass = 'bg-secondary';
+                                $badgeBgStyle = 'background-color: #6c757d;';
+                                $cardStyle = 'border shadow-sm';
+                                $cardBgStyle = 'background-color: #fff;';
+                                $textColorClass = '';
+                                $iconBgStyle = 'background-color: #e9ecef;';
+                                $iconImg = '/assets/icon/pencil.webp';
+                            } elseif ($hasPassed) {
+                                $status = 'lulus';
+                                $statusLabel = 'Lulus';
+                                $statusIcon = 'mdi-check-circle';
+                                $badgeClass = 'bg-success';
+                                $badgeBgStyle = 'background-color: rgba(233, 236, 239, 0.5);';
+                                $cardStyle = 'text-white border-white shadow-lg';
+                                $cardBgStyle = 'background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );';
+                                $textColorClass = 'text-white';
+                                $iconBgStyle = 'background-color: rgba(233, 236, 239, 0.5);';
+                                $iconImg = '/assets/icon/pencil.webp';
+                            } else {
+                                $status = 'belum_lulus';
+                                $statusLabel = 'Belum Lulus';
+                                $statusIcon = 'mdi-close-circle';
+                                $badgeClass = 'bg-danger';
+                                $badgeBgStyle = 'background-color: #dc3545;';
+                                $cardStyle = 'border shadow-sm';
+                                $cardBgStyle = 'background-color: #fff;';
+                                $textColorClass = '';
+                                $iconBgStyle = 'background-color: #f8d7da;';
+                                $iconImg = '/assets/icon/pencil.webp';
+                            }
                             ?>
                             <a
                                 class="col-12 col-xl-6 col-md-6 text-decoration-none"
                                 href="<?= $canAccess ? 'skill-detail.php?id=' . $kuis['id_kuis'] : '#' ?>"
                                 <?= !$canAccess ? 'data-bs-toggle="modal" data-bs-target="#peringatanModal"' : '' ?>>
 
-                                <?php if ($kuis['quizz_selesai']) : ?>
-                                    <!-- Jika sudah selesai: background success, text white, tanpa border-success -->
-                                    <div class="card mb-3 text-white border-white shadow-lg" style="border-radius: 1.25rem; background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(14,174,87,1) 0%, rgba(12,116,117,1) 90% );">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col-3 text-center">
-                                                <div style="width: 56px; height: 56px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items: center; justify-content: center;">
-                                                    <img src="/assets/icon/book.webp" alt="icon" style="width: 32px; height: 32px;" />
-                                                </div>
+                                <div class="card mb-3 <?= $cardStyle ?>" style="border-radius: 1.25rem; <?= $cardBgStyle ?>">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-3 text-center">
+                                            <div style="width: 56px; height: 56px; border-radius: 50%; <?= $iconBgStyle ?> display: inline-flex; align-items: center; justify-content: center;">
+                                                <img src="<?= $iconImg ?>" alt="icon" style="width: 32px; height: 32px;" />
                                             </div>
-                                            <div class="col-9">
-                                                <div class="card-body" style="padding-left: 0px;">
-                                                    <h5 class="card-title mb-0 font-weight-bold">
-                                                        <?= htmlspecialchars($kuis['judul_kuis']) ?>
-                                                    </h5>
-                                                    <!-- Jika sudah selesai -->
-                                                    <small class="badge text-white px-2 py-1 rounded-pill" style="background-color: rgba(233, 236, 239, 0.5);">
-                                                        KKM : <?= $kuis['passing_grade'] ?>
+                                        </div>
+                                        <div class="col-9">
+                                            <div class="card-body <?= $textColorClass ?>" style="padding-left: 0px;">
+                                                <h5 class="card-title mb-0 font-weight-bold">
+                                                    <?= htmlspecialchars($kuis['judul_kuis']) ?>
+                                                </h5>
+                                                <?php if (!$canAccess): ?>
+                                                    <!-- Jika terkunci -->
+                                                    <small class="badge bg-secondary text-white px-2 py-1 rounded-pill">
+                                                        <i class="mdi mdi-lock"></i>
+                                                        Kunci
                                                     </small>
-                                                    <small class="badge text-white px-2 py-1 rounded-pill" style="background-color: rgba(233, 236, 239, 0.5);">
-                                                        <i class="mdi mdi-check-circle"></i>
-                                                        Telah Lulus
+                                                <?php elseif ($status === 'belum_dikerjakan'): ?>
+                                                    <!-- Belum Dikerjakan -->
+                                                    <small class="badge bg-light px-2 py-1 rounded-pill">
+                                                        KKM : <?= $kkm ?>
                                                     </small>
-                                                </div>
+                                                    <small class="badge bg-secondary text-white px-2 py-1 rounded-pill">
+                                                        <i class="mdi <?= $statusIcon ?>"></i>
+                                                        <?= $statusLabel ?>
+                                                    </small>
+                                                <?php elseif ($status === 'lulus'): ?>
+                                                    <!-- Lulus -->
+                                                    <small class="badge <?= $textColorClass ?> px-2 py-1 rounded-pill" style="<?= $badgeBgStyle ?>">
+                                                        KKM : <?= $kkm ?>
+                                                    </small>
+                                                    <small class="badge <?= $textColorClass ?> px-2 py-1 rounded-pill" style="<?= $badgeBgStyle ?>">
+                                                        Percobaan ke-<?= $percobaan ?>
+                                                    </small>
+                                                    <small class="badge <?= $textColorClass ?> px-2 py-1 rounded-pill" style="<?= $badgeBgStyle ?>">
+                                                        <i class="mdi <?= $statusIcon ?>"></i>
+                                                        <?= $statusLabel ?>
+                                                        (<?= $nilai ?>)
+                                                    </small>
+                                                <?php else: ?>
+                                                    <!-- Belum Lulus (Gagal) -->
+                                                    <small class="badge bg-light px-2 py-1 rounded-pill">
+                                                        KKM : <?= $kkm ?>
+                                                    </small>
+                                                    <small class="badge bg-light px-2 py-1 rounded-pill">
+                                                        Percobaan ke-<?= $percobaan ?>
+                                                    </small>
+                                                    <small class="badge bg-danger text-white px-2 py-1 rounded-pill">
+                                                        <i class="mdi <?= $statusIcon ?>"></i>
+                                                        <?= $statusLabel ?>
+                                                        (<?= $nilai ?>)
+                                                    </small>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
-                                <?php else : ?>
-                                    <!-- Jika belum selesai: background putih, border biasa -->
-                                    <div class="card mb-3 border shadow-sm" style="border-radius: 1.25rem;">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col-3 text-center">
-                                                <!-- Icon circle untuk belum selesai: background abu-abu -->
-                                                <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                                    <img src="/assets/icon/pencil.webp" alt="icon" style="width: 32px; height: 32px;" />
-                                                </div>
-                                            </div>
-                                            <div class="col-9">
-                                                <div class="card-body" style="padding-left: 0px;">
-                                                    <h5 class="card-title mb-0 font-weight-bold">
-                                                        <?= htmlspecialchars($kuis['judul_kuis']) ?>
-                                                    </h5>
-                                                    <?php if (!$kuis['material_selesai']) : ?>
-                                                        <!-- Jika terkunci -->
-                                                        <small class="badge bg-secondary text-white px-2 py-1 rounded-pill">
-                                                            <i class="mdi mdi-lock"></i>
-                                                            Kunci
-                                                        </small>
-                                                    <?php else : ?>
-                                                        <!-- Jika bisa diakses tapi belum selesai -->
-                                                        <small class="badge bg-light px-2 py-1 rounded-pill">
-                                                            KKM : <?= $kuis['passing_grade'] ?>
-                                                        </small>
-                                                        <small class="badge bg-light px-2 py-1 rounded-pill">
-                                                            <i class="mdi mdi-pencil"></i>
-                                                            Belum Dikerjakan
-                                                        </small>
-                                                    <?php endif ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php endif; ?>
+                                </div>
                             </a>
                         <?php endforeach; ?>
                         <!-- end col -->
@@ -269,6 +328,16 @@ $persen = $total > 0
     </div>
     <!-- JAVASCRIPT -->
     <?php include '../include/script.php'; ?>
+
+    <script>
+        // Initialize Bootstrap tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
 </body>
 
 </html>

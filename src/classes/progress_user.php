@@ -159,6 +159,31 @@ class ProgressUser
     }
 
     /**
+     * Cek apakah kuis untuk materi ini sudah LULUS (nilai >= KKM)
+     * Mengecek quiz_results untuk kuis dengan material_id ini
+     */
+    public function isQuizPassed(int $userId, int $materialId): bool
+    {
+        $sql = "
+            SELECT qr.lulus
+            FROM quiz_results qr
+            INNER JOIN quizzes q ON qr.kuis_id = q.id
+            WHERE qr.user_id = ?
+            AND q.material_id = ?
+            AND q.jenis = 'kuis'
+            AND qr.lulus = 1
+            LIMIT 1
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $userId, $materialId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->num_rows > 0;
+    }
+
+    /**
      * Extract YouTube video ID from various URL formats
      * Supports: watch?v=, youtu.be/, embed/, v/, shorts/
      */
