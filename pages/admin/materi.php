@@ -431,10 +431,10 @@ Menerapkan keterampilan komunikasi secara efektif."
                     // Reset Form
                     formElement.reset();
 
-                    // Refresh entire table from server to get updated no_urut for all rows
-                    await refreshTable();
+                    // Refresh halaman untuk memastikan tabel responsive dan data terbaru
+                    location.reload();
 
-                    tampilkanNotif('Berhasil', result.message, 'success');
+                    // tampilkanNotif('Berhasil', result.message, 'success');
                 } else {
                     tampilkanNotif('Gagal', result.message, 'error');
                 }
@@ -480,6 +480,8 @@ Menerapkan keterampilan komunikasi secara efektif."
                             const row = dataTable.row.add(rowData).draw(false).node();
                             if (row) row.id = 'baris-' + materi.id;
                         });
+                        // Recalculate responsive columns after rebuild
+                        dataTable.columns.adjust().responsive.recalc();
                     } else {
                         // For regular table
                         const tbody = datatableElement?.querySelector('tbody');
@@ -754,10 +756,10 @@ Menerapkan keterampilan komunikasi secara efektif."
                     modalDelete1.hide();
 
                     if (result.status === 'success') {
-                        // Refresh entire table from server to get updated no_urut for all rows
-                        await refreshTable();
+                        // Refresh halaman untuk memastikan tabel responsive dan data terbaru
+                        location.reload();
 
-                        tampilkanNotif('Berhasil', result.message, 'success');
+                        // tampilkanNotif('Berhasil', result.message, 'success');
                     } else {
                         tampilkanNotif('Gagal', result.message, 'error');
                     }

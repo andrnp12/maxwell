@@ -14,6 +14,12 @@ $materialFinished = $progress->isMaterialFinished(
     (int)$_GET['id']
 );
 
+// Cek apakah kuis untuk materi ini sudah LULUS
+$quizPassed = $progress->isQuizPassed($_SESSION['id'], (int)$_GET['id']);
+
+// Bisa lanjut ke materi selanjutnya jika: materi selesai DAN kuis lulus
+$canProceedToNext = $materialFinished && $quizPassed;
+
 $previousMateri = $data->getPreviousMateri((int)$_GET['id']);
 $nextMateri = $data->getNextMateri((int)$_GET['id']);
 
@@ -59,11 +65,11 @@ $youtubeEmbedUrl = $youtubeVideoId ? "https://www.youtube.com/embed/{$youtubeVid
                     <!-- end page title -->
                     <div class="row">
                         <div class="col-lg-8"> <!-- Main Material Card -->
-                            <div class="card border-0 shadow-sm overflow-hidden" style="border-radius: 1rem;">
+                            <div class="card border shadow-sm overflow-hidden" style="border-radius: 1rem;">
                                 <div class="card-body p-4 p-lg-5"> <!-- ========================= HEADER MATERI ========================== -->
                                     <div class="mb-4"> <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill mb-3"> Materi Pembelajaran </span>
                                         <h1 class="h3 fw-bold text-dark mb-2 lh-base"> <?= htmlspecialchars($dataMateri['judul']) ?> </h1>
-                                        <p class="text-muted mb-0"> Pelajari materi berikut dengan seksama sebelum melanjutkan ke materi berikutnya. </p>
+                                        <p class="text-muted mb-0"> <?= htmlspecialchars($dataMateri['deskripsi']) ?> </p>
                                     </div> <!-- ========================= INFORMASI MATERI ========================== -->
                                     <div class="row g-3 mb-4"> <!-- Tema -->
                                         <div class="col-md-6">
@@ -83,6 +89,29 @@ $youtubeEmbedUrl = $youtubeVideoId ? "https://www.youtube.com/embed/{$youtubeVid
                                                         <div class="bg-success bg-opacity-10 text-success rounded-3 p-2"> <i class="mdi mdi-school-outline fs-4"></i> </div>
                                                     </div>
                                                     <div> <small class="text-muted d-block mb-1"> Status Pembelajaran </small> <span class="fw-semibold text-dark"> <?= $materialFinished ? 'Materi Selesai' : 'Sedang Dipelajari' ?> </span> </div>
+                                                </div>
+                                            </div>
+                                        </div> <!-- Quiz Status -->
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3 h-100">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <div class="<?= $quizPassed ? 'bg-success bg-opacity-10 text-success' : 'bg-warning bg-opacity-10 text-warning' ?> rounded-3 p-2">
+                                                            <i class="mdi mdi<?= $quizPassed ? '-check-circle' : '-alert-circle' ?> fs-4"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <small class="text-muted d-block mb-1"> Status Kuis </small>
+                                                        <span class="fw-semibold text-dark">
+                                                            <?php if ($quizPassed): ?>
+                                                                <span class="badge bg-success"><i class="mdi mdi-check-circle me-1"></i>Lulus</span>
+                                                            <?php elseif ($materialFinished): ?>
+                                                                <span class="badge bg-warning text-dark"><i class="mdi mdi-alert-circle me-1"></i>Belum Lulus (Kuis Gagal)</span>
+                                                            <?php else: ?>
+                                                                <span class="badge bg-secondary"><i class="mdi mdi-clock-outline me-1"></i>Belum Dikerjakan</span>
+                                                            <?php endif; ?>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -180,15 +209,6 @@ $youtubeEmbedUrl = $youtubeVideoId ? "https://www.youtube.com/embed/{$youtubeVid
                                                     <div> <strong>Video tidak tersedia.</strong> <br> <small> URL Video YouTube tidak valid: <?= htmlspecialchars($dataMateri['video_url'] ?? '') ?> </small> </div>
                                                 </div>
                                             </div> <?php endif; ?>
-                                    </div> <!-- ========================= DESKRIPSI MATERI ========================== -->
-                                    <div class="mb-5">
-                                        <div class="d-flex align-items-center mb-3">
-                                            <div class="bg-info bg-opacity-10 text-info rounded-3 p-2 me-3"> <i class="mdi mdi-text-box-outline fs-4"></i> </div>
-                                            <div>
-                                                <h5 class="fw-bold mb-0"> Materi Pembelajaran </h5> <small class="text-muted"> Baca dan pahami materi berikut </small>
-                                            </div>
-                                        </div>
-                                        <div class="material-description text-secondary lh-lg"> <?= nl2br(htmlspecialchars($dataMateri['deskripsi'])) ?> </div>
                                     </div>
                                     <!-- ========================= PDF VIEWER ========================== -->
                                     <div class="mb-4">
@@ -200,7 +220,7 @@ $youtubeEmbedUrl = $youtubeVideoId ? "https://www.youtube.com/embed/{$youtubeVid
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="border rounded-4 overflow-hidden bg-light"> <iframe src="/assets/ViewerJS/index.html?zoom=page-width#/uploads/materi/<?= htmlspecialchars($dataMateri['file']) ?>" title="Pratinjau PDF" class="w-100 border-0" style="height: 700px;"> </iframe> </div>
+                                        <div> <iframe src="/assets/ViewerJS/index.html?zoom=page-width#/uploads/materi/<?= htmlspecialchars($dataMateri['file']) ?>" title="Pratinjau PDF" class="w-100 border-0" style="height: 700px;"> </iframe> </div>
                                     </div>
 
                                     <!-- ========================= KESIMPULAN PEMBELAJARAN ========================== -->
@@ -220,8 +240,17 @@ $youtubeEmbedUrl = $youtubeVideoId ? "https://www.youtube.com/embed/{$youtubeVid
                                     <!-- ========================= NAVIGASI MATERI ========================== -->
                                     <div class="border-top pt-4 mt-5">
                                         <div class="d-flex align-items-center justify-content-between gap-3"> <!-- Previous -->
-                                            <div> <?php if ($previousMateri): ?> <a href="detail-materi.php?id=<?= $previousMateri['id'] ?>" class="btn btn-outline-secondary rounded-pill px-4"> <i class="mdi mdi-arrow-left me-1"></i> Sebelumnya </a> <?php endif; ?> </div> <!-- Next -->
-                                            <div> <?php if ($nextMateri): ?> <a id="btnNextMaterial" href="<?= $materialFinished ? 'detail-materi.php?id=' . $nextMateri['id'] : '#' ?>" class="btn <?= $materialFinished ? 'btn-primary' : 'btn-secondary' ?> rounded-pill px-4 <?= !$materialFinished ? 'disabled' : '' ?>"> <?= $materialFinished ? 'Materi Selanjutnya' : 'Selesaikan Materi Dahulu' ?> <i class="mdi <?= $materialFinished ? 'mdi-arrow-right' : 'mdi-lock-outline' ?> ms-1"></i> </a> <?php endif; ?> </div>
+                                            <div> <?php if ($previousMateri): ?> <a href="detail-materi.php?id=<?= $previousMateri['id'] ?>" class="btn btn-outline-secondary rounded-pill"> <i class="mdi mdi-arrow-left me-1"></i> Sebelumnya </a> <?php endif; ?> </div> <!-- Next -->
+                                            <div>
+                                                <?php if ($nextMateri): ?>
+                                                    <a id="btnNextMaterial"
+                                                        href="<?= $canProceedToNext ? 'detail-materi.php?id=' . $nextMateri['id'] : '#' ?>"
+                                                        class="btn <?= $canProceedToNext ? 'btn-primary' : 'btn-secondary' ?> rounded-pill <?= !$canProceedToNext ? 'disabled' : '' ?>">
+                                                        <?= $canProceedToNext ? 'Selanjutnya' : 'Belum Lulus' ?>
+                                                        <i class="mdi <?= $canProceedToNext ? 'mdi-arrow-right' : 'mdi-lock-outline' ?> ms-1"></i>
+                                                    </a>
+                                                <?php endif; ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -291,12 +320,14 @@ $youtubeEmbedUrl = $youtubeVideoId ? "https://www.youtube.com/embed/{$youtubeVid
         const materialId = <?= (int)$dataMateri['id']; ?>;
 
         const materialFinished = <?= $materialFinished ? 'true' : 'false'; ?>;
+        const quizPassed = <?= $quizPassed ? 'true' : 'false'; ?>;
+        const canProceedToNext = <?= $canProceedToNext ? 'true' : 'false'; ?>;
 
         document.addEventListener("DOMContentLoaded", function() {
 
-            // Kalau materi sudah selesai, tidak perlu jalankan timer
-            if (materialFinished) {
-                // console.log("Materi sudah pernah dipelajari.");
+            // Kalau materi sudah selesai DAN kuis lulus, tidak perlu jalankan timer
+            if (canProceedToNext) {
+                // console.log("Materi sudah selesai dan kuis lulus.");
                 return;
             }
 
@@ -346,24 +377,25 @@ $youtubeEmbedUrl = $youtubeVideoId ? "https://www.youtube.com/embed/{$youtubeVid
                         if (data.success) {
                             console.log("Progress berhasil disimpan");
 
-                            const btn = document.getElementById("btnNextMaterial");
+                            // Cek apakah kuis sudah lulus untuk mengaktifkan tombol next
+                            if (quizPassed) {
+                                const btn = document.getElementById("btnNextMaterial");
 
-                            if (btn) {
+                                if (btn) {
+                                    btn.classList.remove("btn-secondary");
+                                    btn.classList.remove("disabled");
 
-                                btn.classList.remove("btn-secondary");
-                                btn.classList.remove("disabled");
+                                    btn.classList.add("btn-primary");
 
-                                btn.classList.add("btn-primary");
+                                    <?php if ($nextMateri): ?>
+                                        btn.href = "detail-materi.php?id=<?= $nextMateri['id'] ?>";
+                                    <?php endif; ?>
 
-                                <?php if ($nextMateri): ?>
-                                    btn.href = "detail-materi.php?id=<?= $nextMateri['id'] ?>";
-                                <?php endif; ?>
-
-                                btn.innerHTML = `
-                Materi Selanjutnya
-                <i class="mdi mdi-arrow-right"></i>
-            `;
-
+                                    btn.innerHTML = `
+                        Materi Selanjutnya
+                        <i class="mdi mdi-arrow-right"></i>
+                    `;
+                                }
                             }
                         } else {
                             console.error(data.message);
