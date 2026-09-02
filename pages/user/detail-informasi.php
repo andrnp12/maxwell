@@ -62,7 +62,11 @@ $detail = $informasi->getContentById($contentId);
                                                 </h2>
                                             </div>
                                             <div class="mb-4">
-                                                <img alt="" class="img-thumbnail mx-auto d-block" src="/uploads/contents/<?= htmlspecialchars($detail['foto'] ?? ''); ?>" />
+                                                <img
+                                                    class="img-thumbnail mx-auto d-block"
+                                                    src="<?= !empty($detail['foto']) ? '/uploads/contents/' . htmlspecialchars($detail['foto']) : '/uploads/profile/default.webp' ?>"
+                                                    alt="image"
+                                                    onerror="this.onerror=null; this.src='/uploads/profile/default.webp';" />
                                             </div>
                                             <div class="mt-4">
                                                 <div class="text-muted font-size-14">

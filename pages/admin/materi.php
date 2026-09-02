@@ -79,7 +79,7 @@ $dataMateri = $materi->getAllMateri();
                                                 <tr id="baris-<?= $materi['id'] ?>">
                                                     <td><?= $i++ ?></td>
                                                     <td><?= htmlspecialchars($materi['judul']) ?></td>
-                                                    <td><?= htmlspecialchars($materi['deskripsi']) ?></td>
+                                                    <td><?= htmlspecialchars(mb_substr($materi['deskripsi'] ?? '', 0, 100, 'UTF-8')) . (mb_strlen($materi['deskripsi'] ?? '', 'UTF-8') > 100 ? '...' : '') ?></td>
                                                     <td><?= htmlspecialchars($materi['file']) ?></a></td>
                                                     <td><?= htmlspecialchars($materi['video_url']) ?></td>
                                                     <td><?= htmlspecialchars($materi['no_urut']) ?></td>
@@ -152,8 +152,9 @@ $dataMateri = $materi->getAllMateri();
                             <textarea class="form-control" name="deskripsi" id="deskripsi_tambah" rows="4" required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="video_url_tambah" class="form-label">Link Video (Opsional)</label>
+                            <label for="video_url_tambah" class="form-label">Link Video Youtube (Opsional)</label>
                             <input class="form-control" name="video_url" id="video_url_tambah" type="url">
+                            <small class="text-muted">Contoh: https://www.youtube.com/watch?v=Wp9KevROawI</small>
                         </div>
                         <div class="mb-3">
                             <label for="no_urut_tambah" class="form-label">No Urut</label>
@@ -201,8 +202,9 @@ $dataMateri = $materi->getAllMateri();
                             <textarea class="form-control" name="deskripsi" id="deskripsi_edit" rows="4" required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="video_url_edit" class="form-label">Link Video (Opsional)</label>
+                            <label for="video_url_edit" class="form-label">Link Video Youtube (Opsional)</label>
                             <input class="form-control" name="video_url" id="video_url_edit" type="url">
+                            <small class="text-muted">Contoh: https://www.youtube.com/watch?v=Wp9KevROawI</small>
                         </div>
                         <div class="mb-3">
                             <label for="no_urut_edit" class="form-label">No Urut</label>

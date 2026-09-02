@@ -259,7 +259,7 @@ if (!$user) {
                                                 <div class="row g-0 align-items-center">
                                                     <div class="col-3 text-center">
                                                         <div style="width: 42px; height: 42px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items:center; justify-content: center;">
-                                                            <img src="/assets/icon/book.webp" alt="icon" style="width: 32px; height: 32px;" />
+                                                            <img src="/assets/icon/pencil.webp" alt="icon" style="width: 32px; height: 32px;" />
                                                         </div>
                                                     </div>
                                                     <div class="col-9">
