@@ -20,44 +20,17 @@ class User
      */
     public function getAllUsersWithQuizResults(): array
     {
-        $sql = "
+        // Get all users first
+        $userSql = "
             SELECT
-                u.id,
-                u.name,
-                u.username,
-                u.email,
-                u.role,
-                u.foto,
-                -- Pretest: best score (MAX)
-                COALESCE(MAX(CASE WHEN qr.jenis = 'pre' THEN qr.nilai END), 0) AS pretest_nilai,
-                -- Posttest: best score (MAX)
-                COALESCE(MAX(CASE WHEN qr.jenis = 'post' THEN qr.nilai END), 0) AS posttest_nilai,
-                -- Kuis Rata2: average of best scores per quiz
-                COALESCE((
-                    SELECT AVG(best_per_quiz.max_nilai)
-                    FROM (
-                        SELECT qr2.kuis_id, MAX(qr2.nilai) AS max_nilai
-                        FROM quiz_results qr2
-                        WHERE qr2.user_id = u.id
-                        AND qr2.jenis = 'kuis'
-                        AND qr2.kuis_id IS NOT NULL
-                        GROUP BY qr2.kuis_id
-                    ) AS best_per_quiz
-                ), 0) AS kuis_rata2,
-                -- Count of attempts for each type
-                COUNT(CASE WHEN qr.jenis = 'pre' THEN 1 END) AS pretest_attempts,
-                COUNT(CASE WHEN qr.jenis = 'post' THEN 1 END) AS posttest_attempts,
-                COUNT(CASE WHEN qr.jenis = 'kuis' THEN 1 END) AS kuis_attempts
-            FROM users u
-            LEFT JOIN quiz_results qr ON u.id = qr.user_id
-            WHERE u.role = 'user'
-            GROUP BY u.id, u.name, u.username, u.email, u.role, u.foto
-            ORDER BY u.name ASC
+                id, name, username, email, role, foto
+            FROM users
+            WHERE role = 'user'
+            ORDER BY name ASC
         ";
+        $userResult = $this->conn->query($userSql);
 
-        $result = $this->conn->query($sql);
-
-        if (!$result) {
+        if (!$userResult) {
             return [
                 'status' => 'error',
                 'message' => 'Query error: ' . $this->conn->error
@@ -65,11 +38,55 @@ class User
         }
 
         $users = [];
-        while ($row = $result->fetch_assoc()) {
+        while ($user = $userResult->fetch_assoc()) {
+            $userId = $user['id'];
+
+            // Get quiz results for this user
+            $quizSql = "
+                SELECT
+                    -- Pretest: best score (MAX)
+                    COALESCE(MAX(CASE WHEN jenis = 'pre' THEN nilai END), 0) AS pretest_nilai,
+                    -- Posttest: best score (MAX)
+                    COALESCE(MAX(CASE WHEN jenis = 'post' THEN nilai END), 0) AS posttest_nilai,
+                    -- Kuis Rata2: average of best scores per quiz
+                    COALESCE((
+                        SELECT AVG(best_per_quiz.max_nilai)
+                        FROM (
+                            SELECT kuis_id, MAX(nilai) AS max_nilai
+                            FROM quiz_results
+                            WHERE user_id = ?
+                            AND jenis = 'kuis'
+                            AND kuis_id IS NOT NULL
+                            GROUP BY kuis_id
+                        ) AS best_per_quiz
+                    ), 0) AS kuis_rata2,
+                    -- Count of attempts for each type
+                    COUNT(CASE WHEN jenis = 'pre' THEN 1 END) AS pretest_attempts,
+                    COUNT(CASE WHEN jenis = 'post' THEN 1 END) AS posttest_attempts,
+                    COUNT(CASE WHEN jenis = 'kuis' THEN 1 END) AS kuis_attempts
+                FROM quiz_results
+                WHERE user_id = ?
+            ";
+            $stmt = $this->conn->prepare($quizSql);
+            if (!$stmt) {
+                return [
+                    'status' => 'error',
+                    'message' => 'Query error: ' . $this->conn->error
+                ];
+            }
+            $stmt->bind_param("ii", $userId, $userId);
+            $stmt->execute();
+            $quizResult = $stmt->get_result();
+            $quizData = $quizResult->fetch_assoc();
+
+            // Merge user and quiz data
+            $row = array_merge($user, $quizData);
+
             // Format numbers nicely
             $row['pretest_nilai'] = $row['pretest_nilai'] > 0 ? round($row['pretest_nilai'], 1) : '-';
             $row['posttest_nilai'] = $row['posttest_nilai'] > 0 ? round($row['posttest_nilai'], 1) : '-';
             $row['kuis_rata2'] = $row['kuis_rata2'] > 0 ? round($row['kuis_rata2'], 1) : '-';
+
             $users[] = $row;
         }
 
@@ -84,55 +101,67 @@ class User
      */
     public function getUserWithQuizResults(int $userId): array
     {
-        $sql = "
+        // First, get basic user info
+        $userSql = "
             SELECT
-                u.id,
-                u.name,
-                u.username,
-                u.email,
-                u.role,
-                u.foto,
-                u.deskripsi,
-                u.nomor,
-                -- Pretest: best score (MAX)
-                COALESCE(MAX(CASE WHEN qr.jenis = 'pre' THEN qr.nilai END), 0) AS pretest_nilai,
-                -- Posttest: best score (MAX)
-                COALESCE(MAX(CASE WHEN qr.jenis = 'post' THEN qr.nilai END), 0) AS posttest_nilai,
-                -- Kuis Rata2: average of best scores per quiz
-                COALESCE((
-                    SELECT AVG(best_per_quiz.max_nilai)
-                    FROM (
-                        SELECT qr2.kuis_id, MAX(qr2.nilai) AS max_nilai
-                        FROM quiz_results qr2
-                        WHERE qr2.user_id = u.id
-                        AND qr2.jenis = 'kuis'
-                        AND qr2.kuis_id IS NOT NULL
-                        GROUP BY qr2.kuis_id
-                    ) AS best_per_quiz
-                ), 0) AS kuis_rata2,
-                -- Count of attempts for each type
-                COUNT(CASE WHEN qr.jenis = 'pre' THEN 1 END) AS pretest_attempts,
-                COUNT(CASE WHEN qr.jenis = 'post' THEN 1 END) AS posttest_attempts,
-                COUNT(CASE WHEN qr.jenis = 'kuis' THEN 1 END) AS kuis_attempts
-            FROM users u
-            LEFT JOIN quiz_results qr ON u.id = qr.user_id
-            WHERE u.id = ? AND u.role = 'user'
-            GROUP BY u.id, u.name, u.username, u.email, u.role, u.foto, u.deskripsi, u.nomor
+                id, name, username, email, role, foto, deskripsi, nomor
+            FROM users
+            WHERE id = ? AND role = 'user'
         ";
-
-        $stmt = $this->conn->prepare($sql);
+        $stmt = $this->conn->prepare($userSql);
+        if (!$stmt) {
+            return ['status' => 'error', 'message' => 'Query error: ' . $this->conn->error];
+        }
         $stmt->bind_param("i", $userId);
         $stmt->execute();
-        $result = $stmt->get_result();
+        $userResult = $stmt->get_result();
 
-        if ($result->num_rows === 0) {
+        if ($userResult->num_rows === 0) {
             return [
                 'status' => 'error',
                 'message' => 'User tidak ditemukan.'
             ];
         }
 
-        $row = $result->fetch_assoc();
+        $user = $userResult->fetch_assoc();
+
+        // Get quiz results aggregated
+        $quizSql = "
+            SELECT
+                -- Pretest: best score (MAX)
+                COALESCE(MAX(CASE WHEN jenis = 'pre' THEN nilai END), 0) AS pretest_nilai,
+                -- Posttest: best score (MAX)
+                COALESCE(MAX(CASE WHEN jenis = 'post' THEN nilai END), 0) AS posttest_nilai,
+                -- Kuis Rata2: average of best scores per quiz
+                COALESCE((
+                    SELECT AVG(best_per_quiz.max_nilai)
+                    FROM (
+                        SELECT kuis_id, MAX(nilai) AS max_nilai
+                        FROM quiz_results
+                        WHERE user_id = ?
+                        AND jenis = 'kuis'
+                        AND kuis_id IS NOT NULL
+                        GROUP BY kuis_id
+                    ) AS best_per_quiz
+                ), 0) AS kuis_rata2,
+                -- Count of attempts for each type
+                COUNT(CASE WHEN jenis = 'pre' THEN 1 END) AS pretest_attempts,
+                COUNT(CASE WHEN jenis = 'post' THEN 1 END) AS posttest_attempts,
+                COUNT(CASE WHEN jenis = 'kuis' THEN 1 END) AS kuis_attempts
+            FROM quiz_results
+            WHERE user_id = ?
+        ";
+        $stmt = $this->conn->prepare($quizSql);
+        if (!$stmt) {
+            return ['status' => 'error', 'message' => 'Query error: ' . $this->conn->error];
+        }
+        $stmt->bind_param("ii", $userId, $userId);
+        $stmt->execute();
+        $quizResult = $stmt->get_result();
+        $quizData = $quizResult->fetch_assoc();
+
+        // Merge user and quiz data
+        $row = array_merge($user, $quizData);
 
         // Format numbers nicely
         $row['pretest_nilai'] = $row['pretest_nilai'] > 0 ? round($row['pretest_nilai'], 1) : '-';

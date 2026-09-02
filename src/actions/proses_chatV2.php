@@ -4,7 +4,7 @@ session_start();
 
 header('Content-Type: application/json');
 
-require_once '../classes/ChatV2.php';
+require_once '../classes/chatV2.php';
 
 $chat = new ChatV2();
 

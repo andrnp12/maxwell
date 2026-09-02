@@ -16,6 +16,10 @@ $materialFinished = $progress->isMaterialFinished(
 
 $previousMateri = $data->getPreviousMateri((int)$_GET['id']);
 $nextMateri = $data->getNextMateri((int)$_GET['id']);
+
+// Extract YouTube video ID from stored URL
+$youtubeVideoId = $progress->getYouTubeVideoId($dataMateri['video_url'] ?? '');
+$youtubeEmbedUrl = $youtubeVideoId ? "https://www.youtube.com/embed/{$youtubeVideoId}" : '';
 ?>
 
 <?php include '../include/header.php'; ?>
@@ -64,7 +68,21 @@ $nextMateri = $data->getNextMateri((int)$_GET['id']);
                                             </h4>
                                         </div>
                                         <div class="mb-4">
-                                            <img alt="" class="img-thumbnail mx-auto d-block" src="/assets/images/small/img-2.jpg" />
+                                            <?php if ($youtubeEmbedUrl): ?>
+                                                <div class="ratio ratio-16x9">
+                                                    <iframe
+                                                        src="<?= htmlspecialchars($youtubeEmbedUrl) ?>"
+                                                        title="Video Materi"
+                                                        class="rounded"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                        allowfullscreen>
+                                                    </iframe>
+                                                </div>
+                                            <?php else: ?>
+                                                <div class="alert alert-warning">
+                                                    URL Video YouTube tidak valid: <?= htmlspecialchars($dataMateri['video_url'] ?? '') ?>
+                                                </div>
+                                            <?php endif; ?>
                                         </div>
                                         <div class="mt-4">
                                             <div class="text-muted font-size-14">
@@ -248,9 +266,9 @@ $nextMateri = $data->getNextMateri((int)$_GET['id']);
 
                                 btn.classList.add("btn-primary");
 
-                                    <?php if ($nextMateri): ?>
-                                        btn.href = "detail-materi.php?id=<?= $nextMateri['id'] ?>";
-                                    <?php endif; ?>
+                                <?php if ($nextMateri): ?>
+                                    btn.href = "detail-materi.php?id=<?= $nextMateri['id'] ?>";
+                                <?php endif; ?>
 
                                 btn.innerHTML = `
                 Materi Selanjutnya

@@ -72,7 +72,7 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
                                                     <div class="avatar-xl me-3" style="width: 72px; height: 72px; border-radius: 50%; background-color: rgba(233, 236, 239, 0.5); display: inline-flex; align-items: center; justify-content: center;">
-                                                        <img src="/assets/icon/focus-group.webp" alt="icon" style="width: 40px; height: 40px;" />
+                                                        <img src="/assets/icon/pencil.webp" alt="icon" style="width: 40px; height: 40px;" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
@@ -126,9 +126,12 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
                                                                 class="question <?= $i == 0 ? '' : 'd-none' ?>"
                                                                 data-index="<?= $i ?>">
 
-                                                                <h5 class="mb-3">
+                                                                <h5>
                                                                     Soal <?= $no ?> dari <?= $total ?>
                                                                 </h5>
+                                                                <p class="text-muted">
+                                                                    Pilih salah satu jawaban yang paling tepat dari pertanyaan di bawah ini
+                                                                </p>
 
                                                                 <div class="progress mb-4">
 
@@ -156,7 +159,8 @@ if (!$progress->isMaterialFinished($_SESSION['id'], $dataKuis['material_id'])) {
                                                                             type="radio"
                                                                             name="jawaban[<?= $pertanyaan['id'] ?>]"
                                                                             id="q<?= $no . $opsi ?>"
-                                                                            value="<?= strtoupper($opsi) ?>">
+                                                                            value="<?= strtoupper($opsi) ?>"
+                                                                            style="width: 1rem; height: 1rem; transform: scale(1.3); margin-top: 0.15rem;">
 
                                                                         <label
                                                                             class="form-check-label w-100"

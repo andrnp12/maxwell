@@ -206,12 +206,12 @@ $progressDetails = $certEligibility['details'];
                                                         data-nomor="<?= htmlspecialchars($dataProfile['data']['nomor'] ?? "", ENT_QUOTES) ?>"
                                                         data-email="<?= htmlspecialchars($dataProfile['data']['email'] ?? "", ENT_QUOTES) ?>"
                                                         data-deskripsi="<?= htmlspecialchars($dataProfile['data']['deskripsi'] ?? "", ENT_QUOTES) ?>"
-                                                        data-foto="<?= htmlspecialchars($dataProfile['data']['foto'], ENT_QUOTES) ?>"
+                                                        data-foto="<?= htmlspecialchars($dataProfile['data']['foto'] ?? "", ENT_QUOTES) ?>"
                                                         data-nik="<?= htmlspecialchars($dataProfile['data']['nik'] ?? "", ENT_QUOTES) ?>"
                                                         data-alamat="<?= htmlspecialchars($dataProfile['data']['alamat'] ?? "", ENT_QUOTES) ?>"
                                                         data-usia="<?= htmlspecialchars($dataProfile['data']['usia'] ?? "", ENT_QUOTES) ?>"
-                                                        data-pendidikan="<?= htmlspecialchars($dataProfile['data']['pendidikan'], ENT_QUOTES) ?>"
-                                                        data-status="<?= htmlspecialchars($dataProfile['data']['status'], ENT_QUOTES) ?>"
+                                                        data-pendidikan="<?= htmlspecialchars($dataProfile['data']['pendidikan'] ?? "", ENT_QUOTES) ?>"
+                                                        data-status="<?= htmlspecialchars($dataProfile['data']['status'] ?? "", ENT_QUOTES) ?>"
                                                         data-token="<?= htmlspecialchars($dataProfile['data']['token'] ?? '', ENT_QUOTES) ?>"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#modalEditProfile"
@@ -295,12 +295,12 @@ $progressDetails = $certEligibility['details'];
                                             data-nomor="<?= htmlspecialchars($dataProfile['data']['nomor'] ?? "", ENT_QUOTES) ?>"
                                             data-email="<?= htmlspecialchars($dataProfile['data']['email'] ?? "", ENT_QUOTES) ?>"
                                             data-deskripsi="<?= htmlspecialchars($dataProfile['data']['deskripsi'] ?? "", ENT_QUOTES) ?>"
-                                            data-foto="<?= htmlspecialchars($dataProfile['data']['foto'], ENT_QUOTES) ?>"
+                                            data-foto="<?= htmlspecialchars($dataProfile['data']['foto'] ?? "", ENT_QUOTES) ?>"
                                             data-nik="<?= htmlspecialchars($dataProfile['data']['nik'] ?? "", ENT_QUOTES) ?>"
                                             data-alamat="<?= htmlspecialchars($dataProfile['data']['alamat'] ?? "", ENT_QUOTES) ?>"
                                             data-usia="<?= htmlspecialchars($dataProfile['data']['usia'] ?? "", ENT_QUOTES) ?>"
-                                            data-pendidikan="<?= htmlspecialchars($dataProfile['data']['pendidikan'], ENT_QUOTES) ?>"
-                                            data-status="<?= htmlspecialchars($dataProfile['data']['status'], ENT_QUOTES) ?>"
+                                            data-pendidikan="<?= htmlspecialchars($dataProfile['data']['pendidikan'] ?? "", ENT_QUOTES) ?>"
+                                            data-status="<?= htmlspecialchars($dataProfile['data']['status'] ?? "", ENT_QUOTES) ?>"
                                             data-token="<?= htmlspecialchars($dataProfile['data']['token'] ?? '', ENT_QUOTES) ?>"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modalEditProfile"
@@ -325,7 +325,7 @@ $progressDetails = $certEligibility['details'];
                             <p class="text-muted text-center">Supported by</p>
                             <div class="d-flex justify-content-center align-items-center gap-3 mt-3">
                                 <!-- Gunakan style="height: 40px;" untuk membatasi tinggi maksimal logo -->
-                                <img class="img-fluid" style="height: 40px; width: auto;" src="\assets\images\logos\tutwuri.png" alt="Tut Wuri">
+                                <img class="img-fluid" style="height: 40px; width: auto;" src="\assets\images\logos\kemendikbud.webp" alt="Tut Wuri">
                                 <img class="img-fluid" style="height: 40px; width: auto;" src="\assets\images\logos\diktisaintek.png" alt="Diktisaintek">
                                 <img class="img-fluid" style="height: 40px; width: auto;" src="\assets\images\logos\unisnu.png" alt="Unisnu">
                             </div>

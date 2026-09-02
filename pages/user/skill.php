@@ -197,7 +197,7 @@ $persen = $total > 0
                                             <div class="col-3 text-center">
                                                 <!-- Icon circle untuk belum selesai: background abu-abu -->
                                                 <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #e9ecef; display: inline-flex; align-items: center; justify-content: center;">
-                                                    <img src="/assets/icon/book.webp" alt="icon" style="width: 32px; height: 32px;" />
+                                                    <img src="/assets/icon/pencil.webp" alt="icon" style="width: 32px; height: 32px;" />
                                                 </div>
                                             </div>
                                             <div class="col-9">

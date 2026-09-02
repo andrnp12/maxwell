@@ -105,7 +105,7 @@ $activities = $unifiedActivity['data'] ?? [];
                             <div class="card card-h-100 border-white shadow-sm" style="border-radius: 1.25rem; background-image: linear-gradient( 109.6deg,  rgba(245,239,249,1) 30.1%, rgba(207,211,236,1) 100.2% );">
                                 <div class="card-body">
                                     <div class="row align-items-center">
-                                        <div class="col-7">
+                                        <div class="col-9">
                                             <span class="text-muted mb-3 lh-1 d-block text-truncate">
                                                 Total Pengguna
                                             </span>
@@ -116,7 +116,7 @@ $activities = $unifiedActivity['data'] ?? [];
                                                 <i class="mdi mdi-account-check"></i> <?= $stats['active_users'] ?? 0 ?> Aktif
                                             </span>
                                         </div>
-                                        <div class="col-5 text-end">
+                                        <div class="col-3 text-end">
                                             <i class="mdi mdi-account-group text-primary display-4"></i>
                                         </div>
                                     </div>
@@ -130,7 +130,7 @@ $activities = $unifiedActivity['data'] ?? [];
                             <div class="card card-h-100 border-white shadow-sm" style="border-radius: 1.25rem; background-image: linear-gradient( 174.2deg,  rgba(255,244,228,1) 7.1%, rgba(240,246,238,1) 67.4% );">
                                 <div class="card-body">
                                     <div class="row align-items-center">
-                                        <div class="col-7">
+                                        <div class="col-9">
                                             <span class="text-muted mb-3 lh-1 d-block text-truncate">
                                                 Materi & Kuis
                                             </span>
@@ -144,7 +144,7 @@ $activities = $unifiedActivity['data'] ?? [];
                                                 <?= $kuisByType['posttest'] ?? 0 ?> Posttest)
                                             </small>
                                         </div>
-                                        <div class="col-5 text-end">
+                                        <div class="col-3 text-end">
                                             <i class="mdi mdi-book-open-variant text-success display-4"></i>
                                         </div>
                                     </div>
@@ -158,7 +158,7 @@ $activities = $unifiedActivity['data'] ?? [];
                             <div class="card card-h-100 border-white shadow-sm" style="border-radius: 1.25rem; background-image: radial-gradient( circle 476px at 54.8% 51.5%,  rgba(168,229,253,1) 0%, rgba(244,244,254,1) 42.3%, rgba(244,244,254,1) 100.2% );">
                                 <div class="card-body">
                                     <div class="row align-items-center">
-                                        <div class="col-7">
+                                        <div class="col-9">
                                             <span class="text-muted mb-3 lh-1 d-block text-truncate">
                                                 Konselor & Komunitas
                                             </span>
@@ -170,7 +170,7 @@ $activities = $unifiedActivity['data'] ?? [];
                                                 <?= $totalKomunitas ?> Komunitas
                                             </small>
                                         </div>
-                                        <div class="col-5 text-end">
+                                        <div class="col-3 text-end">
                                             <i class="mdi mdi-account-tie text-warning display-4"></i>
                                         </div>
                                     </div>
@@ -184,7 +184,7 @@ $activities = $unifiedActivity['data'] ?? [];
                             <div class="card card-h-100 border-white shadow-sm" style="border-radius: 1.25rem; background-image: linear-gradient( 109.6deg,  rgba(223,234,247,1) 11.2%, rgba(244,248,252,1) 91.1% );">
                                 <div class="card-body">
                                     <div class="row align-items-center">
-                                        <div class="col-7">
+                                        <div class="col-9">
                                             <span class="text-muted mb-3 lh-1 d-block text-truncate">
                                                 Course Completion Rate
                                             </span>
@@ -197,7 +197,7 @@ $activities = $unifiedActivity['data'] ?? [];
                                                 <?= $courseData['completed_users'] ?? 0 ?> / <?= $courseData['total_users'] ?? 0 ?> pengguna
                                             </small>
                                         </div>
-                                        <div class="col-5 text-end">
+                                        <div class="col-3 text-end">
                                             <i class="mdi mdi-chart-line text-success display-4"></i>
                                         </div>
                                     </div>

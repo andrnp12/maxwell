@@ -157,4 +157,25 @@ class ProgressUser
 
         return $progress && $progress['quizz_selesai'] == 1;
     }
+
+    /**
+     * Extract YouTube video ID from various URL formats
+     * Supports: watch?v=, youtu.be/, embed/, v/, shorts/
+     */
+    function getYouTubeVideoId($url)
+    {
+        if (empty($url)) return '';
+
+        $patterns = [
+            '/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/shorts\/)([^&\n?#]+)/',
+            '/^([a-zA-Z0-9_-]{11})$/' // Already just an ID
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $url, $matches)) {
+                return $matches[1];
+            }
+        }
+        return '';
+    }
 }

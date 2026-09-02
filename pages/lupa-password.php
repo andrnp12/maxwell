@@ -59,6 +59,9 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                                             REMAJA TUMBUH
                                         </span>
                                     </a>
+                                    <small>
+                                        Bangun Skill, Tunda Nikah Dini, Cegah Stunting Sejak Remaja
+                                    </small>
                                 </div>
                                 <div class="auth-content my-auto">
                                     <div class="text-center">
@@ -118,7 +121,7 @@ if (!empty($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true) {
                                     </p>
                                     <div class="d-flex justify-content-center align-items-center gap-3 mt-3">
                                         <!-- Gunakan style="height: 40px;" untuk membatasi tinggi maksimal logo -->
-                                        <img class="img-fluid" style="height: 40px; width: auto;" src="\assets\images\logos\tutwuri.png" alt="Tut Wuri">
+                                        <img class="img-fluid" style="height: 40px; width: auto;" src="\assets\images\logos\kemendikbud.webp" alt="Tut Wuri">
                                         <img class="img-fluid" style="height: 40px; width: auto;" src="\assets\images\logos\diktisaintek.png" alt="Diktisaintek">
                                         <img class="img-fluid" style="height: 40px; width: auto;" src="\assets\images\logos\unisnu.png" alt="Unisnu">
                                     </div>
