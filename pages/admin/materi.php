@@ -65,9 +65,12 @@ $dataMateri = $materi->getAllMateri();
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Materi</th>
+                                                <th>Tema Materi</th>
                                                 <th>Deskripsi Materi</th>
+                                                <th>tujuan</th>
                                                 <th>File Materi</th>
                                                 <th>Link Video</th>
+                                                <th>Kesimpulan</th>
                                                 <th>No Urut</th>
                                                 <th>Aksi</th>
                                             </tr>
@@ -79,16 +82,22 @@ $dataMateri = $materi->getAllMateri();
                                                 <tr id="baris-<?= $materi['id'] ?>">
                                                     <td><?= $i++ ?></td>
                                                     <td><?= htmlspecialchars($materi['judul']) ?></td>
+                                                    <td><?= htmlspecialchars($materi['tema']) ?></td>
                                                     <td><?= htmlspecialchars(mb_substr($materi['deskripsi'] ?? '', 0, 100, 'UTF-8')) . (mb_strlen($materi['deskripsi'] ?? '', 'UTF-8') > 100 ? '...' : '') ?></td>
+                                                    <td><?= htmlspecialchars($materi['tujuan']) ?></td>
                                                     <td><?= htmlspecialchars($materi['file']) ?></a></td>
                                                     <td><?= htmlspecialchars($materi['video_url']) ?></td>
+                                                    <td><?= htmlspecialchars($materi['kesimpulan']) ?></td>
                                                     <td><?= htmlspecialchars($materi['no_urut']) ?></td>
                                                     <td>
                                                         <a href="#"
                                                             data-id="<?= $materi['id'] ?>"
                                                             data-judul="<?= htmlspecialchars($materi['judul']) ?>"
+                                                            data-tema="<?= htmlspecialchars($materi['tema']) ?>"
                                                             data-deskripsi="<?= htmlspecialchars($materi['deskripsi']) ?>"
+                                                            data-tujuan="<?= htmlspecialchars($materi['tujuan']) ?>"
                                                             data-video_url="<?= htmlspecialchars($materi['video_url']) ?>"
+                                                            data-kesimpulan="<?= htmlspecialchars($materi['kesimpulan']) ?>"
                                                             data-no_urut="<?= htmlspecialchars($materi['no_urut']) ?>"
                                                             data-file="<?= htmlspecialchars($materi['file']) ?>"
                                                             data-bs-toggle="modal"
@@ -148,13 +157,46 @@ $dataMateri = $materi->getAllMateri();
                             <input class="form-control" name="judul" id="judul_tambah" type="text" required>
                         </div>
                         <div class="mb-3">
+                            <label for="tema_tambah" class="form-label">Tema Materi</label>
+                            <input class="form-control" name="tema" id="tema_tambah" type="text" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="deskripsi_tambah" class="form-label">Deskripsi Materi</label>
                             <textarea class="form-control" name="deskripsi" id="deskripsi_tambah" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+
+                            <label for="tujuan_tambah" class="form-label">
+                                Tujuan Pembelajaran
+                            </label>
+
+                            <textarea
+                                name="tujuan"
+                                id="tujuan_tambah"
+                                class="form-control"
+                                rows="6"
+                                placeholder="Contoh:
+Memahami pentingnya komunikasi yang baik.
+Meningkatkan rasa percaya diri ketika berbicara.
+Mampu menyampaikan pendapat dengan jelas.
+Menerapkan keterampilan komunikasi secara efektif."
+                                required></textarea>
+
+                            <div class="form-text">
+                                <i class="mdi mdi-information-outline me-1"></i>
+                                Masukkan satu tujuan pembelajaran pada setiap baris.
+                                Nomor poin akan dibuat otomatis.
+                            </div>
+
                         </div>
                         <div class="mb-3">
                             <label for="video_url_tambah" class="form-label">Link Video Youtube (Opsional)</label>
                             <input class="form-control" name="video_url" id="video_url_tambah" type="url">
                             <small class="text-muted">Contoh: https://www.youtube.com/watch?v=Wp9KevROawI</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kesimpulan_tambah" class="form-label">Kesimpulan Materi</label>
+                            <textarea class="form-control" name="kesimpulan" id="kesimpulan_tambah" rows="4" required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="no_urut_tambah" class="form-label">No Urut</label>
@@ -198,13 +240,46 @@ $dataMateri = $materi->getAllMateri();
                             <input class="form-control" name="judul" id="judul_edit" type="text" required>
                         </div>
                         <div class="mb-3">
+                            <label for="tema_edit" class="form-label">Tema Materi</label>
+                            <input class="form-control" name="tema" id="tema_edit" type="text" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="deskripsi_edit" class="form-label">Deskripsi Materi</label>
                             <textarea class="form-control" name="deskripsi" id="deskripsi_edit" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+
+                            <label for="tujuan_edit" class="form-label">
+                                Tujuan Pembelajaran
+                            </label>
+
+                            <textarea
+                                name="tujuan"
+                                id="tujuan_edit"
+                                class="form-control"
+                                rows="6"
+                                placeholder="Contoh:
+Memahami pentingnya komunikasi yang baik.
+Meningkatkan rasa percaya diri ketika berbicara.
+Mampu menyampaikan pendapat dengan jelas.
+Menerapkan keterampilan komunikasi secara efektif."
+                                required></textarea>
+
+                            <div class="form-text">
+                                <i class="mdi mdi-information-outline me-1"></i>
+                                Masukkan satu tujuan pembelajaran pada setiap baris.
+                                Nomor poin akan dibuat otomatis.
+                            </div>
+
                         </div>
                         <div class="mb-3">
                             <label for="video_url_edit" class="form-label">Link Video Youtube (Opsional)</label>
                             <input class="form-control" name="video_url" id="video_url_edit" type="url">
                             <small class="text-muted">Contoh: https://www.youtube.com/watch?v=Wp9KevROawI</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="kesimpulan_edit" class="form-label">Kesimpulan Materi</label>
+                            <textarea class="form-control" name="kesimpulan" id="kesimpulan_edit" rows="4" required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="no_urut_edit" class="form-label">No Urut</label>
@@ -393,11 +468,14 @@ $dataMateri = $materi->getAllMateri();
                             const rowData = [
                                 index + 1,
                                 escapeHtml(materi.judul),
+                                escapeHtml(materi.tema),
                                 escapeHtml(materi.deskripsi),
+                                escapeHtml(materi.tujuan),
                                 escapeHtml(materi.file || ''),
                                 escapeHtml(materi.video_url || ''),
+                                escapeHtml(materi.kesimpulan),
                                 escapeHtml(materi.no_urut),
-                                buildActions(materi.id, materi.judul, materi.deskripsi, materi.video_url, materi.no_urut, materi.file || '')
+                                buildActions(materi.id, materi.judul, materi.tema, materi.deskripsi, materi.tujuan, materi.video_url, materi.kesimpulan, materi.no_urut, materi.file || '')
                             ];
                             const row = dataTable.row.add(rowData).draw(false).node();
                             if (row) row.id = 'baris-' + materi.id;
@@ -413,11 +491,14 @@ $dataMateri = $materi->getAllMateri();
                                 tr.innerHTML = `
                                     <td>${index + 1}</td>
                                     <td>${escapeHtml(materi.judul)}</td>
+                                    <td>${escapeHtml(materi.tema)}</td>
                                     <td>${escapeHtml(materi.deskripsi)}</td>
+                                    <td>${escapeHtml(materi.tujuan)}</td>
                                     <td>${escapeHtml(materi.file || '')}</td>
                                     <td>${escapeHtml(materi.video_url || '')}</td>
+                                    <td>${escapeHtml(materi.kesimpulan)}</td>
                                     <td>${escapeHtml(materi.no_urut)}</td>
-                                    <td>${buildActions(materi.id, materi.judul, materi.deskripsi, materi.video_url, materi.no_urut, materi.file || '')}</td>
+                                    <td>${buildActions(materi.id, materi.judul, materi.tema, materi.deskripsi, materi.tujuan, materi.video_url, materi.kesimpulan, materi.no_urut, materi.file || '')}</td>
                                 `;
                                 tbody.appendChild(tr);
                             });
@@ -430,13 +511,16 @@ $dataMateri = $materi->getAllMateri();
         }
 
         // --- Render Row ke Tabel ---
-        function buildActions(id, judul, deskripsi, videoUrl, noUrut, file) {
+        function buildActions(id, judul, tema, deskripsi, tujuan, videoUrl, kesimpulan, noUrut, file) {
             return `
                 <a href="#"
                     data-id="${id}"
                     data-judul="${escapeHtml(judul, true)}"
+                    data-tema="${escapeHtml(tema, true)}"
                     data-deskripsi="${escapeHtml(deskripsi, true)}"
+                    data-tujuan="${escapeHtml(tujuan, true)}"
                     data-video_url="${escapeHtml(videoUrl, true)}"
+                    data-kesimpulan="${escapeHtml(kesimpulan, true)}"
                     data-no_urut="${escapeHtml(noUrut, true)}"
                     data-file="${escapeHtml(file, true)}"
                     data-bs-toggle="modal"
@@ -461,11 +545,14 @@ $dataMateri = $materi->getAllMateri();
             const rowData = [
                 getRowNumber(),
                 escapeHtml(data.judul),
+                escapeHtml(data.tema),
                 escapeHtml(data.deskripsi),
+                escapeHtml(data.tujuan),
                 escapeHtml(data.file),
                 escapeHtml(data.videoUrl),
+                escapeHtml(data.kesimpulan),
                 escapeHtml(data.noUrut),
-                buildActions(data.id, data.judul, data.deskripsi, data.videoUrl, data.noUrut, data.file)
+                buildActions(data.id, data.judul, data.tema, data.deskripsi, data.tujuan, data.videoUrl, data.kesimpulan, data.noUrut, data.file)
             ];
 
             if (dataTable) {
@@ -482,11 +569,14 @@ $dataMateri = $materi->getAllMateri();
             tr.innerHTML = `
                 <td>${getRowNumber()}</td>
                 <td>${escapeHtml(data.judul)}</td>
+                <td>${escapeHtml(data.tema)}</td>
                 <td>${escapeHtml(data.deskripsi)}</td>
+                <td>${escapeHtml(data.tujuan)}</td>
                 <td>${escapeHtml(data.file)}</td>
                 <td>${escapeHtml(data.videoUrl)}</td>
+                <td>${escapeHtml(data.kesimpulan)}</td>
                 <td>${escapeHtml(data.noUrut)}</td>
-                <td>${buildActions(data.id, data.judul, data.deskripsi, data.videoUrl, data.noUrut, data.file)}</td>
+                <td>${buildActions(data.id, data.judul, data.tema, data.deskripsi, data.tujuan, data.videoUrl, data.kesimpulan, data.noUrut, data.file)}</td>
             `;
             tbody.appendChild(tr);
         }
@@ -500,11 +590,14 @@ $dataMateri = $materi->getAllMateri();
                     const rowData = [
                         rowNumber,
                         escapeHtml(data.judul),
+                        escapeHtml(data.tema),
                         escapeHtml(data.deskripsi),
+                        escapeHtml(data.tujuan),
                         escapeHtml(data.file),
                         escapeHtml(data.videoUrl),
+                        escapeHtml(data.kesimpulan),
                         escapeHtml(data.noUrut),
-                        buildActions(data.id, data.judul, data.deskripsi, data.videoUrl, data.noUrut, data.file)
+                        buildActions(data.id, data.judul, data.tema, data.deskripsi, data.tujuan, data.videoUrl, data.kesimpulan, data.noUrut, data.file)
                     ];
                     row.data(rowData).draw(false);
                     const node = row.node();
@@ -522,13 +615,16 @@ $dataMateri = $materi->getAllMateri();
 
             // Update setiap sel secara individual
             const cells = row.querySelectorAll('td');
-            if (cells.length >= 6) {
+            if (cells.length >= 9) {
                 cells[1].textContent = data.judul;
-                cells[2].textContent = data.deskripsi;
-                cells[3].textContent = data.file;
-                cells[4].textContent = data.videoUrl;
-                cells[5].textContent = data.noUrut;
-                cells[6].innerHTML = buildActions(data.id, data.judul, data.deskripsi, data.videoUrl, data.noUrut, data.file);
+                cells[2].textContent = data.tema;
+                cells[3].textContent = data.deskripsi;
+                cells[4].textContent = data.tujuan;
+                cells[5].textContent = data.file;
+                cells[6].textContent = data.videoUrl;
+                cells[7].textContent = data.kesimpulan;
+                cells[8].textContent = data.noUrut;
+                cells[9].innerHTML = buildActions(data.id, data.judul, data.tema, data.deskripsi, data.tujuan, data.videoUrl, data.kesimpulan, data.noUrut, data.file);
             }
         }
 
@@ -556,15 +652,21 @@ $dataMateri = $materi->getAllMateri();
 
                 const id = button.getAttribute('data-id');
                 const judul = button.getAttribute('data-judul') || '';
+                const tema = button.getAttribute('data-tema') || '';
                 const deskripsi = button.getAttribute('data-deskripsi') || '';
+                const tujuan = button.getAttribute('data-tujuan') || '';
                 const videoUrl = button.getAttribute('data-video_url') || '';
+                const kesimpulan = button.getAttribute('data-kesimpulan') || '';
                 const noUrut = button.getAttribute('data-no_urut') || '';
                 const fileNama = button.getAttribute('data-file') || '';
 
                 document.getElementById('edit_id').value = id;
                 document.getElementById('judul_edit').value = judul;
+                document.getElementById('tema_edit').value = tema;
                 document.getElementById('deskripsi_edit').value = deskripsi;
+                document.getElementById('tujuan_edit').value = tujuan;
                 document.getElementById('video_url_edit').value = videoUrl;
+                document.getElementById('kesimpulan_edit').value = kesimpulan;
                 document.getElementById('no_urut_edit').value = noUrut;
                 document.getElementById('file_lama').value = fileNama;
                 document.getElementById('file_lama_edit').textContent = fileNama;
@@ -587,15 +689,21 @@ $dataMateri = $materi->getAllMateri();
                     if (!id) return;
 
                     const judul = editButton.getAttribute('data-judul') || '';
+                    const tema = editButton.getAttribute('data-tema') || '';
                     const deskripsi = editButton.getAttribute('data-deskripsi') || '';
+                    const tujuan = editButton.getAttribute('data-tujuan') || '';
                     const videoUrl = editButton.getAttribute('data-video_url') || '';
+                    const kesimpulan = editButton.getAttribute('data-kesimpulan') || '';
                     const noUrut = editButton.getAttribute('data-no_urut') || '';
 
                     // Isi form edit
                     document.getElementById('edit_id').value = id;
                     document.getElementById('judul_edit').value = judul;
+                    document.getElementById('tema_edit').value = tema;
                     document.getElementById('deskripsi_edit').value = deskripsi;
+                    document.getElementById('tujuan_edit').value = tujuan;
                     document.getElementById('video_url_edit').value = videoUrl;
+                    document.getElementById('kesimpulan_edit').value = kesimpulan;
                     document.getElementById('no_urut_edit').value = noUrut;
 
                     const editModal = bootstrap.Modal.getOrCreateInstance(modalEditMateri);

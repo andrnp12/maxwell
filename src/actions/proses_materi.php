@@ -17,7 +17,7 @@ $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === "POST" && $action === 'get_materi') {
     $current_id = isset($_POST['current_id']) ? (int)$_POST['current_id'] : 0;
-    
+
     // Ambil material_id dari materi yang sedang diedit (jika ada)
     $current_material_id = null;
     if ($current_id > 0) {
@@ -26,9 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && $action === 'get_materi') {
             $current_material_id = $materiData['id'];
         }
     }
-    
+
     $dataMateri = $materi->getAllMateri(); // Untuk materi, kita tidak perlu filter seperti kuis
-    
+
     echo json_encode([
         'status' => 'success',
         'data' => $dataMateri,
@@ -42,10 +42,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && $action === 'save') {
     // Penyesuaian nama field agar cocok dengan kiriman JS baru
     $id         = !empty($_POST['id']) ? (int)$_POST['id'] : null;
     $judul      = $_POST['judul'] ?? '';
+    $tema       = $_POST['tema'] ?? '';
     $deskripsi  = $_POST['deskripsi'] ?? '';
+    $tujuan     = $_POST['tujuan'] ?? '';
     $videoUrl   = $_POST['video_url'] ?? '';
+    $kesimpulan = $_POST['kesimpulan'] ?? '';
     $noUrut     = !empty($_POST['no_urut']) ? (int)$_POST['no_urut'] : 0;
-    
+
     $file = isset($_FILES['file_materi']) && $_FILES['file_materi']['error'] !== UPLOAD_ERR_NO_FILE
         ? $_FILES['file_materi']
         : null;
@@ -60,40 +63,44 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && $action === 'save') {
 
     if (!empty($id)) {
         // Update materi
-        $result = $materi->updateMateri($id, $judul, $deskripsi, $videoUrl, $noUrut, $file);
+        $result = $materi->updateMateri($id, $judul, $tema, $deskripsi, $tujuan, $videoUrl, $kesimpulan, $noUrut, $file);
         $result['id'] = $id; // kembalikan ID untuk referensi JS
     } else {
         // Tambah materi baru
-        $result = $materi->addMateri($judul, $deskripsi, $videoUrl, $noUrut, $file);
+        $result = $materi->addMateri($judul, $tema, $deskripsi, $tujuan, $videoUrl, $kesimpulan, $noUrut, $file);
         // Dapatkan ID yang baru disisipkan menggunakan method baru
         if ($result['status'] === 'success') {
             $result['id'] = $materi->getLastInsertId();
         }
     }
-    
+
     // Ambil data materi untuk rendering tabel di JS
     if ($result['status'] === 'success') {
         // Dapatkan data materi terbaru dari database untuk mendapatkan informasi file yang benar
         $materiData = $materi->getMateriById($result['id']);
         if ($materiData) {
             $result['judul'] = $materiData['judul'];
+            $result['tema'] = $materiData['tema'];
             $result['deskripsi'] = $materiData['deskripsi'];
+            $result['tujuan'] = $materiData['tujuan'];
             $result['video_url'] = $materiData['video_url'];
+            $result['kesimpulan'] = $materiData['kesimpulan'];
             $result['no_urut'] = $materiData['no_urut'];
             $result['file'] = $materiData['file']; // Tambahkan data file dari database
         }
     }
-    
+
     echo json_encode($result);
     exit;
 }
 
 // Hapus materi
-if ((($_SERVER['REQUEST_METHOD'] === 'DELETE' || $_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'POST') && 
-     isset($_GET['action']) && $_GET['action'] === 'delete') ||
-    (($_SERVER['REQUEST_METHOD'] === 'DELETE' || $_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'POST') && 
-     isset($_POST['action']) && $_POST['action'] === 'delete')) {
-    
+if ((($_SERVER['REQUEST_METHOD'] === 'DELETE' || $_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'POST') &&
+        isset($_GET['action']) && $_GET['action'] === 'delete') ||
+    (($_SERVER['REQUEST_METHOD'] === 'DELETE' || $_SERVER['REQUEST_METHOD'] === 'GET' || $_SERVER['REQUEST_METHOD'] === 'POST') &&
+        isset($_POST['action']) && $_POST['action'] === 'delete')
+) {
+
     // Get ID from appropriate source based on request method
     if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
         parse_str(file_get_contents("php://input"), $_DELETE);
@@ -103,7 +110,7 @@ if ((($_SERVER['REQUEST_METHOD'] === 'DELETE' || $_SERVER['REQUEST_METHOD'] === 
     } else { // POST
         $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
     }
-    
+
     if ($id <= 0) {
         echo json_encode([
             'status' => 'error',
@@ -111,9 +118,9 @@ if ((($_SERVER['REQUEST_METHOD'] === 'DELETE' || $_SERVER['REQUEST_METHOD'] === 
         ]);
         exit;
     }
-    
+
     $result = $materi->deleteMateri($id);
-    
+
     if ($result['status'] === 'success') {
         echo json_encode([
             'status' => 'success',
@@ -130,4 +137,3 @@ if ((($_SERVER['REQUEST_METHOD'] === 'DELETE' || $_SERVER['REQUEST_METHOD'] === 
 
 echo json_encode(['status' => 'error', 'message' => 'Aksi tidak dikenali.']);
 exit;
-?>

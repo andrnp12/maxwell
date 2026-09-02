@@ -162,7 +162,7 @@ class ProgressUser
      * Extract YouTube video ID from various URL formats
      * Supports: watch?v=, youtu.be/, embed/, v/, shorts/
      */
-    function getYouTubeVideoId($url)
+    function getYouTubeVideoId(string $url)
     {
         if (empty($url)) return '';
 
