@@ -161,7 +161,11 @@ class Kuis
             m.judul AS judul_materi,
 
             COALESCE(up.material_selesai,0) AS material_selesai,
-            COALESCE(up.quizz_selesai,0) AS quizz_selesai
+            COALESCE(up.quizz_selesai,0) AS quizz_selesai,
+
+            qr.nilai,
+            qr.lulus,
+            qr.percobaan
 
         FROM quizzes q
 
@@ -172,13 +176,28 @@ class Kuis
             ON up.material_id = q.material_id
             AND up.user_id = ?
 
+        LEFT JOIN (
+            SELECT user_id, kuis_id, nilai, lulus, percobaan
+            FROM quiz_results
+            WHERE jenis = 'kuis'
+            AND percobaan = (
+                SELECT MAX(percobaan)
+                FROM quiz_results qr2
+                WHERE qr2.user_id = quiz_results.user_id
+                AND qr2.kuis_id = quiz_results.kuis_id
+                AND qr2.jenis = quiz_results.jenis
+            )
+        ) qr
+            ON qr.user_id = ?
+            AND qr.kuis_id = q.id
+
         WHERE q.jenis = 'kuis'
 
         ORDER BY m.no_urut ASC
     ";
 
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $userId);
+        $stmt->bind_param("ii", $userId, $userId);
         $stmt->execute();
 
         $result = $stmt->get_result();
